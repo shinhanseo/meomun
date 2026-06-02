@@ -83,8 +83,11 @@ Backend의 각 Feature는 `routes`, `controller`, `service`, `repository`, `type
 cd backend
 cp .env.example .env
 npm install
+npm run prisma:migrate
 npm run dev
 ```
+
+`.env`에는 Supabase에서 제공하는 `DATABASE_URL`, `DIRECT_URL`을 입력합니다. Prisma Schema를 변경한 뒤 배포 환경에 migration을 적용할 때도 `npm run prisma:migrate`를 실행합니다.
 
 서버가 실행되면 다음 주소에서 상태를 확인할 수 있습니다.
 
@@ -106,4 +109,3 @@ Expo 개발 서버가 실행되면 iOS Simulator, Android Emulator 또는 Expo G
 
 - `docs/ui`: 화면 설계 이미지, 와이어프레임, 디자인 참고 자료
 - `docs/api`: API 명세서, ERD, 기획 문서
-
