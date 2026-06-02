@@ -1,0 +1,67 @@
+export const color = {
+  purple: {
+    50: '#F8F5FF',
+    100: '#EFE9FF',
+    200: '#DED2FA',
+    300: '#C4B0F0',
+    400: '#A68AE1',
+    500: '#8A6BD1',
+    600: '#7453C1',
+    700: '#5D43A0',
+    800: '#49367D',
+    900: '#34265C',
+  },
+  gray: {
+    50: '#FAFAFC',
+    100: '#F3F2F7',
+    200: '#E6E4EC',
+    300: '#D2CFDC',
+    400: '#AAA6B5',
+    500: '#817D8F',
+    600: '#625E70',
+    700: '#494553',
+    800: '#302D38',
+    900: '#1D1B22',
+  },
+  red: {
+    50: '#FFF1F2',
+    100: '#FFE1E4',
+    500: '#E85D75',
+    600: '#D94460',
+    700: '#B9344E',
+  },
+  pink: {
+    100: '#FBE1EE',
+    300: '#F2A4C9',
+    500: '#DE73A7',
+  },
+  yellow: {
+    100: '#FFF2C7',
+    500: '#F5C451',
+  },
+  blue: {
+    100: '#E1ECFF',
+    500: '#7EA4DF',
+  },
+  green: {
+    100: '#DEF3E6',
+    500: '#68B987',
+  },
+  white: '#FFFFFF',
+  black: '#15131A',
+  transparent: 'transparent',
+} as const;
+
+export const semanticColor = {
+  background: color.purple[50],
+  surface: color.white,
+  primary: color.purple[600],
+  primaryPressed: color.purple[700],
+  primarySoft: color.purple[100],
+  textPrimary: color.gray[900],
+  textSecondary: color.gray[600],
+  textMuted: color.gray[400],
+  border: color.gray[200],
+  danger: color.red[600],
+  dangerSoft: color.red[50],
+} as const;
