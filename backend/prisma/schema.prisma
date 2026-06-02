@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Emotion {
+  ANGRY
+  ANXIOUS
+  CALM
+  FLUTTER
+  HAPPY
+  REFLECTIVE
+  SAD
+  TIRED
+}
+
+enum Visibility {
+  PRIVATE
+  ANONYMOUS
+}
+
+model User {
+  id        String   @id @db.Uuid
+  nickname  String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  records   Record[]
+
+  @@map("users")
+}
+
+model Place {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  address      String?
+  latitude     Decimal  @db.Decimal(9, 6)
+  longitude    Decimal  @db.Decimal(10, 6)
+  category     String?
+  kakaoPlaceId String?  @unique @map("kakao_place_id")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  records      Record[]
+
+  @@map("places")
+}
+
+model Record {
+  id         String        @id @default(uuid()) @db.Uuid
+  userId     String        @map("user_id") @db.Uuid
+  placeId    String        @map("place_id") @db.Uuid
+  emotion    Emotion
+  content    String?
+  visibility Visibility    @default(PRIVATE)
+  recordedAt DateTime      @map("recorded_at") @db.Timestamptz(6)
+  createdAt  DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  place      Place         @relation(fields: [placeId], references: [id])
+  images     RecordImage[]
+
+  @@index([userId, recordedAt(sort: Desc)])
+  @@index([placeId])
+  @@index([emotion])
+  @@map("records")
+}
+
+model RecordImage {
+  id        String   @id @default(uuid()) @db.Uuid
+  recordId  String   @map("record_id") @db.Uuid
+  imageUrl  String   @map("image_url")
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  record    Record   @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
+  @@unique([recordId, sortOrder])
+  @@index([recordId])
+  @@map("record_images")
+}
