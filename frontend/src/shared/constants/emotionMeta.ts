@@ -2,8 +2,6 @@ import type { ImageSourcePropType } from 'react-native';
 
 import { color } from './color';
 
-/* eslint-disable @typescript-eslint/no-require-imports -- Metro needs static require paths for bundled images. */
-
 export const EMOTION_CODES = [
   'ANGRY',
   'ANXIOUS',
