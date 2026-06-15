@@ -14,7 +14,7 @@ export interface SelectedPlaceInput {
 }
 
 export interface CreateRecordRequest {
-  emtion: Emotion;
+  emotion: Emotion;
   content?: string;
   recordedAt: string;
   visibility?: Visibility;
