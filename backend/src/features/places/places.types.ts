@@ -22,3 +22,13 @@ export interface PlaceSearchResponse {
   };
   places: PlaceSearchResult[];
 }
+
+export interface SelectedPlaceInput {
+  kakaoPlaceId: string;
+  placeName: string;
+  categoryName: string | null;
+  addressName: string;
+  roadAddressName: string | null;
+  longitude: string;
+  latitude: string;
+}
