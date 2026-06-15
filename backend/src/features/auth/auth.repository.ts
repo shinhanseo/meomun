@@ -48,6 +48,7 @@ export class AuthRepository {
     userId: string,
     tokenHash: string,
     expiresAt: Date,
+    familyId?: string,
     userAgent?: string,
     ipAddress?: string,
   ) {
@@ -56,9 +57,30 @@ export class AuthRepository {
         userId,
         tokenHash,
         expiresAt,
+        familyId,
         userAgent,
         ipAddress,
       },
+    });
+  }
+
+  findRefreshToken(tokenHash: string) {
+    return database.refreshToken.findUnique({
+      where: {
+        tokenHash,
+      }
+    });
+  }
+
+  revokeRefreshToken(id: string) {
+    return database.refreshToken.update({
+      where: {
+        id,
+      },
+      data: {
+        revokedAt: new Date(),
+        lastUsedAt: new Date(),
+      }
     });
   }
 }
