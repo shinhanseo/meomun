@@ -5,6 +5,7 @@ import type {
   AppleLoginRequest,
   KakaoLoginRequest,
   RefreshRequest,
+  LogoutRequest
 } from './auth.types.js';
 
 import { AppError } from '../../common/errors/app-error.js';
@@ -66,4 +67,19 @@ export class AuthController {
 
     response.status(200).json(result);
   }
+
+  logout = async (
+    request: Request<object, object, LogoutRequest>,
+    response: Response,
+  ) => {
+    const { refreshToken } = request.body;
+
+    if (!refreshToken) {
+      throw new AppError(400, 'refreshToken이 필요합니다.');
+    }
+
+    await this.authService.logout(refreshToken);
+
+    response.status(204).send();
+  };
 }

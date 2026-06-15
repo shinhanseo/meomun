@@ -132,4 +132,15 @@ export class AuthService {
       refreshToken: newRefreshToken,
     };
   }
+
+  async logout(refreshToken: string): Promise<void> {
+    const tokenHash = hashRefreshToken(refreshToken);
+    const storedToken = await this.authRepository.findRefreshToken(tokenHash);
+
+    if (!storedToken || storedToken.revokedAt) {
+      return;
+    }
+
+    await this.authRepository.revokeRefreshToken(storedToken.id);
+  }
 }
