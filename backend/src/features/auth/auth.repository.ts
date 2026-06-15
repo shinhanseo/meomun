@@ -43,4 +43,22 @@ export class AuthRepository {
       }
     });
   }
+
+  createRefreshToken(
+    userId: string,
+    tokenHash: string,
+    expiresAt: Date,
+    userAgent?: string,
+    ipAddress?: string,
+  ) {
+    return database.refreshToken.create({
+      data: {
+        userId,
+        tokenHash,
+        expiresAt,
+        userAgent,
+        ipAddress,
+      },
+    });
+  }
 }
