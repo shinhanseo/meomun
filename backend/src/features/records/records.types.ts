@@ -62,6 +62,7 @@ export interface CreateRecordData {
 }
 
 export interface UpdateRecordData {
+  placeId: string;
   emotion?: Emotion;
   content?: string | null;
   recordedAt?: Date;

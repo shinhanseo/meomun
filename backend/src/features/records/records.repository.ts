@@ -83,39 +83,39 @@ export class RecordsRepository {
     });
   }
 
-  updateRecord(
-    recordId: string,
-    record: UpdateRecordData,
-  ) {
+  updateRecord(recordId: string, record: UpdateRecordData) {
     return database.$transaction(async (transaction) => {
-      if (record.imageObjectKeys !== undefined) {
-        await transaction.recordImage.deleteMany({
-          where: {
-            recordId,
-          },
-        });
-      }
+      await transaction.recordImage.deleteMany({
+        where: {
+          recordId,
+        },
+      });
 
       return transaction.record.update({
         where: {
           id: recordId,
         },
         data: {
+          placeId: record.placeId,
           emotion: record.emotion,
           content: record.content,
           recordedAt: record.recordedAt,
           visibility: record.visibility,
-          images:
-            record.imageObjectKeys === undefined
-              ? undefined
-              : {
-                create: record.imageObjectKeys.map((objectKey, index) => ({
-                  objectKey,
-                  sortOrder: index,
-                })),
-              },
+          images: {
+            create: record.imageObjectKeys?.map((objectKey, index) => ({
+              objectKey,
+              sortOrder: index,
+            })),
+          },
         },
-        include: recordInclude,
+        include: {
+          place: true,
+          images: {
+            orderBy: {
+              sortOrder: 'asc',
+            },
+          },
+        },
       });
     });
   }
