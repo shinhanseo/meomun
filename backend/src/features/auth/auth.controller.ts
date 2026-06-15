@@ -3,6 +3,8 @@ import type { Request, Response } from 'express';
 import { AuthService } from './auth.service.js';
 import type { KakaoLoginRequest } from './auth.types.js';
 
+import { AppError } from '../../common/errors/app-error.js';
+
 export class AuthController {
   constructor(private readonly authService = new AuthService()) { }
 
@@ -13,9 +15,7 @@ export class AuthController {
     const { kakaoAccessToken } = request.body
 
     if (!kakaoAccessToken) {
-      response.status(400).json({
-        message: 'kakaoAccessToken이 필요합니다.',
-      });
+      throw new AppError(400, 'kakaoAccessToken이 필요합니다.');
 
       return;
     }
