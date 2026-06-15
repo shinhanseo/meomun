@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 
-import { SignJWT } from 'jose';
+import { jwtVerify, SignJWT } from 'jose';
+import { AppError } from '../errors/app-error.js';
 
 const accessTokenSecret = process.env.JWT_ACCESS_SECRET;
 
@@ -32,4 +33,22 @@ export function createRefreshTokenExpiresAt(): Date {
   expiresAt.setDate(expiresAt.getDate() + 30);
 
   return expiresAt;
+}
+
+export async function verityAccessToken(accessToken: string) {
+  try {
+    const { payload } = await jwtVerify(accessToken, secretKey);
+
+    if (!payload) {
+      throw new AppError(401, '사용자 정보가 없는 Access Token입니다.');
+    }
+
+    return payload.sub;
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError(401, '유효하지 않거나 만료된 Access Token입니다.');
+  }
 }
