@@ -20,6 +20,7 @@ export class AuthRepository {
     });
   }
 
+  /* 신규 유저 생성 메서드 */
   createUserWithOauthAccount(
     provider: AuthProvider,
     providerUserId: string,
