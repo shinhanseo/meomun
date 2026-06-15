@@ -9,7 +9,8 @@ import {
   createRefreshTokenExpiresAt,
   hashRefreshToken,
 } from '../../common/utils/token.js';
-import type { LoginResponse } from './auth.types.js';
+import type { LoginResponse, TokenResponse } from './auth.types.js';
+import { AppError } from '../../common/errors/app-error.js';
 
 export class AuthService {
   constructor(
@@ -95,6 +96,40 @@ export class AuthService {
       },
       accessToken,
       refreshToken,
+    };
+  }
+
+  async refresh(refreshToken: string): Promise<TokenResponse> {
+    const tokenHash = hashRefreshToken(refreshToken);
+    const storedToken = await this.authRepository.findRefreshToken(tokenHash);
+
+    if (!storedToken) {
+      throw new AppError(401, '유효하지 않은 Refresh Token입니다.');
+    }
+
+    if (storedToken.revokedAt) {
+      throw new AppError(401, '이미 사용되거나 폐기된 Refresh Token입니다.');
+    }
+
+    if (storedToken.expiresAt <= new Date()) {
+      throw new AppError(401, '만료된 Refresh Token입니다.');
+    }
+
+    await this.authRepository.revokeRefreshToken(storedToken.id);
+
+    const newAccessToken = await createAccessToken(storedToken.userId);
+    const newRefreshToken = createRefreshToken();
+
+    await this.authRepository.createRefreshToken(
+      storedToken.userId,
+      hashRefreshToken(newRefreshToken),
+      createRefreshTokenExpiresAt(),
+      storedToken.familyId,
+    );
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
     };
   }
 }
