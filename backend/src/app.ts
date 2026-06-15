@@ -9,6 +9,8 @@ import statsRoutes from './features/stats/stats.routes.js';
 import uploadsRoutes from './features/uploads/uploads.routes.js';
 import usersRoutes from './features/users/users.routes.js';
 
+import { errorHandler } from './common/middleware/error-handler.js';
+
 export const createApp = () => {
   const app = express();
 
@@ -26,6 +28,8 @@ export const createApp = () => {
   app.use('/api/archives', archivesRoutes);
   app.use('/api/stats', statsRoutes);
   app.use('/api/uploads', uploadsRoutes);
+
+  app.use(errorHandler);
 
   return app;
 };
