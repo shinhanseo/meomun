@@ -76,16 +76,17 @@ model RefreshToken {
 }
 
 model Place {
-  id           String   @id @default(uuid()) @db.Uuid
-  name         String
-  address      String?
-  latitude     Decimal  @db.Decimal(9, 6)
-  longitude    Decimal  @db.Decimal(10, 6)
-  category     String?
-  kakaoPlaceId String?  @unique @map("kakao_place_id")
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
-  records      Record[]
+  id              String   @id @default(uuid()) @db.Uuid
+  kakaoPlaceId    String   @unique @map("kakao_place_id")
+  name            String
+  categoryName    String?  @map("category_name")
+  addressName     String   @map("address_name")
+  roadAddressName String?  @map("road_address_name")
+  latitude        Decimal  @db.Decimal(9, 6)
+  longitude       Decimal  @db.Decimal(10, 6)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  records         Record[]
 
   @@map("places")
 }
@@ -113,7 +114,7 @@ model Record {
 model RecordImage {
   id        String   @id @default(uuid()) @db.Uuid
   recordId  String   @map("record_id") @db.Uuid
-  imageUrl  String   @map("image_url")
+  objectKey String   @unique @map("object_key")
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   record    Record   @relation(fields: [recordId], references: [id], onDelete: Cascade)
