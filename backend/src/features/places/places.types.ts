@@ -16,3 +16,13 @@ export interface PlaceSearchResult {
   longitude: string;
   latitude: string;
 }
+
+export interface KakaoPlaceDocument {
+  id: string;
+  place_name: string;
+  category_name: string;
+  address_name: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
