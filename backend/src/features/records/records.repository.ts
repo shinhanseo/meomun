@@ -39,13 +39,21 @@ export class RecordsRepository {
     });
   }
 
-  findRecordById(recordId: string) {
-    return database.record.findUnique({
+  findRecordById(recordId: string, userId: string) {
+    return database.record.findFirst({
       where: {
         id: recordId,
+        userId,
       },
-      include: recordInclude,
-    })
+      include: {
+        place: true,
+        images: {
+          orderBy: {
+            sortOrder: 'asc',
+          },
+        },
+      },
+    });
   }
 
   findRecordsByUserId(
