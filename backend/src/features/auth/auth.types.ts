@@ -16,3 +16,9 @@ export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface AppleLoginRequest {
+  identityToken: string;
+  nonce: string;
+  nickname?: string;
+}
