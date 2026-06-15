@@ -50,3 +50,28 @@ export interface RecordResponse {
   place: RecordPlaceResponse;
   images: RecordImageResponse[];
 }
+
+export interface CreateRecordData {
+  userId: string;
+  placeId: string;
+  emotion: Emotion;
+  content?: string;
+  recordedAt: Date;
+  visibility?: Visibility;
+  imageObjectKeys?: string[];
+}
+
+export interface UpdateRecordData {
+  emotion?: Emotion;
+  content?: string | null;
+  recordedAt?: Date;
+  visibility?: Visibility;
+  imageObjectKeys?: string[];
+}
+
+export type RecordSort = 'latest' | 'oldest';
+
+export interface FindRecordsOptions {
+  limit?: number;
+  sort?: RecordSort;
+}
