@@ -4,6 +4,7 @@ import { AuthService } from './auth.service.js';
 import type {
   AppleLoginRequest,
   KakaoLoginRequest,
+  RefreshRequest,
 } from './auth.types.js';
 
 import { AppError } from '../../common/errors/app-error.js';
@@ -50,4 +51,19 @@ export class AuthController {
 
     response.status(200).json(result);
   };
+
+  refresh = async (
+    request: Request<object, object, RefreshRequest>,
+    response: Response,
+  ) => {
+    const { refreshToken } = request.body;
+
+    if (!refreshToken) {
+      throw new AppError(400, 'refreshToken이 필요합니다.');
+    }
+
+    const result = await this.authService.refresh(refreshToken);
+
+    response.status(200).json(result);
+  }
 }
