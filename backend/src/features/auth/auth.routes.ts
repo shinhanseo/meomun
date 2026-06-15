@@ -8,5 +8,6 @@ authRoutes.post('/kakao', authController.loginWithKakao);
 authRoutes.post('/apple', authController.loginWithApple);
 authRoutes.post('/refresh', authController.refresh);
 authRoutes.post('/logout', authController.logout);
+authRoutes.delete('/delete_account', authController.deleteAccount);
 
 export default authRoutes;

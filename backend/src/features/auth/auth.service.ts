@@ -143,4 +143,19 @@ export class AuthService {
 
     await this.authRepository.revokeRefreshToken(storedToken.id);
   }
+
+  async deleteAccount(refreshToken: string): Promise<void> {
+    const tokenHash = hashRefreshToken(refreshToken);
+    const storedToken = await this.authRepository.findRefreshToken(tokenHash);
+
+    if (!storedToken || storedToken.revokedAt) {
+      throw new AppError(401, '유효하지 않은 Refresh Token입니다.');
+    }
+
+    if (storedToken.expiresAt <= new Date()) {
+      throw new AppError(401, '만료된 Refresh Token입니다.');
+    }
+
+    await this.authRepository.deleteUser(storedToken.userId);
+  }
 }

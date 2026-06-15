@@ -5,7 +5,8 @@ import type {
   AppleLoginRequest,
   KakaoLoginRequest,
   RefreshRequest,
-  LogoutRequest
+  LogoutRequest,
+  DeleteAccountRequest,
 } from './auth.types.js';
 
 import { AppError } from '../../common/errors/app-error.js';
@@ -79,6 +80,21 @@ export class AuthController {
     }
 
     await this.authService.logout(refreshToken);
+
+    response.status(204).send();
+  };
+
+  deleteAccount = async (
+    request: Request<object, object, DeleteAccountRequest>,
+    response: Response,
+  ) => {
+    const { refreshToken } = request.body;
+
+    if (!refreshToken) {
+      throw new AppError(400, 'refreshToken이 필요합니다.');
+    }
+
+    await this.authService.deleteAccount(refreshToken);
 
     response.status(204).send();
   };

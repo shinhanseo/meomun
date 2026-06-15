@@ -83,4 +83,12 @@ export class AuthRepository {
       }
     });
   }
+
+  deleteUser(userId: string) {
+    return database.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+  }
 }
