@@ -1,7 +1,10 @@
 import type { Request, Response } from 'express';
 
 import { AuthService } from './auth.service.js';
-import type { KakaoLoginRequest } from './auth.types.js';
+import type {
+  AppleLoginRequest,
+  KakaoLoginRequest,
+} from './auth.types.js';
 
 import { AppError } from '../../common/errors/app-error.js';
 
@@ -24,4 +27,27 @@ export class AuthController {
 
     response.status(200).json(result);
   }
+
+  loginWithApple = async (
+    request: Request<object, object, AppleLoginRequest>,
+    response: Response,
+  ) => {
+    const { identityToken, nonce, nickname } = request.body;
+
+    if (!identityToken) {
+      throw new AppError(400, 'identityToken이 필요합니다.');
+    }
+
+    if (!nonce) {
+      throw new AppError(400, 'nonce가 필요합니다.');
+    }
+
+    const result = await this.authService.loginWithApple(
+      identityToken,
+      nonce,
+      nickname,
+    );
+
+    response.status(200).json(result);
+  };
 }
