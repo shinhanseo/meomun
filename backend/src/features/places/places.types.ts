@@ -1,8 +1,5 @@
 export interface PlaceSearchQuery {
   query: string;
-  x?: string;
-  y?: string;
-  radius?: number;
   page?: number;
   size?: number;
 }
@@ -17,12 +14,11 @@ export interface PlaceSearchResult {
   latitude: string;
 }
 
-export interface KakaoPlaceDocument {
-  id: string;
-  place_name: string;
-  category_name: string;
-  address_name: string;
-  road_address_name: string;
-  x: string;
-  y: string;
+export interface PlaceSearchResponse {
+  meta: {
+    totalCount: number;
+    pageableCount: number;
+    isEnd: boolean;
+  };
+  places: PlaceSearchResult[];
 }
