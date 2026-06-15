@@ -35,7 +35,7 @@ export function createRefreshTokenExpiresAt(): Date {
   return expiresAt;
 }
 
-export async function verityAccessToken(accessToken: string) {
+export async function verifyAccessToken(accessToken: string) {
   try {
     const { payload } = await jwtVerify(accessToken, secretKey);
 
