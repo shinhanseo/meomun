@@ -75,3 +75,12 @@ export interface FindRecordsOptions {
   limit?: number;
   sort?: RecordSort;
 }
+
+export interface UpdateRecordRequest {
+  emotion: Emotion;
+  content?: string | null;
+  recordedAt: string;
+  visibility: Visibility;
+  place: SelectedPlaceInput;
+  imageObjectKeys: string[];
+}
