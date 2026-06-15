@@ -22,3 +22,12 @@ export interface AppleLoginRequest {
   nonce: string;
   nickname?: string;
 }
+
+export interface RefreshRequest {
+  refreshToken: string;
+}
+
+export interface TokenResponse {
+  accessToken: string;
+  refreshToken: string;
+}
