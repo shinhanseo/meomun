@@ -1,13 +1,21 @@
 import { AppError } from '../../common/errors/app-error.js';
 import { RecordsRepository } from './records.repository.js';
 import { PlacesRepository } from '../places/places.repository.js';
-import type { CreateRecordRequest, FindRecordsOptions, UpdateRecordData, UpdateRecordRequest } from './records.types.js';
+import { S3UploadProvider } from '../uploads/provider/s3-upload.provider.js';
+import type {
+  CreateRecordRequest,
+  FindRecordsOptions,
+  RecordResponse,
+  RecordWithPlaceAndImages,
+  UpdateRecordRequest,
+} from './records.types.js';
 
 
 export class RecordsService {
   constructor(
     private readonly recordsRepository = new RecordsRepository(),
     private readonly placesRepository = new PlacesRepository(),
+    private readonly s3UploadProvider = new S3UploadProvider(),
   ) { }
 
   private parseRecordedAt(recordedAt: string): Date {
@@ -21,8 +29,8 @@ export class RecordsService {
   }
 
   private validateImageObjectKeys(objectKeys: string[]): void {
-    if (objectKeys.length > 5) {
-      throw new AppError(400, '사진은 최대 5장까지 등록할 수 있습니다.');
+    if (objectKeys.length > 3) {
+      throw new AppError(400, '사진은 최대 3장까지 등록할 수 있습니다.');
     }
 
     if (new Set(objectKeys).size !== objectKeys.length) {
@@ -40,7 +48,7 @@ export class RecordsService {
       request.place
     );
 
-    return this.recordsRepository.createRecord({
+    const record = await this.recordsRepository.createRecord({
       userId,
       placeId: place.id,
       emotion: request.emotion,
@@ -49,6 +57,8 @@ export class RecordsService {
       visibility: request.visibility,
       imageObjectKeys,
     });
+
+    return this.toRecordResponse(record);
   }
 
   async getRecordById(userId: string, recordId: string) {
@@ -65,7 +75,7 @@ export class RecordsService {
       throw new AppError(404, '기록을 찾을 수 없습니다.');
     }
 
-    return record;
+    return this.toRecordResponse(record);
   }
 
   async getRecords(userId: string, options: FindRecordsOptions) {
@@ -83,10 +93,14 @@ export class RecordsService {
       );
     }
 
-    return this.recordsRepository.findRecordsByUserId(userId, {
+    const records = await this.recordsRepository.findRecordsByUserId(userId, {
       limit,
-      sort
+      sort,
     });
+
+    return Promise.all(
+      records.map((record) => this.toRecordResponse(record)),
+    );
   }
 
   async updateRecord(
@@ -111,7 +125,7 @@ export class RecordsService {
       request.place,
     );
 
-    return this.recordsRepository.updateRecord(recordId, {
+    const record = await this.recordsRepository.updateRecord(recordId, {
       placeId: place.id,
       emotion: request.emotion,
       content: request.content?.trim() || null,
@@ -119,6 +133,8 @@ export class RecordsService {
       visibility: request.visibility,
       imageObjectKeys: request.imageObjectKeys,
     });
+
+    return this.toRecordResponse(record);
   }
 
   async deleteRecord(userId: string, recordId: string) {
@@ -134,5 +150,39 @@ export class RecordsService {
     return this.recordsRepository.deleteRecord(
       recordId,
     );
+  }
+
+  private async toRecordResponse(
+    record: RecordWithPlaceAndImages,
+  ): Promise<RecordResponse> {
+    return {
+      id: record.id,
+      emotion: record.emotion,
+      content: record.content,
+      visibility: record.visibility,
+      recordedAt: record.recordedAt.toISOString(),
+      createdAt: record.createdAt.toISOString(),
+      updatedAt: record.updatedAt.toISOString(),
+      place: {
+        id: record.place.id,
+        kakaoPlaceId: record.place.kakaoPlaceId,
+        placeName: record.place.name,
+        categoryName: record.place.categoryName,
+        addressName: record.place.addressName,
+        roadAddressName: record.place.roadAddressName,
+        longitude: record.place.longitude.toString(),
+        latitude: record.place.latitude.toString(),
+      },
+      images: await Promise.all(
+        record.images.map(async (image) => ({
+          id: image.id,
+          objectKey: image.objectKey,
+          sortOrder: image.sortOrder,
+          imageUrl: await this.s3UploadProvider.createDownloadUrl(
+            image.objectKey,
+          ),
+        })),
+      ),
+    };
   }
 }

@@ -2,6 +2,7 @@ import type {
   Emotion,
   Visibility,
 } from '../../generated/prisma/enums.js';
+import type { Prisma } from '../../generated/prisma/client.js';
 
 export interface SelectedPlaceInput {
   kakaoPlaceId: string;
@@ -37,6 +38,7 @@ export interface RecordImageResponse {
   id: string;
   objectKey: string;
   sortOrder: number;
+  imageUrl: string;
 }
 
 export interface RecordResponse {
@@ -85,3 +87,10 @@ export interface UpdateRecordRequest {
   place: SelectedPlaceInput;
   imageObjectKeys: string[];
 }
+
+export type RecordWithPlaceAndImages = Prisma.RecordGetPayload<{
+  include: {
+    place: true;
+    images: true;
+  };
+}>;
