@@ -104,7 +104,6 @@ export interface EmotionArchiveItem {
   emotion: Emotion;
   recordCount: number;
   percentage: number;
-  thumbnailImage: ArchiveThumbnailImage | null;
   isMostRecorded: boolean;
 }
 

@@ -37,40 +37,6 @@ export class EmotionArchiveRepository {
     });
   }
 
-  async findEmotionThumbnailRecords(userId: string) {
-    const emotionCounts = await this.findEmotionCounts(userId);
-
-    return Promise.all(
-      emotionCounts.map(async ({ emotion }) => {
-        const record = await database.record.findFirst({
-          where: {
-            userId,
-            emotion,
-            images: {
-              some: {},
-            },
-          },
-          orderBy: {
-            recordedAt: 'desc',
-          },
-          include: {
-            images: {
-              take: 1,
-              orderBy: {
-                sortOrder: 'asc',
-              },
-            },
-          },
-        });
-
-        return {
-          emotion,
-          record,
-        };
-      }),
-    );
-  }
-
   findEmotionArchiveRecords(
     userId: string,
     options: FindEmotionArchiveRecordsOptions,
