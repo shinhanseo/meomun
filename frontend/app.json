@@ -16,7 +16,8 @@
       "package": "com.hanseo.meomun"
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-build-properties"
     ]
   }
 }
