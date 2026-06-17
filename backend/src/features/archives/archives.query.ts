@@ -4,6 +4,7 @@ import type { ArchiveSort } from './archives.types.js';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 50;
+const KOREA_TIME_OFFSET_MS = 9 * 60 * 60 * 1000;
 
 export function parseArchiveKeyword(keyword?: string): string | undefined {
   return keyword?.trim() || undefined;
@@ -53,7 +54,7 @@ export function parseArchiveYearMonth(yearMonth?: string): {
 
   return {
     yearMonth,
-    startDate: new Date(Date.UTC(year, month - 1, 1)),
-    endDate: new Date(Date.UTC(year, month, 1)),
+    startDate: new Date(Date.UTC(year, month - 1, 1) - KOREA_TIME_OFFSET_MS),
+    endDate: new Date(Date.UTC(year, month, 1) - KOREA_TIME_OFFSET_MS),
   };
 }
