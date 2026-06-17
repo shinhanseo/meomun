@@ -1,5 +1,6 @@
-import { database } from '../../db.js';
-import type { ArchiveSort } from './archives.types.js';
+import { database } from '../../../db.js';
+
+import type { ArchiveSort } from '../archives.types.js';
 
 interface FindAllArchiveRecordsOptions {
   keyword?: string;
@@ -8,8 +9,7 @@ interface FindAllArchiveRecordsOptions {
   cursor?: string;
 }
 
-export class ArchivesRepository {
-  // All Archive
+export class AllArchiveRepository {
   findAllArchiveRecords(
     userId: string,
     options: FindAllArchiveRecordsOptions,
@@ -85,7 +85,7 @@ export class ArchivesRepository {
     return database.record.count({
       where: {
         userId,
-      }
+      },
     });
   }
 
