@@ -13,6 +13,8 @@ import {
 
 import { color, semanticColor } from '../../../shared/constants/color';
 
+import { useOnboardingStore } from '../store/onboardingStore';
+
 const slides = [
   {
     id: 'map',
@@ -41,6 +43,7 @@ export function OnboardingScreen() {
 
   const isLastSlide = currentIndex === slides.length - 1;
 
+  const completeOnboarding = useOnboardingStore((state) => state.completeOnboarding);
   const handleScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>,
   ) => {
@@ -51,9 +54,9 @@ export function OnboardingScreen() {
     setCurrentIndex(nextIndex);
   };
 
-  const handlePressNext = () => {
+  const handlePressNext = async () => {
     if (isLastSlide) {
-      // TODO: 온보딩 완료 저장 후 LoginScreen으로 이동
+      await completeOnboarding();
       // navigation.replace('Login');
       return;
     }
