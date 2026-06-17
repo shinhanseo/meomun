@@ -1,32 +1,35 @@
 import { create } from 'zustand';
 
-type User = {
-  id: string;
-  nickname: string | null;
-};
+import type { AuthUser } from '../types/auth.types';
 
-type AuthState = {
+interface AuthState {
   accessToken: string | null;
-  user: User | null;
-  isBootstrapping: boolean;
+  user: AuthUser | null;
+  isInitializing: boolean;
 
-  setSession: (params: { accessToken: string; user: User }) => void;
+  setSession: (session: { accessToken: string; user: AuthUser }) => void;
+  setAccessToken: (accessToken: string | null) => void;
+  setUser: (user: AuthUser | null) => void;
   clearSession: () => void;
-  setBootstrapping: (value: boolean) => void;
-};
+  setInitializing: (isInitializing: boolean) => void;
+}
 
-export const userAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
   user: null,
-  isBootstrapping: true,
+  isInitializing: true,
 
   setSession: ({ accessToken, user }) => {
-    set({
-      accessToken,
-      user,
-    });
+    set({ accessToken, user });
   },
 
+  setAccessToken: (accessToken) => {
+    set({ accessToken });
+  },
+
+  setUser: (user) => {
+    set({ user });
+  },
 
   clearSession: () => {
     set({
@@ -35,8 +38,7 @@ export const userAuthStore = create<AuthState>((set) => ({
     });
   },
 
-  setBootstrapping: (value) => {
-    set({ isBootstrapping: value });
+  setInitializing: (isInitializing) => {
+    set({ isInitializing });
   },
-
 }));
