@@ -1,12 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
+
+import { AppProvider } from './src/app/providers/AppProvider';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Meomun</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AppProvider>
+      <View style={styles.container}>
+        <Text>Meomun</Text>
+        <StatusBar style="auto" />
+      </View>
+    </AppProvider>
   );
 }
 
