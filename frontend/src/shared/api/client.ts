@@ -9,3 +9,12 @@ export const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+export function setApiAccessToken(accessToken: string | null) {
+  if (accessToken) {
+    apiClient.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    return;
+  }
+
+  delete apiClient.defaults.headers.common.Authorization;
+}

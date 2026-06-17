@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 
+import { setApiAccessToken } from '../../../shared/api/client';
 import type { AuthUser } from '../types/auth.types';
 
 interface AuthState {
@@ -20,10 +21,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   isInitializing: true,
 
   setSession: ({ accessToken, user }) => {
+    setApiAccessToken(accessToken);
     set({ accessToken, user });
   },
 
   setAccessToken: (accessToken) => {
+    setApiAccessToken(accessToken);
     set({ accessToken });
   },
 
@@ -32,6 +35,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   clearSession: () => {
+    setApiAccessToken(null);
     set({
       accessToken: null,
       user: null,
