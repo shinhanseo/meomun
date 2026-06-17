@@ -22,6 +22,7 @@ const config: ExpoConfig = {
   },
   plugins: [
     'expo-secure-store',
+    'expo-apple-authentication',
     [
       '@react-native-seoul/kakao-login',
       {
