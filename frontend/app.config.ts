@@ -1,10 +1,8 @@
 import type { ExpoConfig } from 'expo/config';
 
-const kakaoNativeAppKey = process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY;
-
-if (!kakaoNativeAppKey) {
-  throw new Error('EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY is not defined');
-}
+const kakaoNativeAppKey =
+  process.env.EXPO_PUBLIC_KAKAO_NATIVE_APP_KEY ??
+  '21a5930fdd4ec1deced66f33c3893668';
 
 const config: ExpoConfig = {
   name: 'Meomun',

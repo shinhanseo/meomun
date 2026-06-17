@@ -1,8 +1,8 @@
-import { login } from '@react-native-seoul/kakao-login';
+import { loginWithKakaoAccount } from '@react-native-seoul/kakao-login';
 
 export function useKakaoSdk() {
   const getKakaoAccessToken = async (): Promise<string> => {
-    const token = await login();
+    const token = await loginWithKakaoAccount();
     return token.accessToken;
   };
 
