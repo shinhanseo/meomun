@@ -5,6 +5,8 @@ import { Emotion } from '../../generated/prisma/enums.js';
 import { AllArchiveService } from './services/all-archive.service.js';
 import { EmotionArchiveService } from './services/emotion-archive.service.js';
 import { MonthlyArchiveService } from './services/monthly-archive.service.js';
+import { parseArchivePlaceCategoryParam } from './archives.place-category.js';
+import { PlaceArchiveService } from './services/place-archive.service.js';
 import type {
   ArchivePaginationQuery,
   ArchiveSort,
@@ -29,6 +31,17 @@ interface EmotionArchiveDetailQuery {
   cursor?: string;
 }
 
+interface PlaceCategoryArchiveDetailParams {
+  category: string;
+}
+
+interface PlaceCategoryArchiveDetailQuery {
+  keyword?: string;
+  sort?: ArchiveSort;
+  limit?: string;
+  cursor?: string;
+}
+
 interface MonthlyArchiveRequestQuery {
   yearMonth?: string;
   keyword?: string;
@@ -42,6 +55,7 @@ export class ArchivesController {
     private readonly allArchiveService = new AllArchiveService(),
     private readonly emotionArchiveService = new EmotionArchiveService(),
     private readonly monthlyArchiveService = new MonthlyArchiveService(),
+    private readonly placeArchiveService = new PlaceArchiveService(),
   ) { }
 
   getAllArchive = async (
@@ -86,6 +100,50 @@ export class ArchivesController {
       userId,
       query,
     );
+
+    response.status(200).json(result);
+  };
+
+  getPlaceCategoryArchive = async (
+    request: Request,
+    response: Response,
+  ) => {
+    const userId = this.getUserId(request);
+
+    const result =
+      await this.placeArchiveService.getPlaceCategoryArchive(userId);
+
+    response.status(200).json(result);
+  };
+
+  getPlaceCategoryArchiveDetail = async (
+    request: Request<
+      PlaceCategoryArchiveDetailParams,
+      object,
+      object,
+      PlaceCategoryArchiveDetailQuery
+    >,
+    response: Response,
+  ) => {
+    const userId = this.getUserId(request);
+    const category = parseArchivePlaceCategoryParam(request.params.category);
+
+    const query: ArchivePaginationQuery = {
+      keyword: request.query.keyword,
+      sort: request.query.sort,
+      limit:
+        request.query.limit === undefined
+          ? undefined
+          : Number(request.query.limit),
+      cursor: request.query.cursor,
+    };
+
+    const result =
+      await this.placeArchiveService.getPlaceCategoryArchiveDetail(
+        userId,
+        category,
+        query,
+      );
 
     response.status(200).json(result);
   };

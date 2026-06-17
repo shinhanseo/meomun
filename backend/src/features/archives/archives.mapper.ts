@@ -1,6 +1,7 @@
 import { S3UploadProvider } from '../uploads/provider/s3-upload.provider.js';
 
 import type {
+  ArchiveThumbnailImage,
   ArchiveRecordListItem,
   MonthlyArchiveRecordItem,
 } from './archives.types.js';
@@ -53,6 +54,12 @@ export class ArchivesMapper {
       recordedAt: record.recordedAt.toISOString(),
       thumbnailImage,
     };
+  }
+
+  toArchiveThumbnailImage(
+    record: ArchiveRecordWithThumbnail,
+  ): Promise<ArchiveThumbnailImage | null> {
+    return this.createThumbnailImage(record);
   }
 
   private async createThumbnailImage(record: ArchiveRecordWithThumbnail) {

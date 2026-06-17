@@ -3,6 +3,18 @@ import type { Emotion } from '../../generated/prisma/enums.js';
 // Common
 export type ArchiveSort = 'latest' | 'oldest';
 
+export type ArchivePlaceCategory =
+  | 'HOME'
+  | 'CAFE'
+  | 'FOOD'
+  | 'NATURE'
+  | 'CULTURE'
+  | 'SCHOOL'
+  | 'WORK'
+  | 'SHOPPING'
+  | 'STREET'
+  | 'OTHER';
+
 export interface ArchivePaginationQuery {
   keyword?: string;
   sort?: ArchiveSort;
@@ -73,12 +85,12 @@ export interface MonthlyArchiveResponse {
 
 // Place category archive
 export interface PlaceCategoryArchiveStatsItem {
-  category: string;
+  category: ArchivePlaceCategory;
   recordCount: number;
 }
 
 export interface PlaceCategoryArchiveItem {
-  category: string;
+  category: ArchivePlaceCategory;
   recordCount: number;
   mostRecordedEmotion: Emotion | null;
   thumbnailImage: ArchiveThumbnailImage | null;
@@ -90,11 +102,11 @@ export interface PlaceCategoryArchiveResponse {
 }
 
 export interface PlaceCategoryArchiveDetailQuery extends ArchivePaginationQuery {
-  category: string;
+  category: ArchivePlaceCategory;
 }
 
 export interface PlaceCategoryArchiveDetailResponse {
-  category: string;
+  category: ArchivePlaceCategory;
   records: ArchiveRecordListItem[];
   nextCursor: string | null;
 }

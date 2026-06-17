@@ -10,6 +10,14 @@ archivesRoutes.use(authenticate);
 
 archivesRoutes.get('/all', archivesController.getAllArchive);
 archivesRoutes.get('/monthly', archivesController.getMonthlyArchive);
+archivesRoutes.get(
+  '/place-categories',
+  archivesController.getPlaceCategoryArchive,
+);
+archivesRoutes.get(
+  '/place-categories/:category/records',
+  archivesController.getPlaceCategoryArchiveDetail,
+);
 archivesRoutes.get('/emotions', archivesController.getEmotionArchive);
 archivesRoutes.get(
   '/emotions/:emotion/records',
