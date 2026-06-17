@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useRef, useState } from 'react';
 import {
   FlatList,
@@ -11,9 +13,15 @@ import {
   View,
 } from 'react-native';
 
+import type { AuthStackParamList } from '../../../app/navigation/AuthNavigator';
 import { color, semanticColor } from '../../../shared/constants/color';
 
 import { useOnboardingStore } from '../store/onboardingStore';
+
+type OnboardingNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  'Onboarding'
+>;
 
 const slides = [
   {
@@ -38,6 +46,7 @@ const slides = [
 
 export function OnboardingScreen() {
   const { width } = useWindowDimensions();
+  const navigation = useNavigation<OnboardingNavigationProp>();
   const flatListRef = useRef<FlatList<(typeof slides)[number]>>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -57,7 +66,7 @@ export function OnboardingScreen() {
   const handlePressNext = async () => {
     if (isLastSlide) {
       await completeOnboarding();
-      // navigation.replace('Login');
+      navigation.replace('Login');
       return;
     }
 
