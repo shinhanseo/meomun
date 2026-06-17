@@ -2,21 +2,13 @@ import { database } from '../../db.js';
 
 import type { CreateRecordData, UpdateRecordData, FindRecordsOptions } from './records.types.js';
 
-const recordInclude = {
-  place: true,
-  images: {
-    orderBy: {
-      sortOrder: 'asc' as const,
-    },
-  },
-};
-
 export class RecordsRepository {
   createRecord(record: CreateRecordData) {
     return database.record.create({
       data: {
         userId: record.userId,
         placeId: record.placeId,
+        title: record.title,
         emotion: record.emotion,
         content: record.content,
         recordedAt: record.recordedAt,
@@ -97,6 +89,7 @@ export class RecordsRepository {
         },
         data: {
           placeId: record.placeId,
+          title: record.title,
           emotion: record.emotion,
           content: record.content,
           recordedAt: record.recordedAt,

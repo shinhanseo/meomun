@@ -1,0 +1,5 @@
+ALTER TABLE "records"
+ADD COLUMN "title" TEXT NOT NULL DEFAULT '';
+
+ALTER TABLE "records"
+ALTER COLUMN "title" DROP DEFAULT;

@@ -15,6 +15,7 @@ export interface SelectedPlaceInput {
 }
 
 export interface CreateRecordRequest {
+  title: string;
   emotion: Emotion;
   content?: string;
   recordedAt: string;
@@ -43,6 +44,7 @@ export interface RecordImageResponse {
 
 export interface RecordResponse {
   id: string;
+  title: string;
   emotion: Emotion;
   content: string | null;
   visibility: Visibility;
@@ -56,6 +58,7 @@ export interface RecordResponse {
 export interface CreateRecordData {
   userId: string;
   placeId: string;
+  title: string;
   emotion: Emotion;
   content?: string;
   recordedAt: Date;
@@ -65,6 +68,7 @@ export interface CreateRecordData {
 
 export interface UpdateRecordData {
   placeId: string;
+  title?: string;
   emotion?: Emotion;
   content?: string | null;
   recordedAt?: Date;
@@ -80,6 +84,7 @@ export interface FindRecordsOptions {
 }
 
 export interface UpdateRecordRequest {
+  title: string;
   emotion: Emotion;
   content?: string | null;
   recordedAt: string;

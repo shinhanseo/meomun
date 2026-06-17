@@ -10,6 +10,7 @@ import type {
   UpdateRecordRequest,
 } from './records.types.js';
 
+const MAX_TITLE_LENGTH = 40;
 
 export class RecordsService {
   constructor(
@@ -38,7 +39,22 @@ export class RecordsService {
     }
   }
 
+  private normalizeTitle(title: string): string {
+    const trimmedTitle = title?.trim();
+
+    if (!trimmedTitle) {
+      throw new AppError(400, '제목을 입력해주세요.');
+    }
+
+    if (trimmedTitle.length > MAX_TITLE_LENGTH) {
+      throw new AppError(400, '제목은 최대 40자까지 입력할 수 있습니다.');
+    }
+
+    return trimmedTitle;
+  }
+
   async createRecord(userId: string, request: CreateRecordRequest) {
+    const title = this.normalizeTitle(request.title);
     const recordedAt = this.parseRecordedAt(request.recordedAt);
     const imageObjectKeys = request.imageObjectKeys ?? [];
 
@@ -51,6 +67,7 @@ export class RecordsService {
     const record = await this.recordsRepository.createRecord({
       userId,
       placeId: place.id,
+      title,
       emotion: request.emotion,
       content: request.content?.trim() || undefined,
       recordedAt,
@@ -118,6 +135,7 @@ export class RecordsService {
     }
 
     const recordedAt = this.parseRecordedAt(request.recordedAt);
+    const title = this.normalizeTitle(request.title);
 
     this.validateImageObjectKeys(request.imageObjectKeys);
 
@@ -127,6 +145,7 @@ export class RecordsService {
 
     const record = await this.recordsRepository.updateRecord(recordId, {
       placeId: place.id,
+      title,
       emotion: request.emotion,
       content: request.content?.trim() || null,
       recordedAt,
@@ -157,6 +176,7 @@ export class RecordsService {
   ): Promise<RecordResponse> {
     return {
       id: record.id,
+      title: record.title,
       emotion: record.emotion,
       content: record.content,
       visibility: record.visibility,

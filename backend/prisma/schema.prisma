@@ -95,6 +95,7 @@ model Record {
   id         String        @id @default(uuid()) @db.Uuid
   userId     String        @map("user_id") @db.Uuid
   placeId    String        @map("place_id") @db.Uuid
+  title      String
   emotion    Emotion
   content    String?
   visibility Visibility    @default(PRIVATE)
