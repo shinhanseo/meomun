@@ -4,9 +4,11 @@ import { AppError } from '../../common/errors/app-error.js';
 import { Emotion } from '../../generated/prisma/enums.js';
 import { AllArchiveService } from './services/all-archive.service.js';
 import { EmotionArchiveService } from './services/emotion-archive.service.js';
+import { MonthlyArchiveService } from './services/monthly-archive.service.js';
 import type {
   ArchivePaginationQuery,
   ArchiveSort,
+  MonthlyArchiveQuery,
 } from './archives.types.js';
 
 interface AllArchiveQuery {
@@ -27,11 +29,19 @@ interface EmotionArchiveDetailQuery {
   cursor?: string;
 }
 
+interface MonthlyArchiveRequestQuery {
+  yearMonth?: string;
+  keyword?: string;
+  sort?: ArchiveSort;
+  limit?: string;
+  cursor?: string;
+}
 
 export class ArchivesController {
   constructor(
     private readonly allArchiveService = new AllArchiveService(),
     private readonly emotionArchiveService = new EmotionArchiveService(),
+    private readonly monthlyArchiveService = new MonthlyArchiveService(),
   ) { }
 
   getAllArchive = async (
@@ -55,6 +65,31 @@ export class ArchivesController {
     response.status(200).json(result);
   };
 
+  getMonthlyArchive = async (
+    request: Request<object, object, object, MonthlyArchiveRequestQuery>,
+    response: Response,
+  ) => {
+    const userId = this.getUserId(request);
+
+    const query: MonthlyArchiveQuery = {
+      yearMonth: request.query.yearMonth ?? '',
+      keyword: request.query.keyword,
+      sort: request.query.sort,
+      limit:
+        request.query.limit === undefined
+          ? undefined
+          : Number(request.query.limit),
+      cursor: request.query.cursor,
+    };
+
+    const result = await this.monthlyArchiveService.getMonthlyArchive(
+      userId,
+      query,
+    );
+
+    response.status(200).json(result);
+  };
+
   getEmotionArchive = async (
     request: Request,
     response: Response,
@@ -64,7 +99,7 @@ export class ArchivesController {
     const result = await this.emotionArchiveService.getEmotionArchive(userId);
 
     response.status(200).json(result);
-  }
+  };
 
   getEmotionArchiveDetail = async (
     request: Request<

@@ -9,6 +9,7 @@ const archivesController = new ArchivesController();
 archivesRoutes.use(authenticate);
 
 archivesRoutes.get('/all', archivesController.getAllArchive);
+archivesRoutes.get('/monthly', archivesController.getMonthlyArchive);
 archivesRoutes.get('/emotions', archivesController.getEmotionArchive);
 archivesRoutes.get(
   '/emotions/:emotion/records',

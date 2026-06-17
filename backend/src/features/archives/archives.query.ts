@@ -35,3 +35,25 @@ export function parseArchiveSort(sort?: ArchiveSort): ArchiveSort {
 
   return parsedSort;
 }
+
+export function parseArchiveYearMonth(yearMonth?: string): {
+  yearMonth: string;
+  startDate: Date;
+  endDate: Date;
+} {
+  if (!yearMonth || !/^\d{4}-\d{2}$/.test(yearMonth)) {
+    throw new AppError(400, 'yearMonth는 YYYY-MM 형식이어야 합니다.');
+  }
+
+  const [year, month] = yearMonth.split('-').map(Number);
+
+  if (month < 1 || month > 12) {
+    throw new AppError(400, 'yearMonth의 월은 01에서 12 사이여야 합니다.');
+  }
+
+  return {
+    yearMonth,
+    startDate: new Date(Date.UTC(year, month - 1, 1)),
+    endDate: new Date(Date.UTC(year, month, 1)),
+  };
+}
