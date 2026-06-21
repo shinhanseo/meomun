@@ -92,14 +92,17 @@ export function BottomBar({
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: semanticColor.background,
+    bottom: 0,
+    left: 0,
     paddingHorizontal: 20,
     paddingBottom: 24,
     paddingTop: 8,
+    position: 'absolute',
+    right: 0,
   },
   container: {
     alignItems: 'center',
-    backgroundColor: color.white,
+    backgroundColor: 'rgba(255, 255, 255, 0.88)',
     borderRadius: 32,
     elevation: 8,
     flexDirection: 'row',

@@ -33,6 +33,15 @@ export function MainTabNavigator() {
       )}
       screenOptions={{
         headerShown: false,
+        sceneStyle: {
+          backgroundColor: 'transparent',
+        },
+        tabBarStyle: {
+          backgroundColor: 'transparent',
+          borderTopWidth: 0,
+          elevation: 0,
+          position: 'absolute',
+        },
       }}
     >
       <Tab.Screen
