@@ -28,7 +28,7 @@ const slides = [
     id: 'map',
     title: '오늘의 감정을\n지도 위에 남겨보세요',
     description: '내가 머문 장소와 감정을\n하나의 지도에 기록해요.',
-    image: require('../../../assets/images/onboarding/onborading1.png'),
+    image: require('../../../assets/images/onboarding/onboarding1.png'),
   },
   {
     id: 'record',
@@ -40,7 +40,7 @@ const slides = [
     id: 'stats',
     title: '나만의 감정 흐름을\n한눈에 확인하세요',
     description: '통계를 통해 내 감정의 패턴을\n발견하고 이해할 수 있어요.',
-    image: require('../../../assets/images/onboarding/onborading3.png'),
+    image: require('../../../assets/images/onboarding/onboarding3.png'),
   },
 ];
 
@@ -128,7 +128,7 @@ export function OnboardingScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: semanticColor.background,
+    backgroundColor: semanticColor.onBoardingBackground,
     flex: 1,
   },
   slide: {
