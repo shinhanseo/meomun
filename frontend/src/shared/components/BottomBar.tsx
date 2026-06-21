@@ -6,9 +6,14 @@ import {
   PlusIcon,
   UserIcon,
 } from 'lucide-react-native';
+import { Fragment } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { color, semanticColor } from '../constants/color';
+
+type BottomBarProps = BottomTabBarProps & {
+  onPressCreate: () => void;
+};
 
 const tabItems = {
   Home: {
@@ -29,13 +34,16 @@ const tabItems = {
   },
 } as const;
 
-export function BottomBar({ state, navigation }: BottomTabBarProps) {
+export function BottomBar({
+  state,
+  navigation,
+  onPressCreate,
+}: BottomBarProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;
-          const isRecord = route.name === 'Record';
 
           const handlePress = () => {
             const event = navigation.emit({
@@ -49,18 +57,6 @@ export function BottomBar({ state, navigation }: BottomTabBarProps) {
             }
           };
 
-          if (isRecord) {
-            return (
-              <Pressable
-                key={route.key}
-                style={styles.recordButton}
-                onPress={handlePress}
-              >
-                <PlusIcon size={24} color={color.white} strokeWidth={2} />
-              </Pressable>
-            );
-          }
-
           const item = tabItems[route.name as keyof typeof tabItems];
 
           if (!item) {
@@ -73,16 +69,20 @@ export function BottomBar({ state, navigation }: BottomTabBarProps) {
             : color.purple[400];
 
           return (
-            <Pressable
-              key={route.key}
-              style={styles.tabButton}
-              onPress={handlePress}
-            >
-              <Icon size={24} color={tintColor} strokeWidth={2} />
-              <Text style={[styles.label, isFocused && styles.activeLabel]}>
-                {item.label}
-              </Text>
-            </Pressable>
+            <Fragment key={route.key}>
+              <Pressable style={styles.tabButton} onPress={handlePress}>
+                <Icon size={24} color={tintColor} strokeWidth={2} />
+                <Text style={[styles.label, isFocused && styles.activeLabel]}>
+                  {item.label}
+                </Text>
+              </Pressable>
+
+              {route.name === 'Archive' ? (
+                <Pressable style={styles.recordButton} onPress={onPressCreate}>
+                  <PlusIcon size={24} color={color.white} strokeWidth={2} />
+                </Pressable>
+              ) : null}
+            </Fragment>
           );
         })}
       </View>
