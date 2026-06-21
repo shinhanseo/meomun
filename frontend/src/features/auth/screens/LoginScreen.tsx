@@ -110,15 +110,14 @@ export function LoginScreen() {
         </View>
 
       </View>
-      <View style={styles.agreementText}>
-        <Text style={styles.agreementLine}>
-          로그인하면{' '}
-          <Text style={styles.agreementButtonText}>서비스 이용약관</Text>
-          {' '}및{' '}
-          <Text style={styles.agreementButtonText}>개인정보 처리방침</Text>
-          에 동의하게 됩니다.
-        </Text>
-      </View>
+      <Text style={styles.agreementLine}>
+        로그인하면{' '}
+        <Text style={styles.agreementButtonText}>서비스 이용약관</Text>
+        {' '}및{' '}
+        <Text style={styles.agreementButtonText}>개인정보 처리방침</Text>
+        {'\n'}
+        에 동의하게 됩니다.
+      </Text>
     </View>
   );
 }
@@ -142,7 +141,7 @@ const styles = StyleSheet.create({
   },
   textArea: {
     alignItems: 'center',
-    marginTop: 28,
+    marginTop: 10,
   },
   title: {
     color: semanticColor.primary,
@@ -155,7 +154,8 @@ const styles = StyleSheet.create({
     color: semanticColor.textMuted,
     fontSize: 17,
     lineHeight: 26,
-    marginTop: 18,
+    marginTop: 2,
+    marginBottom: 18,
     textAlign: 'center',
   },
   buttonArea: {
