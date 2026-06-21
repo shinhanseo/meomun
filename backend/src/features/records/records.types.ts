@@ -42,6 +42,11 @@ export interface RecordImageResponse {
   imageUrl: string;
 }
 
+export interface RecordThumbnailImageResponse {
+  objectKey: string;
+  imageUrl: string;
+}
+
 export interface RecordResponse {
   id: string;
   title: string;
@@ -53,6 +58,19 @@ export interface RecordResponse {
   updatedAt: string;
   place: RecordPlaceResponse;
   images: RecordImageResponse[];
+}
+
+export interface MapRecordResponse {
+  id: string;
+  title: string;
+  content: string | null;
+  emotion: Emotion;
+  recordedAt: string;
+  place: {
+    latitude: string;
+    longitude: string;
+  };
+  thumbnailImage: RecordThumbnailImageResponse | null;
 }
 
 export interface CreateRecordData {
@@ -94,6 +112,13 @@ export interface UpdateRecordRequest {
 }
 
 export type RecordWithPlaceAndImages = Prisma.RecordGetPayload<{
+  include: {
+    place: true;
+    images: true;
+  };
+}>;
+
+export type MapRecordWithPlaceAndThumbnail = Prisma.RecordGetPayload<{
   include: {
     place: true;
     images: true;

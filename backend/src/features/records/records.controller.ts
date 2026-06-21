@@ -71,6 +71,17 @@ export class RecordsController {
     response.status(200).json(records);
   };
 
+  getMapRecords = async (
+    request: Request,
+    response: Response,
+  ) => {
+    const userId = this.getUserId(request);
+
+    const records = await this.recordsService.getMapRecords(userId);
+
+    response.status(200).json(records);
+  };
+
   updateRecord = async (
     request: Request<RecordParams, object, UpdateRecordRequest>,
     response: Response,

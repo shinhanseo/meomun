@@ -5,6 +5,8 @@ import { S3UploadProvider } from '../uploads/provider/s3-upload.provider.js';
 import type {
   CreateRecordRequest,
   FindRecordsOptions,
+  MapRecordResponse,
+  MapRecordWithPlaceAndThumbnail,
   RecordResponse,
   RecordWithPlaceAndImages,
   UpdateRecordRequest,
@@ -120,6 +122,16 @@ export class RecordsService {
     );
   }
 
+  async getMapRecords(userId: string) {
+    const records = await this.recordsRepository.findMapRecordsByUserId(
+      userId,
+    );
+
+    return Promise.all(
+      records.map((record) => this.toMapRecordResponse(record)),
+    );
+  }
+
   async updateRecord(
     userId: string,
     recordId: string,
@@ -203,6 +215,32 @@ export class RecordsService {
           ),
         })),
       ),
+    };
+  }
+
+  private async toMapRecordResponse(
+    record: MapRecordWithPlaceAndThumbnail,
+  ): Promise<MapRecordResponse> {
+    const thumbnail = record.images[0];
+
+    return {
+      id: record.id,
+      title: record.title,
+      content: record.content,
+      emotion: record.emotion,
+      recordedAt: record.recordedAt.toISOString(),
+      place: {
+        latitude: record.place.latitude.toString(),
+        longitude: record.place.longitude.toString(),
+      },
+      thumbnailImage: thumbnail
+        ? {
+          objectKey: thumbnail.objectKey,
+          imageUrl: await this.s3UploadProvider.createDownloadUrl(
+            thumbnail.objectKey,
+          ),
+        }
+        : null,
     };
   }
 }

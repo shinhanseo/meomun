@@ -75,6 +75,26 @@ export class RecordsRepository {
     });
   }
 
+  findMapRecordsByUserId(userId: string) {
+    return database.record.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        recordedAt: 'desc',
+      },
+      include: {
+        place: true,
+        images: {
+          take: 1,
+          orderBy: {
+            sortOrder: 'asc',
+          },
+        },
+      },
+    });
+  }
+
   updateRecord(recordId: string, record: UpdateRecordData) {
     return database.$transaction(async (transaction) => {
       await transaction.recordImage.deleteMany({
