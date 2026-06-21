@@ -5,7 +5,7 @@ import { semanticColor } from '../../shared/constants/color';
 import { useAuthBootstrap } from '../../features/auth/hooks/useAuthBootstrap';
 import { useAuthStore } from '../../features/auth/store/authStore';
 import { AuthNavigator } from './AuthNavigator';
-import { MainTabNavigator } from './MainTabNavigator';
+import { MainStackNavigator } from './MainStackNavigator';
 
 export function RootNavigator() {
   useAuthBootstrap();
@@ -23,7 +23,7 @@ export function RootNavigator() {
 
   return (
     <NavigationContainer>
-      {accessToken ? <MainTabNavigator /> : <AuthNavigator />}
+      {accessToken ? <MainStackNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 }
