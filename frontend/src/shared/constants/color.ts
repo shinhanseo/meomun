@@ -10,6 +10,7 @@ export const color = {
     700: '#5D43A0',
     800: '#49367D',
     900: '#34265C',
+    1000: '#F0E8F8',
   },
   gray: {
     50: '#FAFAFC',
@@ -54,6 +55,7 @@ export const color = {
 
 export const semanticColor = {
   background: color.purple[50],
+  onBoardingBackground: color.purple[1000],
   surface: color.white,
   primary: color.purple[600],
   primaryPressed: color.purple[700],
