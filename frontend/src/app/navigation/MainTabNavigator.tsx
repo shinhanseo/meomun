@@ -1,15 +1,16 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { ArchiveScreen } from '../../features/archive/screens/ArchiveScreen';
 import { HomeScreen } from '../../features/home/screens/HomeScreen';
 import { ProfileScreen } from '../../features/profile/screens/ProfileScreen';
-import { RecordScreen } from '../../features/record/screens/RecordScreen';
 import { StatsScreen } from '../../features/stats/screens/StatsScreen';
+import { BottomBar } from '../../shared/components/BottomBar';
+import { ArchiveStackNavigator } from './ArchiveStackNavigator';
+import type { MainStackParamList } from './MainStackNavigator';
 
 export type MainTabParamList = {
   Home: undefined;
   Archive: undefined;
-  Record: undefined;
   Stats: undefined;
   Profile: undefined;
 };
@@ -20,6 +21,16 @@ export function MainTabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
+      tabBar={(props) => (
+        <BottomBar
+          {...props}
+          onPressCreate={() => {
+            props.navigation
+              .getParent<NativeStackNavigationProp<MainStackParamList>>()
+              ?.navigate('RecordWrite');
+          }}
+        />
+      )}
       screenOptions={{
         headerShown: false,
       }}
@@ -33,16 +44,9 @@ export function MainTabNavigator() {
       />
       <Tab.Screen
         name="Archive"
-        component={ArchiveScreen}
+        component={ArchiveStackNavigator}
         options={{
           title: '보관함',
-        }}
-      />
-      <Tab.Screen
-        name="Record"
-        component={RecordScreen}
-        options={{
-          title: '기록하기',
         }}
       />
       <Tab.Screen

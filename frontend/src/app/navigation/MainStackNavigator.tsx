@@ -1,0 +1,43 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { EmotionArchiveDetailScreen } from '../../features/archive/screens/EmotionArchiveDetailScreen';
+import { PlaceArchiveDetailScreen } from '../../features/archive/screens/PlaceArchiveDetailScreen';
+import { PlaceSelectScreen } from '../../features/place/screens/PlaceSelectScreen';
+import { RecordDetailScreen } from '../../features/record/screens/RecordDetailScreen';
+import { RecordWriteScreen } from '../../features/record/screens/RecordWriteScreen';
+import { MainTabNavigator } from './MainTabNavigator';
+
+export type MainStackParamList = {
+  MainTabs: undefined;
+  RecordWrite: undefined;
+  RecordDetail: undefined;
+  PlaceSelect: undefined;
+  PlaceArchiveDetail: undefined;
+  EmotionArchiveDetail: undefined;
+};
+
+const Stack = createNativeStackNavigator<MainStackParamList>();
+
+export function MainStackNavigator() {
+  return (
+    <Stack.Navigator
+      initialRouteName="MainTabs"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="MainTabs" component={MainTabNavigator} />
+      <Stack.Screen name="RecordWrite" component={RecordWriteScreen} />
+      <Stack.Screen name="RecordDetail" component={RecordDetailScreen} />
+      <Stack.Screen name="PlaceSelect" component={PlaceSelectScreen} />
+      <Stack.Screen
+        name="PlaceArchiveDetail"
+        component={PlaceArchiveDetailScreen}
+      />
+      <Stack.Screen
+        name="EmotionArchiveDetail"
+        component={EmotionArchiveDetailScreen}
+      />
+    </Stack.Navigator>
+  );
+}
