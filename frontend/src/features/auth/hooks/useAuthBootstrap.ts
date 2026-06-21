@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 
 import { tokenStorage } from '../../../shared/api/tokenStorage';
+import { env } from '../../../shared/config/env';
+import { onboardingStorage } from '../../../shared/storage/onboardingStorage';
 import { authApi } from '../api/authApi';
 import { useAuthStore } from '../store/authStore';
 
@@ -12,6 +14,13 @@ export function useAuthBootstrap() {
   useEffect(() => {
     const bootstrap = async () => {
       try {
+        if (env.resetAppStateOnBoot) {
+          await tokenStorage.removeRefreshToken();
+          await onboardingStorage.resetHasSeenOnboarding();
+          clearSession();
+          return;
+        }
+
         const refreshToken = await tokenStorage.getRefreshToken();
 
         if (!refreshToken) {
