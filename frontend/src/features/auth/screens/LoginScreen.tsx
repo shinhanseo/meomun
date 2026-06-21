@@ -1,6 +1,6 @@
 // frontend/src/features/auth/screens/LoginScreen.tsx
 
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { color, semanticColor } from '../../../shared/constants/color';
 import { useAppleAuth } from '../hooks/useAppleAuth';
@@ -25,7 +25,8 @@ export function LoginScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.logo}>머문</Text>
+
+        <Image source={require('../../../assets/icons/logo.png')} style={styles.image} />
 
         <View style={styles.textArea}>
           <Text style={styles.title}>어서오세요</Text>
@@ -73,6 +74,50 @@ export function LoginScreen() {
             </Text>
           </Pressable>
         ) : null}
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 20,
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              height: 1,
+              backgroundColor: '#E5E7EB',
+            }}
+          />
+
+          <Text
+            style={{
+              marginHorizontal: 12,
+              color: '#9CA3AF',
+              fontSize: 14,
+            }}
+          >
+            또는
+          </Text>
+
+          <View
+            style={{
+              flex: 1,
+              height: 1,
+              backgroundColor: '#E5E7EB',
+            }}
+          />
+        </View>
+
+      </View>
+      <View style={styles.agreementText}>
+        <Text style={styles.agreementLine}>
+          로그인하면{' '}
+          <Text style={styles.agreementButtonText}>서비스 이용약관</Text>
+          {' '}및{' '}
+          <Text style={styles.agreementButtonText}>개인정보 처리방침</Text>
+          에 동의하게 됩니다.
+        </Text>
       </View>
     </View>
   );
@@ -97,17 +142,17 @@ const styles = StyleSheet.create({
   },
   textArea: {
     alignItems: 'center',
-    marginTop: 52,
+    marginTop: 28,
   },
   title: {
-    color: semanticColor.textPrimary,
+    color: semanticColor.primary,
     fontSize: 28,
     fontWeight: '700',
     lineHeight: 40,
     textAlign: 'center',
   },
   description: {
-    color: semanticColor.textSecondary,
+    color: semanticColor.textMuted,
     fontSize: 17,
     lineHeight: 26,
     marginTop: 18,
@@ -150,5 +195,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     textAlign: 'center',
+  },
+  image: {
+    height: 330,
+    marginTop: 58,
+    width: '100%',
+  },
+  agreementText: {
+    alignItems: 'center',
+  },
+
+  agreementLine: {
+    color: semanticColor.textMuted,
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
+
+  agreementButtonText: {
+    color: semanticColor.primary,
+    fontWeight: '700',
   },
 });
