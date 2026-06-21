@@ -2,10 +2,10 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { semanticColor } from '../../../shared/constants/color';
 
-export function RecordScreen() {
+export function PlaceSelectScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>기록하기</Text>
+      <Text style={styles.title}>장소 선택</Text>
     </View>
   );
 }
