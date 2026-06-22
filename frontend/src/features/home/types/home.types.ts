@@ -1,12 +1,4 @@
-export type EmotionType =
-  | 'ANGRY'
-  | 'ANXIOUS'
-  | 'CALM'
-  | 'FLUTTER'
-  | 'HAPPY'
-  | 'REFLECTIVE'
-  | 'SAD'
-  | 'TIRED';
+import type { EmotionType } from '../constants/emotionMarker';
 
 export interface MapRecord {
   id: string;
