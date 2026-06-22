@@ -8,11 +8,6 @@ export type EmotionType =
   | 'SAD'
   | 'TIRED';
 
-export interface MapRecordThumbnailImage {
-  objectKey: string;
-  imageUrl: string;
-}
-
 export interface MapRecord {
   id: string;
   title: string;
@@ -23,5 +18,8 @@ export interface MapRecord {
     latitude: string;
     longitude: string;
   };
-  thumbnailImage: MapRecordThumbnailImage | null;
+  thumbnailImage: {
+    objectKey: string;
+    imageUrl: string;
+  } | null;
 }
