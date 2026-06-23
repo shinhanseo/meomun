@@ -1,8 +1,9 @@
 import {
   NaverMapView,
   type ClusterMarkerProp,
+  type NaverMapViewRef,
 } from '@mj-studio/react-native-naver-map';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { emotionMarkerMeta } from '../constants/emotionMarker';
@@ -29,6 +30,8 @@ export function HomeMap({
   selectedRecordId,
   onPressRecord,
 }: HomeMapProps) {
+  const mapRef = useRef<NaverMapViewRef>(null);
+
   const recordById = useMemo(() => {
     return new Map(records.map((record) => [record.id, record]));
   }, [records]);
@@ -56,13 +59,27 @@ export function HomeMap({
     }
   };
 
+  useEffect(() => {
+    if (!currentLocation) {
+      return;
+    }
+
+    mapRef.current?.animateCameraTo({
+      latitude: currentLocation.latitude,
+      longitude: currentLocation.longitude,
+      zoom: 13,
+      duration: 500,
+    });
+  }, [currentLocation]);
+
   return (
     <View style={styles.container}>
       <NaverMapView
+        ref={mapRef}
         style={styles.map}
         initialCamera={{
-          latitude: currentLocation?.latitude ?? 37.5665,
-          longitude: currentLocation?.longitude ?? 126.978,
+          latitude: 37.5665,
+          longitude: 126.978,
           zoom: 13,
         }}
         customStyleId="e559247a-fd67-42c6-937b-1d3ae0d97b27"
