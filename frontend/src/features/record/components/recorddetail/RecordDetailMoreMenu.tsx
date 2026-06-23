@@ -92,11 +92,6 @@ export function RecordDetailMoreMenu({
             </Text>
           </View>
         </Pressable>
-
-        <Pressable style={styles.cancelButton} onPress={onClose}>
-          <XIcon size={18} color={color.gray[500]} strokeWidth={2} />
-          <Text style={styles.cancelText}>취소</Text>
-        </Pressable>
       </BottomSheetView>
     </BottomSheet>
   );
