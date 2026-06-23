@@ -21,8 +21,8 @@ type HomeMapProps = {
   onPressRecord: (record: MapRecord) => void;
 };
 
-const MARKER_WIDTH = 78;
-const MARKER_HEIGHT = 98;
+const MARKER_WIDTH = 58;
+const MARKER_HEIGHT = 78;
 
 export function HomeMap({
   records,
@@ -44,8 +44,8 @@ export function HomeMap({
         identifier: record.id,
         latitude: Number(record.place.latitude),
         longitude: Number(record.place.longitude),
-        width: isSelected ? 90 : MARKER_WIDTH,
-        height: isSelected ? 112 : MARKER_HEIGHT,
+        width: isSelected ? 70 : MARKER_WIDTH,
+        height: isSelected ? 92 : MARKER_HEIGHT,
         image: emotionMarkerMeta[record.emotion].image,
       };
     });
