@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image: {
-    height: 430,
-    marginTop: 48,
+    height: 380,
+    marginTop: 8,
     width: '100%',
   },
   bottomArea: {
