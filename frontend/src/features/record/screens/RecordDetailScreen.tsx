@@ -15,6 +15,7 @@ import { RecordDetailContent } from '../components/recorddetail/RecordDetailCont
 import { RecordDetailPlaceSection } from '../components/recorddetail/RecordDetailPlaceSection';
 import { RecordDetailPhotoSection } from '../components/recorddetail/RecordDetailPhotoSection';
 import { RecordDetailMoreMenu } from '../components/recorddetail/RecordDetailMoreMenu';
+import { RecordDeleteConfirmModal } from '../components/recorddetail/RecordDeleteConfirmModal';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'RecordDetail'>;
 
@@ -23,6 +24,7 @@ export function RecordDetailScreen({ route, navigation }: Props) {
   const deleteRecord = useDeleteRecord();
 
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const {
     data: record,
@@ -53,34 +55,22 @@ export function RecordDetailScreen({ route, navigation }: Props) {
 
   const handleDelete = () => {
     setIsMoreMenuOpen(false);
+    setIsDeleteConfirmOpen(true);
+  };
 
-    Alert.alert(
-      '기록을 삭제할까요?',
-      '삭제한 기록은 되돌릴 수 없어요.',
-      [
-        {
-          text: '취소',
-          style: 'cancel',
-        },
-        {
-          text: '삭제',
-          style: 'destructive',
-          onPress: () => {
-            deleteRecord.mutate(record.id, {
-              onSuccess: () => {
-                navigation.goBack();
-              },
-              onError: () => {
-                Alert.alert(
-                  '삭제하지 못했어요',
-                  '잠시 후 다시 시도해주세요.',
-                );
-              },
-            });
-          },
-        },
-      ],
-    );
+  const handleConfirmDelete = () => {
+    deleteRecord.mutate(record.id, {
+      onSuccess: () => {
+        setIsDeleteConfirmOpen(false);
+        navigation.goBack();
+      },
+      onError: () => {
+        Alert.alert(
+          '삭제하지 못했어요',
+          '잠시 후 다시 시도해주세요.',
+        );
+      },
+    });
   };
 
   return (
@@ -119,6 +109,13 @@ export function RecordDetailScreen({ route, navigation }: Props) {
         onClose={() => setIsMoreMenuOpen(false)}
         onPressEdit={handleEdit}
         onPressDelete={handleDelete}
+      />
+
+      <RecordDeleteConfirmModal
+        visible={isDeleteConfirmOpen}
+        isDeleting={deleteRecord.isPending}
+        onClose={() => setIsDeleteConfirmOpen(false)}
+        onConfirm={handleConfirmDelete}
       />
     </View>
   );
