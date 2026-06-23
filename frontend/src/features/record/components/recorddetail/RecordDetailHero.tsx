@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { ChevronLeftIcon, MapPinIcon } from 'lucide-react-native';
+import { MoreHorizontalIcon } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { color } from '../../../../shared/constants/color';
@@ -24,6 +25,7 @@ type RecordDetailHeroProps = {
   emotion: EmotionCode;
   imageUrl?: string;
   onBack: () => void;
+  onPressMore: () => void;
 };
 
 export function RecordDetailHero({
@@ -34,6 +36,7 @@ export function RecordDetailHero({
   emotion,
   imageUrl,
   onBack,
+  onPressMore,
 }: RecordDetailHeroProps) {
   const insets = useSafeAreaInsets();
   const emotionInfo = emotionMeta[emotion];
@@ -58,6 +61,7 @@ export function RecordDetailHero({
             emotionColor={emotionInfo.color}
             emotionIcon={emotionInfo.icon}
             onBack={onBack}
+            onPressMore={onPressMore}
           />
         </ImageBackground>
       ) : (
@@ -73,6 +77,7 @@ export function RecordDetailHero({
             emotionColor={emotionInfo.color}
             emotionIcon={emotionInfo.icon}
             onBack={onBack}
+            onPressMore={onPressMore}
           />
         </View>
       )}
@@ -90,6 +95,7 @@ type HeroContentProps = {
   emotionColor: string;
   emotionIcon: ImageSourcePropType;
   onBack: () => void;
+  onPressMore: () => void;
 };
 
 function HeroContent({
@@ -102,12 +108,17 @@ function HeroContent({
   emotionColor,
   emotionIcon,
   onBack,
+  onPressMore,
 }: HeroContentProps) {
   return (
     <>
       <View style={[styles.topBar, { paddingTop: topInset + 10 }]}>
         <Pressable style={styles.backButton} onPress={onBack}>
           <ChevronLeftIcon size={24} color={color.purple[800]} />
+        </Pressable>
+
+        <Pressable style={styles.moreButton} onPress={onPressMore}>
+          <MoreHorizontalIcon size={24} color={color.purple[800]} />
         </Pressable>
       </View>
 
@@ -171,6 +182,9 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 18,
   },
   topBar: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     left: 0,
     paddingHorizontal: 24,
     position: 'absolute',
@@ -179,6 +193,14 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   backButton: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 21,
+    height: 42,
+    justifyContent: 'center',
+    width: 42,
+  },
+  moreButton: {
     alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 21,
