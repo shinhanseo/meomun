@@ -8,6 +8,7 @@ import type { MainStackParamList } from '../../../app/navigation/MainStackNaviga
 import { HomeHeader } from '../components/HomeHeader';
 import { HomeMap } from '../components/HomeMap';
 import { HomeRecordPanel } from '../components/HomeRecordPanel';
+import { HomeEmptyPanel } from '../components/HomeEmptyPanel';
 import { useMapRecords } from '../hooks/useMapRecords';
 import type { MapRecord } from '../types/home.types';
 
@@ -78,7 +79,13 @@ export function HomeScreen() {
             navigation.navigate('RecordDetail');
           }}
         />
-      ) : null}
+      ) : (
+        <HomeEmptyPanel
+          onPressCreate={() => {
+            navigation.navigate('RecordWrite');
+          }}
+        />
+      )}
     </View>
   );
 }
