@@ -76,7 +76,9 @@ export function HomeScreen() {
           mode={panelMode}
           record={panelRecord}
           onPressDetail={() => {
-            navigation.navigate('RecordDetail');
+            navigation.navigate('RecordDetail', {
+              recordId: panelRecord.id,
+            });
           }}
         />
       ) : (

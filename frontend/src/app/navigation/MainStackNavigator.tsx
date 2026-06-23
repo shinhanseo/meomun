@@ -10,7 +10,7 @@ import { MainTabNavigator } from './MainTabNavigator';
 export type MainStackParamList = {
   MainTabs: undefined;
   RecordWrite: undefined;
-  RecordDetail: undefined;
+  RecordDetail: { recordId: string };
   PlaceSelect: undefined;
   PlaceArchiveDetail: undefined;
   EmotionArchiveDetail: undefined;
