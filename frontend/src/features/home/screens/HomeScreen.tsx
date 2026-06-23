@@ -65,6 +65,7 @@ export function HomeScreen() {
         currentLocation={currentLocation}
         selectedRecordId={selectedRecord?.id}
         onPressRecord={setSelectedRecord}
+        onPressMap={() => setSelectedRecord(null)}
       />
 
       <HomeHeader />
