@@ -1,0 +1,21 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { recordApi } from '../api/recordApi';
+
+export function useDeleteRecord() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (recordId: string) => recordApi.deleteRecord(recordId),
+    onSuccess: async (_, recordId) => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['home', 'mapRecords'],
+        }),
+        queryClient.removeQueries({
+          queryKey: ['record', 'detail', recordId],
+        }),
+      ]);
+    },
+  });
+}
