@@ -16,6 +16,7 @@ export function HomeRecordPanel({
   onPressDetail,
 }: HomeRecordPanelProps) {
   const emotionColor = emotionMarkerMeta[record.emotion].color;
+  const emotionText = emotionMarkerMeta[record.emotion].label;
   const recordedAt = new Date(record.recordedAt);
 
   const formattedDate = `${recordedAt.getFullYear()}.${String(
@@ -60,7 +61,7 @@ export function HomeRecordPanel({
               ]}
             />
             <Text style={[styles.emotionText, { color: emotionColor }]}>
-              {record.emotion}
+              {emotionText}
             </Text>
           </View>
 
