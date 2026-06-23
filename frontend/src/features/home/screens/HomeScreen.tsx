@@ -4,6 +4,7 @@ import * as Location from 'expo-location';
 import { HomeMap } from '../components/HomeMap';
 import { useMapRecords } from '../hooks/useMapRecords';
 import type { MapRecord } from '../types/home.types';
+import { HomeHeader } from '../components/HomeHeader';
 
 type CurrentLocation = {
   latitude: number;
@@ -43,9 +44,7 @@ export function HomeScreen() {
         selectedRecordId={selectedRecord?.id}
         onPressRecord={setSelectedRecord}
       />
-
-      {/* selectedRecord가 있으면 나중에 바텀시트 렌더링 */}
-      {/* <RecordPreviewBottomSheet record={selectedRecord} /> */}
+      <HomeHeader />
     </View>
   );
 }
