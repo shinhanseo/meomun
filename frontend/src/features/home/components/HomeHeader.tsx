@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   content: {
-    marginTop: 48,
+    marginTop: 18,
   },
   title: {
     color: color.purple[900],
