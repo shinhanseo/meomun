@@ -8,5 +8,9 @@ export const recordApi = {
     );
 
     return data;
-  }
-}
+  },
+
+  async deleteRecord(recordId: string) {
+    await apiClient.delete(`/api/records/${recordId}`);
+  },
+};
