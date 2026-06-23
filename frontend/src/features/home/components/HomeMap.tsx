@@ -85,7 +85,7 @@ export function HomeMap({
           longitude: 126.978,
           zoom: 13,
         }}
-        customStyleId="e559247a-fd67-42c6-937b-1d3ae0d97b27" // e559247a-fd67-42c6-937b-1d3ae0d97b27(보라색 지도)), 289a2f1a-3d46-4ce8-b607-b2f9ce380e3c(일반 지도))
+        customStyleId="ec1d6a8a-b6bc-4153-8878-570ecb4034f7" // e559247a-fd67-42c6-937b-1d3ae0d97b27(보라색 지도)), 289a2f1a-3d46-4ce8-b607-b2f9ce380e3c(일반 지도))
         isShowLocationButton={false}
         clusters={[
           {
