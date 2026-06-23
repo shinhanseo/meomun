@@ -8,8 +8,14 @@ import { StyleSheet, View } from 'react-native';
 import { emotionMarkerMeta } from '../constants/emotionMarker';
 import type { MapRecord } from '../types/home.types';
 
+type CurrentLocation = {
+  latitude: number;
+  longitude: number;
+};
+
 type HomeMapProps = {
   records: MapRecord[];
+  currentLocation: CurrentLocation | null;
   selectedRecordId?: string | null;
   onPressRecord: (record: MapRecord) => void;
 };
@@ -19,6 +25,7 @@ const MARKER_HEIGHT = 98;
 
 export function HomeMap({
   records,
+  currentLocation,
   selectedRecordId,
   onPressRecord,
 }: HomeMapProps) {
@@ -54,8 +61,8 @@ export function HomeMap({
       <NaverMapView
         style={styles.map}
         initialCamera={{
-          latitude: 37.5665,
-          longitude: 126.978,
+          latitude: currentLocation?.latitude ?? 37.5665,
+          longitude: currentLocation?.longitude ?? 126.978,
           zoom: 13,
         }}
         customStyleId="e559247a-fd67-42c6-937b-1d3ae0d97b27"
