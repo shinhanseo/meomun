@@ -20,6 +20,10 @@ const config: ExpoConfig = {
   ios: {
     bundleIdentifier: 'com.hanseo.meomun',
     usesAppleSignIn: true,
+    infoPlist: {
+      NSLocationWhenInUseUsageDescription:
+        '현재 위치를 기준으로 주변 기록을 보여주기 위해 위치 권한이 필요합니다.',
+    },
   },
   android: {
     package: 'com.hanseo.meomun',
