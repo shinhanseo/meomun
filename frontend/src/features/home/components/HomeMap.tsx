@@ -19,6 +19,7 @@ type HomeMapProps = {
   currentLocation: CurrentLocation | null;
   selectedRecordId?: string | null;
   onPressRecord: (record: MapRecord) => void;
+  onPressMap?: () => void;
 };
 
 const MARKER_WIDTH = 58;
@@ -29,6 +30,7 @@ export function HomeMap({
   currentLocation,
   selectedRecordId,
   onPressRecord,
+  onPressMap,
 }: HomeMapProps) {
   const mapRef = useRef<NaverMapViewRef>(null);
 
@@ -77,6 +79,7 @@ export function HomeMap({
       <NaverMapView
         ref={mapRef}
         style={styles.map}
+        onTapMap={onPressMap}
         initialCamera={{
           latitude: 37.5665,
           longitude: 126.978,
