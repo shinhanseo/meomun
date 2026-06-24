@@ -31,7 +31,7 @@ export function RecordWrtieTitleInput({
         maxLength={20}
         returnKeyType="done"
         onChangeText={onChangeTitle}
-      />
+      />ㅇ
 
       <Text style={styles.count}>{title.length}/20</Text>
     </View>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   helper: {
-    color: '#A8A1B8',
+    color: semanticColor.textSecondary,
     fontSize: 13,
     fontWeight: '600',
   },
