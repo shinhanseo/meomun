@@ -1,25 +1,137 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useState } from 'react';
+import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import type { MainStackParamList } from '../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../shared/constants/color';
+import type { EmotionCode } from '../../../shared/constants/emotionMeta';
+import type { SelectedPlaceInput } from '../types/record.types';
+
+import { RecordWriteHeader } from '../components/recordwrite/RecordWriteHeader';
+import { RecordWrtieTitleInput } from '../components/recordwrite/RecordWriteTitleInput';
+import { RecordPlaceSection } from '../components/recordwrite/RecordPlaceSection';
+import { RecordEmotionSection } from '../components/recordwrite/RecordEmotionSection';
+import { RecordPhotoSection } from '../components/recordwrite/RecordPhotoSection';
+import { RecordContentSection } from '../components/recordwrite/RecordContentSection';
+
+import { useCreateRecord } from '../hooks/useCreateRecord';
+import { useRecordImagePicker } from '../hooks/useRecordImagePicker';
+
+type RecordWriteNavigationProp = NativeStackNavigationProp<
+  MainStackParamList,
+  'RecordWrite'
+>;
 
 export function RecordWriteScreen() {
+  const navigation = useNavigation<RecordWriteNavigationProp>();
+
+  const [title, setTitle] = useState('');
+  const [place, setPlace] = useState<SelectedPlaceInput | null>(null);
+  const [emotion, setEmotion] = useState<EmotionCode | null>(null);
+  const { images, pickImages, removeImage } = useRecordImagePicker();
+  const [content, setContent] = useState('');
+
+  const createRecordMutation = useCreateRecord();
+
+  const handleClose = () => {
+    navigation.goBack();
+  };
+
+  const handleSave = () => {
+    if (!title.trim()) {
+      Alert.alert('제목을 입력해주세요.');
+      return;
+    }
+
+    if (!place) {
+      Alert.alert('장소를 선택해주세요.');
+      return;
+    }
+
+    if (!emotion) {
+      Alert.alert('감정을 선택해주세요.');
+      return;
+    }
+
+    createRecordMutation.mutate(
+      {
+        record: {
+          title: title.trim(),
+          emotion,
+          content: content.trim() || undefined,
+          recordedAt: new Date().toISOString(),
+          visibility: 'PRIVATE',
+          place,
+        },
+        images,
+      },
+      {
+        onSuccess: (createdRecord) => {
+          navigation.replace('RecordDetail', {
+            recordId: createdRecord.id,
+          });
+        },
+        onError: () => {
+          Alert.alert('기록 저장에 실패했어요. 잠시 후 다시 시도해주세요.');
+        },
+      },
+    );
+  };
+
+  const handlePressSelectPlace = () => {
+    navigation.navigate('PlaceSelect');
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>기록 작성</Text>
-    </View>
+    <KeyboardAwareScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      enableOnAndroid
+      extraScrollHeight={24}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
+      <RecordWriteHeader
+        isSaving={createRecordMutation.isPending}
+        onPressClose={handleClose}
+        onPressSave={handleSave}
+      />
+
+      <RecordWrtieTitleInput title={title} onChangeTitle={setTitle} />
+
+      <RecordPlaceSection
+        place={place}
+        onPressSelectPlace={handlePressSelectPlace}
+      />
+
+      <RecordEmotionSection
+        selectedEmotion={emotion}
+        onSelectEmotion={setEmotion}
+      />
+
+      <RecordPhotoSection
+        images={images}
+        onPressAddImage={pickImages}
+        onRemoveImage={removeImage}
+      />
+
+      <RecordContentSection
+        content={content}
+        onChangeContent={setContent}
+      />
+
+    </KeyboardAwareScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     backgroundColor: semanticColor.background,
     flex: 1,
-    justifyContent: 'center',
   },
-  title: {
-    color: semanticColor.textPrimary,
-    fontSize: 28,
-    fontWeight: '700',
+  contentContainer: {
+    paddingBottom: 40,
   },
 });
