@@ -37,3 +37,23 @@ export interface RecordResponse {
   place: RecordPlaceResponse;
   images: RecordImageResponse[];
 }
+
+export interface SelectedPlaceInput {
+  kakaoPlaceId: string;
+  placeName: string;
+  categoryName: string | null;
+  addressName: string;
+  roadAddressName: string | null;
+  longitude: string;
+  latitude: string;
+}
+
+export interface CreateRecordRequest {
+  title: string;
+  emotion: EmotionType;
+  content?: string;
+  recordedAt: string;
+  visibility?: Visibility;
+  place: SelectedPlaceInput;
+  imageObjectKeys?: string[];
+}
