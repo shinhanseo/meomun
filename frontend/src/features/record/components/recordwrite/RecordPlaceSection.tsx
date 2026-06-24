@@ -5,13 +5,18 @@ import {
 } from '@mj-studio/react-native-naver-map';
 import { ChevronRight, MapPin } from 'lucide-react-native';
 import { useEffect, useRef } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
-import type { SelectedPlaceInput } from '../../types/record.types';
+import { emotionMeta } from '../../../../shared/constants/emotionMeta';
+import type {
+  PlaceRecordSummaryResponse,
+  SelectedPlaceInput,
+} from '../../types/record.types';
 
 interface RecordPlaceSectionProps {
   place: SelectedPlaceInput | null;
+  placeRecordSummary?: PlaceRecordSummaryResponse;
   onPressSelectPlace: () => void;
 }
 
@@ -23,10 +28,16 @@ const DEFAULT_CAMERA = {
 
 export function RecordPlaceSection({
   place,
+  placeRecordSummary,
   onPressSelectPlace,
 }: RecordPlaceSectionProps) {
   const mapRef = useRef<NaverMapViewRef>(null);
   const hasPlace = !!place;
+  const latestEmotion = placeRecordSummary?.latestRecord?.emotion;
+  const latestEmotionMeta = latestEmotion
+    ? emotionMeta[latestEmotion]
+    : null;
+  const hasPreviousRecord = !!latestEmotionMeta;
 
   const camera = hasPlace
     ? {
@@ -120,6 +131,26 @@ export function RecordPlaceSection({
           </View>
         )}
       </View>
+
+      {hasPreviousRecord && (
+        <View style={styles.memoryCard}>
+          <View style={styles.memoryIcon}>
+            <Image
+              source={latestEmotionMeta.icon}
+              style={styles.memoryIconImage}
+            />
+          </View>
+
+          <View style={styles.memoryTextContainer}>
+            <Text style={styles.memoryTitle}>
+              여기엔 전에 {latestEmotionMeta.label}을 남겼어요.
+            </Text>
+            <Text style={styles.memoryDescription}>
+              오늘은 어떤 감정으로 남길까요?
+            </Text>
+          </View>
+        </View>
+      )}
     </Pressable>
   );
 }
@@ -188,5 +219,43 @@ const styles = StyleSheet.create({
     color: semanticColor.textSecondary,
     fontSize: 13,
     fontWeight: '700',
+  },
+  memoryCard: {
+    alignItems: 'center',
+    backgroundColor: '#F7F3FF',
+    borderColor: '#E6DAFF',
+    borderRadius: 14,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  memoryIcon: {
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 13,
+    height: 26,
+    justifyContent: 'center',
+    width: 26,
+  },
+  memoryIconImage: {
+    height: 18,
+    width: 18,
+  },
+  memoryTextContainer: {
+    flex: 1,
+  },
+  memoryTitle: {
+    color: semanticColor.textPrimary,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  memoryDescription: {
+    color: semanticColor.textSecondary,
+    fontSize: 13,
+    fontWeight: '600',
+    marginTop: 3,
   },
 });
