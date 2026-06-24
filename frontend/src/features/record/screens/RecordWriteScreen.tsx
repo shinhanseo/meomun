@@ -22,6 +22,7 @@ import { RecordWrtieTitleInput } from '../components/recordwrite/RecordWriteTitl
 import { RecordWriteValidationModal } from '../components/recordwrite/RecordWriteValidationModal';
 
 import { useCreateRecord } from '../hooks/useCreateRecord';
+import { usePlaceRecordSummary } from '../hooks/usePlaceRecordSummary';
 import { useRecordImagePicker } from '../hooks/useRecordImagePicker';
 import { useRecordWriteStore } from '../store/recordWriteStore';
 
@@ -51,6 +52,9 @@ export function RecordWriteScreen() {
   } = useRecordImagePicker();
 
   const createRecordMutation = useCreateRecord();
+  const { data: placeRecordSummary } = usePlaceRecordSummary(
+    place?.kakaoPlaceId,
+  );
   const isValidationModalVisible = validationMessage.length > 0;
 
   const handleClose = () => {
@@ -149,6 +153,7 @@ export function RecordWriteScreen() {
 
           <RecordPlaceSection
             place={place}
+            placeRecordSummary={placeRecordSummary}
             onPressSelectPlace={handlePressSelectPlace}
           />
 
