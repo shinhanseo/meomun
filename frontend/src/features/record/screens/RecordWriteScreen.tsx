@@ -1,8 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import axios from 'axios';
 import { useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 
 import type { MainStackParamList } from '../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../shared/constants/color';
@@ -95,7 +101,19 @@ export function RecordWriteScreen() {
             recordId: createdRecord.id,
           });
         },
-        onError: () => {
+        onError: (error) => {
+          if (axios.isAxiosError(error)) {
+            console.log('[record-create] failed', {
+              message: error.message,
+              status: error.response?.status,
+              data: error.response?.data,
+              url: error.config?.url,
+              method: error.config?.method,
+            });
+          } else {
+            console.log('[record-create] failed', error);
+          }
+
           Alert.alert('기록 저장에 실패했어요. 잠시 후 다시 시도해주세요.');
         },
       },
@@ -112,40 +130,42 @@ export function RecordWriteScreen() {
 
   return (
     <>
-      <KeyboardAwareScrollView
+      <KeyboardAvoidingView
         style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-        enableOnAndroid
-        extraScrollHeight={24}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <RecordWriteHeader
-          isSaving={createRecordMutation.isPending}
-          onPressClose={handleClose}
-          onPressSave={handleSave}
-        />
+        <ScrollView
+          contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <RecordWriteHeader
+            isSaving={createRecordMutation.isPending}
+            onPressClose={handleClose}
+            onPressSave={handleSave}
+          />
 
-        <RecordWrtieTitleInput title={title} onChangeTitle={setTitle} />
+          <RecordWrtieTitleInput title={title} onChangeTitle={setTitle} />
 
-        <RecordPlaceSection
-          place={place}
-          onPressSelectPlace={handlePressSelectPlace}
-        />
+          <RecordPlaceSection
+            place={place}
+            onPressSelectPlace={handlePressSelectPlace}
+          />
 
-        <RecordEmotionSection
-          selectedEmotion={emotion}
-          onSelectEmotion={setEmotion}
-        />
+          <RecordEmotionSection
+            selectedEmotion={emotion}
+            onSelectEmotion={setEmotion}
+          />
 
-        <RecordPhotoSection
-          images={images}
-          onPressAddImage={pickImages}
-          onRemoveImage={removeImage}
-        />
+          <RecordPhotoSection
+            images={images}
+            onPressAddImage={pickImages}
+            onRemoveImage={removeImage}
+          />
 
-        <RecordContentSection content={content} onChangeContent={setContent} />
-      </KeyboardAwareScrollView>
+          <RecordContentSection content={content} onChangeContent={setContent} />
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       <RecordWriteValidationModal
         visible={isValidationModalVisible}
