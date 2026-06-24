@@ -1,5 +1,5 @@
-import { apiClient } from "../../../shared/api/client";
-import type { RecordResponse, CreateRecordRequest } from "../types/record.types";
+import { apiClient } from '../../../shared/api/client';
+import type { CreateRecordRequest, RecordResponse } from '../types/record.types';
 
 export const recordApi = {
   async getRecordDetail(recordId: string) {
@@ -12,12 +12,14 @@ export const recordApi = {
 
   async createRecord(body: CreateRecordRequest) {
     const { data } = await apiClient.post<RecordResponse>(
-      `/api/records`, body
+      `/api/records`,
+      body,
     );
+
+    return data;
   },
 
   async deleteRecord(recordId: string) {
     await apiClient.delete(`/api/records/${recordId}`);
   },
-
 };
