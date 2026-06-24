@@ -1,5 +1,10 @@
-import { NaverMapView } from '@mj-studio/react-native-naver-map';
-import { ChevronRight, MapPin, Heart } from 'lucide-react-native';
+import {
+  NaverMapMarkerOverlay,
+  NaverMapView,
+  type NaverMapViewRef,
+} from '@mj-studio/react-native-naver-map';
+import { ChevronRight, MapPin } from 'lucide-react-native';
+import { useEffect, useRef } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
@@ -20,6 +25,7 @@ export function RecordPlaceSection({
   place,
   onPressSelectPlace,
 }: RecordPlaceSectionProps) {
+  const mapRef = useRef<NaverMapViewRef>(null);
   const hasPlace = !!place;
 
   const camera = hasPlace
@@ -29,6 +35,19 @@ export function RecordPlaceSection({
       zoom: 15,
     }
     : DEFAULT_CAMERA;
+
+  useEffect(() => {
+    if (!place) {
+      return;
+    }
+
+    mapRef.current?.animateCameraTo({
+      latitude: Number(place.latitude),
+      longitude: Number(place.longitude),
+      zoom: 15,
+      duration: 400,
+    });
+  }, [place]);
 
   return (
     <Pressable
@@ -60,30 +79,46 @@ export function RecordPlaceSection({
       <View style={styles.mapPreview}>
         <View pointerEvents="none" style={StyleSheet.absoluteFill}>
           <NaverMapView
+            ref={mapRef}
             style={styles.map}
             initialCamera={camera}
             customStyleId="ec1d6a8a-b6bc-4153-8878-570ecb4034f7"
+            isShowCompass={false}
             isShowLocationButton={false}
+            isShowScaleBar={false}
             isShowZoomControls={false}
-          />
+            isScrollGesturesEnabled={false}
+            isZoomGesturesEnabled={false}
+            isTiltGesturesEnabled={false}
+            isRotateGesturesEnabled={false}
+          >
+            {hasPlace && (
+              <NaverMapMarkerOverlay
+                latitude={Number(place.latitude)}
+                longitude={Number(place.longitude)}
+                width={30}
+                height={38}
+                anchor={{
+                  x: 0.5,
+                  y: 1,
+                }}
+                image={{
+                  symbol: 'pink',
+                }}
+              />
+            )}
+          </NaverMapView>
         </View>
 
-        <View pointerEvents="none" style={styles.mapOverlay}>
-          <View style={styles.markerWrapper}>
-            <View style={styles.markerCircle}>
-              <Heart color="#FFFFFF" size={26} fill="#FFFFFF" strokeWidth={2} />
-            </View>
-            <View style={styles.markerDot} />
-          </View>
-
-          {!hasPlace && (
+        {!hasPlace && (
+          <View pointerEvents="none" style={styles.mapOverlay}>
             <View style={styles.mapBubble}>
               <Text style={styles.mapBubbleText}>
                 지도를 눌러 장소를 선택하세요
               </Text>
             </View>
-          )}
-        </View>
+          </View>
+        )}
       </View>
     </Pressable>
   );
@@ -153,31 +188,5 @@ const styles = StyleSheet.create({
     color: semanticColor.textSecondary,
     fontSize: 13,
     fontWeight: '700',
-  },
-  markerWrapper: {
-    alignItems: 'center',
-  },
-  markerCircle: {
-    alignItems: 'center',
-    backgroundColor: '#A88BE8',
-    borderRadius: 28,
-    height: 56,
-    justifyContent: 'center',
-    shadowColor: '#A88BE8',
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    width: 56,
-  },
-  markerDot: {
-    backgroundColor: '#A88BE8',
-    borderRadius: 4,
-    height: 8,
-    marginTop: 4,
-    opacity: 0.7,
-    width: 8,
   },
 });
