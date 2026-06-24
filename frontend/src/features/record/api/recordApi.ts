@@ -1,5 +1,9 @@
 import { apiClient } from '../../../shared/api/client';
-import type { CreateRecordRequest, RecordResponse } from '../types/record.types';
+import type {
+  CreateRecordRequest,
+  PlaceRecordSummaryResponse,
+  RecordResponse,
+} from '../types/record.types';
 
 export const recordApi = {
   async getRecordDetail(recordId: string) {
@@ -14,6 +18,19 @@ export const recordApi = {
     const { data } = await apiClient.post<RecordResponse>(
       `/api/records`,
       body,
+    );
+
+    return data;
+  },
+
+  async getPlaceRecordSummary(kakaoPlaceId: string) {
+    const { data } = await apiClient.get<PlaceRecordSummaryResponse>(
+      `/api/records/place-summary`,
+      {
+        params: {
+          kakaoPlaceId,
+        },
+      },
     );
 
     return data;
