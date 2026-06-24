@@ -20,7 +20,7 @@ export function useRecordImagePicker() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsMultipleSelection: true,
       selectionLimit: MAX_IMAGE_COUNT - images.length,
       quality: 0.9,

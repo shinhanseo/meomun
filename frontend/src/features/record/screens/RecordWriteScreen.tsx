@@ -1,23 +1,21 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import type { MainStackParamList } from '../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../shared/constants/color';
-import type { EmotionCode } from '../../../shared/constants/emotionMeta';
-import type { SelectedPlaceInput } from '../types/record.types';
 
-import { RecordWriteHeader } from '../components/recordwrite/RecordWriteHeader';
-import { RecordWrtieTitleInput } from '../components/recordwrite/RecordWriteTitleInput';
-import { RecordPlaceSection } from '../components/recordwrite/RecordPlaceSection';
+import { RecordContentSection } from '../components/recordwrite/RecordContentSection';
 import { RecordEmotionSection } from '../components/recordwrite/RecordEmotionSection';
 import { RecordPhotoSection } from '../components/recordwrite/RecordPhotoSection';
-import { RecordContentSection } from '../components/recordwrite/RecordContentSection';
+import { RecordPlaceSection } from '../components/recordwrite/RecordPlaceSection';
+import { RecordWriteHeader } from '../components/recordwrite/RecordWriteHeader';
+import { RecordWrtieTitleInput } from '../components/recordwrite/RecordWriteTitleInput';
 
 import { useCreateRecord } from '../hooks/useCreateRecord';
 import { useRecordImagePicker } from '../hooks/useRecordImagePicker';
+import { useRecordWriteStore } from '../store/recordWriteStore';
 
 type RecordWriteNavigationProp = NativeStackNavigationProp<
   MainStackParamList,
@@ -27,15 +25,27 @@ type RecordWriteNavigationProp = NativeStackNavigationProp<
 export function RecordWriteScreen() {
   const navigation = useNavigation<RecordWriteNavigationProp>();
 
-  const [title, setTitle] = useState('');
-  const [place, setPlace] = useState<SelectedPlaceInput | null>(null);
-  const [emotion, setEmotion] = useState<EmotionCode | null>(null);
-  const { images, pickImages, removeImage } = useRecordImagePicker();
-  const [content, setContent] = useState('');
+  const title = useRecordWriteStore((state) => state.title);
+  const place = useRecordWriteStore((state) => state.place);
+  const emotion = useRecordWriteStore((state) => state.emotion);
+  const content = useRecordWriteStore((state) => state.content);
+  const setTitle = useRecordWriteStore((state) => state.setTitle);
+  const setEmotion = useRecordWriteStore((state) => state.setEmotion);
+  const setContent = useRecordWriteStore((state) => state.setContent);
+  const resetDraft = useRecordWriteStore((state) => state.resetDraft);
+
+  const {
+    images,
+    pickImages,
+    removeImage,
+    resetImages,
+  } = useRecordImagePicker();
 
   const createRecordMutation = useCreateRecord();
 
   const handleClose = () => {
+    resetDraft();
+    resetImages();
     navigation.goBack();
   };
 
@@ -69,6 +79,9 @@ export function RecordWriteScreen() {
       },
       {
         onSuccess: (createdRecord) => {
+          resetDraft();
+          resetImages();
+
           navigation.replace('RecordDetail', {
             recordId: createdRecord.id,
           });
@@ -117,11 +130,7 @@ export function RecordWriteScreen() {
         onRemoveImage={removeImage}
       />
 
-      <RecordContentSection
-        content={content}
-        onChangeContent={setContent}
-      />
-
+      <RecordContentSection content={content} onChangeContent={setContent} />
     </KeyboardAwareScrollView>
   );
 }
