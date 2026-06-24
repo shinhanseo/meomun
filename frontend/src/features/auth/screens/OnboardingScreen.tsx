@@ -27,7 +27,7 @@ const slides = [
   {
     id: 'map',
     title: '오늘의 감정을\n지도 위에 남겨보세요',
-    description: '내가 머문 장소와 감정을\n하나의 지도에 기록해요.',
+    description: '기록의 시작이 글이면 어려워요.\n머문은 장소와 감정에서 시작해요.',
     image: require('../../../assets/images/onboarding/onboarding1.png'),
   },
   {
