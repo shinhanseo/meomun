@@ -163,7 +163,11 @@ export function RecordWriteScreen() {
             onRemoveImage={removeImage}
           />
 
-          <RecordContentSection content={content} onChangeContent={setContent} />
+          <RecordContentSection
+            selectedEmotion={emotion}
+            content={content}
+            onChangeContent={setContent} />
+
         </ScrollView>
       </KeyboardAvoidingView>
 

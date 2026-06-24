@@ -2,18 +2,37 @@ import { Feather } from 'lucide-react-native';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
+import {
+  emotionMeta,
+  type EmotionCode,
+} from '../../../../shared/constants/emotionMeta';
 
 interface RecordContentSectionProps {
+  selectedEmotion: EmotionCode | null;
   content: string;
   onChangeContent: (content: string) => void;
 }
 
 const MAX_CONTENT_LENGTH = 300;
 
+const emotionPlaceholderMap: Record<EmotionCode, string> = {
+  ANGRY: `무엇이 마음에 걸렸나요?`,
+  ANXIOUS: `어떤 생각이 계속 맴돌았나요?`,
+  CALM: `무엇이 마음을 가라않혀줬나요?`,
+  FLUTTER: `어떤 기대가 피어났나요?`,
+  HAPPY: `어떤 순간이 좋았나요?`,
+  REFLECTIVE: `어떤 생각이 깊어졌나요?`,
+  SAD: `어떤 마음이 조용히 남았나요?`,
+  TIRED: `무엇이 나를 지치게 했나요?`,
+};
+
 export function RecordContentSection({
+  selectedEmotion,
   content,
   onChangeContent,
 }: RecordContentSectionProps) {
+  const placeholderText = selectedEmotion ? emotionPlaceholderMap[selectedEmotion] : '오늘, 이 장소에서 느낀 감정을\n자유롭게 적어보세요.';
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -28,7 +47,7 @@ export function RecordContentSection({
       <View style={styles.inputContainer}>
         <TextInput
           value={content}
-          placeholder={`오늘, 이 장소에서 느낀 감정을\n자유롭게 적어보세요.`}
+          placeholder={placeholderText}
           placeholderTextColor="#A8A1B8"
           style={styles.input}
           multiline
