@@ -29,6 +29,7 @@ const config: ExpoConfig = {
   },
   android: {
     package: 'com.hanseo.meomun',
+    softwareKeyboardLayoutMode: 'resize',
   },
   extra: {
     naverMapClientId,
