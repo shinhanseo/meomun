@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 
-import { setApiAccessToken } from '../../../shared/api/client';
+import {
+  setApiAccessToken,
+  setAuthEventHandlers,
+} from '../../../shared/api/client';
 import type { AuthUser } from '../types/auth.types';
 
 interface AuthState {
@@ -46,3 +49,15 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isInitializing });
   },
 }));
+
+setAuthEventHandlers({
+  onAccessTokenRefreshed: (accessToken) => {
+    useAuthStore.setState({ accessToken });
+  },
+  onSessionExpired: () => {
+    useAuthStore.setState({
+      accessToken: null,
+      user: null,
+    });
+  },
+});
