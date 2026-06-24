@@ -16,13 +16,13 @@ interface RecordContentSectionProps {
 const MAX_CONTENT_LENGTH = 300;
 
 const emotionPlaceholderMap: Record<EmotionCode, string> = {
-  ANGRY: `무엇이 마음에 걸렸나요?`,
-  ANXIOUS: `어떤 생각이 계속 맴돌았나요?`,
+  ANGRY: `오늘 무슨 일이 있었나요?`,
+  ANXIOUS: `무엇이 당신을 초조하게 하나요?`,
   CALM: `무엇이 마음을 가라앉혀줬나요?`,
-  FLUTTER: `어떤 기대가 피어났나요?`,
+  FLUTTER: `무엇이 당신을 두근거리게 했나요?`,
   HAPPY: `어떤 순간이 좋았나요?`,
-  REFLECTIVE: `어떤 생각이 깊어졌나요?`,
-  SAD: `어떤 마음이 조용히 남았나요?`,
+  REFLECTIVE: `무슨 생각을 했나요?`,
+  SAD: `어떤 일이 나를 울적하게 했나요?`,
   TIRED: `무엇이 나를 지치게 했나요?`,
 };
 
