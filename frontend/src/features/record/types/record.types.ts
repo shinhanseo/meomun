@@ -38,6 +38,15 @@ export interface RecordResponse {
   images: RecordImageResponse[];
 }
 
+export interface PlaceRecordSummaryResponse {
+  recordCount: number;
+  latestRecord: {
+    id: string;
+    emotion: EmotionType;
+    recordedAt: string;
+  } | null;
+}
+
 export interface SelectedPlaceInput {
   kakaoPlaceId: string;
   placeName: string;
