@@ -73,6 +73,15 @@ export interface MapRecordResponse {
   thumbnailImage: RecordThumbnailImageResponse | null;
 }
 
+export interface PlaceRecordSummaryResponse {
+  recordCount: number;
+  latestRecord: {
+    id: string;
+    emotion: Emotion;
+    recordedAt: string;
+  } | null;
+}
+
 export interface CreateRecordData {
   userId: string;
   placeId: string;

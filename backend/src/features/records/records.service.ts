@@ -7,6 +7,7 @@ import type {
   FindRecordsOptions,
   MapRecordResponse,
   MapRecordWithPlaceAndThumbnail,
+  PlaceRecordSummaryResponse,
   RecordResponse,
   RecordWithPlaceAndImages,
   UpdateRecordRequest,
@@ -130,6 +131,33 @@ export class RecordsService {
     return Promise.all(
       records.map((record) => this.toMapRecordResponse(record)),
     );
+  }
+
+  async getPlaceRecordSummary(
+    userId: string,
+    kakaoPlaceId: string,
+  ): Promise<PlaceRecordSummaryResponse> {
+    const trimmedKakaoPlaceId = kakaoPlaceId?.trim();
+
+    if (!trimmedKakaoPlaceId) {
+      throw new AppError(400, 'kakaoPlaceId가 필요합니다.');
+    }
+
+    const summary = await this.recordsRepository.findPlaceRecordSummary(
+      userId,
+      trimmedKakaoPlaceId,
+    );
+
+    return {
+      recordCount: summary.recordCount,
+      latestRecord: summary.latestRecord
+        ? {
+          id: summary.latestRecord.id,
+          emotion: summary.latestRecord.emotion,
+          recordedAt: summary.latestRecord.recordedAt.toISOString(),
+        }
+        : null,
+    };
   }
 
   async updateRecord(

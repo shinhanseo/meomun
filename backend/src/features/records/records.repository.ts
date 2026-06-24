@@ -95,6 +95,37 @@ export class RecordsRepository {
     });
   }
 
+  async findPlaceRecordSummary(userId: string, kakaoPlaceId: string) {
+    const where = {
+      userId,
+      place: {
+        kakaoPlaceId,
+      },
+    };
+
+    const [recordCount, latestRecord] = await database.$transaction([
+      database.record.count({
+        where,
+      }),
+      database.record.findFirst({
+        where,
+        orderBy: {
+          recordedAt: 'desc',
+        },
+        select: {
+          id: true,
+          emotion: true,
+          recordedAt: true,
+        },
+      }),
+    ]);
+
+    return {
+      recordCount,
+      latestRecord,
+    };
+  }
+
   updateRecord(recordId: string, record: UpdateRecordData) {
     return database.$transaction(async (transaction) => {
       await transaction.recordImage.deleteMany({

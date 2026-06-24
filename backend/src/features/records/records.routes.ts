@@ -10,6 +10,7 @@ recordsRoutes.use(authenticate);
 recordsRoutes.post('/', recordsController.createRecord);
 recordsRoutes.get('/', recordsController.getRecords);
 recordsRoutes.get('/map', recordsController.getMapRecords);
+recordsRoutes.get('/place-summary', recordsController.getPlaceRecordSummary);
 recordsRoutes.get('/:recordId', recordsController.getRecordById);
 recordsRoutes.put('/:recordId', recordsController.updateRecord);
 recordsRoutes.delete('/:recordId', recordsController.deleteRecord);

@@ -19,6 +19,10 @@ interface GetRecordsQuery {
   sort?: RecordSort;
 }
 
+interface GetPlaceRecordSummaryQuery {
+  kakaoPlaceId?: string;
+}
+
 export class RecordsController {
   constructor(
     private readonly recordsService = new RecordsService(),
@@ -80,6 +84,20 @@ export class RecordsController {
     const records = await this.recordsService.getMapRecords(userId);
 
     response.status(200).json(records);
+  };
+
+  getPlaceRecordSummary = async (
+    request: Request<object, object, object, GetPlaceRecordSummaryQuery>,
+    response: Response,
+  ) => {
+    const userId = this.getUserId(request);
+
+    const summary = await this.recordsService.getPlaceRecordSummary(
+      userId,
+      request.query.kakaoPlaceId ?? '',
+    );
+
+    response.status(200).json(summary);
   };
 
   updateRecord = async (
