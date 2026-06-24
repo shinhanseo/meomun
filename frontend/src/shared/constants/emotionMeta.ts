@@ -30,7 +30,7 @@ export const emotionMeta = {
   ANXIOUS: {
     label: '불안',
     icon: require('../../assets/emotions/anxious.png'),
-    color: color.purple[400],
+    color: '#B58AF7',
   },
   CALM: {
     label: '평온',
@@ -50,7 +50,7 @@ export const emotionMeta = {
   REFLECTIVE: {
     label: '사색',
     icon: require('../../assets/emotions/reflective.png'),
-    color: color.purple[500],
+    color: '#7C6FD6',
   },
   SAD: {
     label: '슬픔',
