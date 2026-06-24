@@ -31,7 +31,7 @@ export function RecordWrtieTitleInput({
         maxLength={20}
         returnKeyType="done"
         onChangeText={onChangeTitle}
-      />ㅇ
+      />
 
       <Text style={styles.count}>{title.length}/20</Text>
     </View>
