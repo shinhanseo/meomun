@@ -28,6 +28,7 @@ export function useCreateRecord() {
         createdRecord,
       );
       queryClient.invalidateQueries({ queryKey: ['home', 'mapRecords'] });
+      queryClient.invalidateQueries({ queryKey: ['record', 'placeSummary'] });
     },
   });
 }
