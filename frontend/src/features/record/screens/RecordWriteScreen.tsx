@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -12,6 +13,7 @@ import { RecordPhotoSection } from '../components/recordwrite/RecordPhotoSection
 import { RecordPlaceSection } from '../components/recordwrite/RecordPlaceSection';
 import { RecordWriteHeader } from '../components/recordwrite/RecordWriteHeader';
 import { RecordWrtieTitleInput } from '../components/recordwrite/RecordWriteTitleInput';
+import { RecordWriteValidationModal } from '../components/recordwrite/RecordWriteValidationModal';
 
 import { useCreateRecord } from '../hooks/useCreateRecord';
 import { useRecordImagePicker } from '../hooks/useRecordImagePicker';
@@ -24,6 +26,7 @@ type RecordWriteNavigationProp = NativeStackNavigationProp<
 
 export function RecordWriteScreen() {
   const navigation = useNavigation<RecordWriteNavigationProp>();
+  const [validationMessage, setValidationMessage] = useState('');
 
   const title = useRecordWriteStore((state) => state.title);
   const place = useRecordWriteStore((state) => state.place);
@@ -42,6 +45,7 @@ export function RecordWriteScreen() {
   } = useRecordImagePicker();
 
   const createRecordMutation = useCreateRecord();
+  const isValidationModalVisible = validationMessage.length > 0;
 
   const handleClose = () => {
     resetDraft();
@@ -51,17 +55,22 @@ export function RecordWriteScreen() {
 
   const handleSave = () => {
     if (!title.trim()) {
-      Alert.alert('제목을 입력해주세요.');
+      setValidationMessage('제목을 입력해주세요.');
       return;
     }
 
     if (!place) {
-      Alert.alert('장소를 선택해주세요.');
+      setValidationMessage('장소를 선택해주세요.');
       return;
     }
 
     if (!emotion) {
-      Alert.alert('감정을 선택해주세요.');
+      setValidationMessage('감정을 선택해주세요.');
+      return;
+    }
+
+    if (!content.trim()) {
+      setValidationMessage('오늘 이 장소에서 느낀 감정을 기록으로 남겨주세요.');
       return;
     }
 
@@ -97,41 +106,53 @@ export function RecordWriteScreen() {
     navigation.navigate('PlaceSelect');
   };
 
+  const handleCloseValidationModal = () => {
+    setValidationMessage('');
+  };
+
   return (
-    <KeyboardAwareScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      enableOnAndroid
-      extraScrollHeight={24}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    >
-      <RecordWriteHeader
-        isSaving={createRecordMutation.isPending}
-        onPressClose={handleClose}
-        onPressSave={handleSave}
+    <>
+      <KeyboardAwareScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}
+        enableOnAndroid
+        extraScrollHeight={24}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <RecordWriteHeader
+          isSaving={createRecordMutation.isPending}
+          onPressClose={handleClose}
+          onPressSave={handleSave}
+        />
+
+        <RecordWrtieTitleInput title={title} onChangeTitle={setTitle} />
+
+        <RecordPlaceSection
+          place={place}
+          onPressSelectPlace={handlePressSelectPlace}
+        />
+
+        <RecordEmotionSection
+          selectedEmotion={emotion}
+          onSelectEmotion={setEmotion}
+        />
+
+        <RecordPhotoSection
+          images={images}
+          onPressAddImage={pickImages}
+          onRemoveImage={removeImage}
+        />
+
+        <RecordContentSection content={content} onChangeContent={setContent} />
+      </KeyboardAwareScrollView>
+
+      <RecordWriteValidationModal
+        visible={isValidationModalVisible}
+        message={validationMessage}
+        onClose={handleCloseValidationModal}
       />
-
-      <RecordWrtieTitleInput title={title} onChangeTitle={setTitle} />
-
-      <RecordPlaceSection
-        place={place}
-        onPressSelectPlace={handlePressSelectPlace}
-      />
-
-      <RecordEmotionSection
-        selectedEmotion={emotion}
-        onSelectEmotion={setEmotion}
-      />
-
-      <RecordPhotoSection
-        images={images}
-        onPressAddImage={pickImages}
-        onRemoveImage={removeImage}
-      />
-
-      <RecordContentSection content={content} onChangeContent={setContent} />
-    </KeyboardAwareScrollView>
+    </>
   );
 }
 
