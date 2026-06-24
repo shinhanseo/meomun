@@ -18,7 +18,7 @@ const MAX_CONTENT_LENGTH = 300;
 const emotionPlaceholderMap: Record<EmotionCode, string> = {
   ANGRY: `무엇이 마음에 걸렸나요?`,
   ANXIOUS: `어떤 생각이 계속 맴돌았나요?`,
-  CALM: `무엇이 마음을 가라않혀줬나요?`,
+  CALM: `무엇이 마음을 가라앉혀줬나요?`,
   FLUTTER: `어떤 기대가 피어났나요?`,
   HAPPY: `어떤 순간이 좋았나요?`,
   REFLECTIVE: `어떤 생각이 깊어졌나요?`,
