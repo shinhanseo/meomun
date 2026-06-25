@@ -1,15 +1,13 @@
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Check, SlidersHorizontal } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import type { ArchiveStackParamList } from '../../../../app/navigation/ArchiveStackNavigator';
 import { semanticColor } from '../../../../shared/constants/color';
 import type { ArchiveSort, ArchiveTab } from '../../types/archive.types';
 
 interface ArchiveNavigationBarProps {
   activeTab: ArchiveTab;
+  onChangeTab: (tab: ArchiveTab) => void;
   sort: ArchiveSort;
   onChangeSort: (sort: ArchiveSort) => void;
   showSort?: boolean;
@@ -18,27 +16,22 @@ interface ArchiveNavigationBarProps {
 const ARCHIVE_TABS: {
   label: string;
   value: ArchiveTab;
-  routeName: keyof ArchiveStackParamList;
 }[] = [
     {
       label: '전체',
       value: 'all',
-      routeName: 'ArchiveHome',
     },
     {
       label: '월별',
       value: 'monthly',
-      routeName: 'MonthlyArchive',
     },
     {
       label: '장소별',
       value: 'place',
-      routeName: 'PlaceArchive',
     },
     {
       label: '감정별',
       value: 'emotion',
-      routeName: 'EmotionArchive',
     },
   ];
 
@@ -56,15 +49,13 @@ const SORT_OPTIONS: {
     },
   ];
 
-type ArchiveNavigationProp = NativeStackNavigationProp<ArchiveStackParamList>;
-
 export function ArchiveNavigationBar({
   activeTab,
+  onChangeTab,
   sort,
   onChangeSort,
   showSort = true,
 }: ArchiveNavigationBarProps) {
-  const navigation = useNavigation<ArchiveNavigationProp>();
   const [isSortOpen, setIsSortOpen] = useState(false);
 
   const selectedSortLabel =
@@ -77,7 +68,7 @@ export function ArchiveNavigationBar({
       return;
     }
 
-    navigation.navigate(tab.routeName);
+    onChangeTab(tab.value);
   };
 
   const handlePressSort = (nextSort: ArchiveSort) => {
