@@ -20,41 +20,41 @@ const ARCHIVE_TABS: {
   value: ArchiveTab;
   routeName: keyof ArchiveStackParamList;
 }[] = [
-  {
-    label: '전체',
-    value: 'all',
-    routeName: 'ArchiveHome',
-  },
-  {
-    label: '월별',
-    value: 'monthly',
-    routeName: 'MonthlyArchive',
-  },
-  {
-    label: '장소별',
-    value: 'place',
-    routeName: 'PlaceArchive',
-  },
-  {
-    label: '감정별',
-    value: 'emotion',
-    routeName: 'EmotionArchive',
-  },
-];
+    {
+      label: '전체',
+      value: 'all',
+      routeName: 'ArchiveHome',
+    },
+    {
+      label: '월별',
+      value: 'monthly',
+      routeName: 'MonthlyArchive',
+    },
+    {
+      label: '장소별',
+      value: 'place',
+      routeName: 'PlaceArchive',
+    },
+    {
+      label: '감정별',
+      value: 'emotion',
+      routeName: 'EmotionArchive',
+    },
+  ];
 
 const SORT_OPTIONS: {
   label: string;
   value: ArchiveSort;
 }[] = [
-  {
-    label: '최신순',
-    value: 'latest',
-  },
-  {
-    label: '오래된순',
-    value: 'oldest',
-  },
-];
+    {
+      label: '최신순',
+      value: 'latest',
+    },
+    {
+      label: '오래된순',
+      value: 'oldest',
+    },
+  ];
 
 type ArchiveNavigationProp = NativeStackNavigationProp<ArchiveStackParamList>;
 
@@ -180,8 +180,8 @@ const styles = StyleSheet.create({
   },
   tab: {
     alignItems: 'center',
-    borderRadius: 18,
-    minWidth: 56,
+    borderRadius: 11,
+    minWidth: 36,
     paddingHorizontal: 14,
     paddingVertical: 10,
   },
@@ -189,11 +189,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     shadowColor: '#8A6BD1',
     shadowOffset: {
-      width: 0,
+      width: 2,
       height: 6,
     },
     shadowOpacity: 0.08,
-    shadowRadius: 12,
+    shadowRadius: 4,
   },
   tabText: {
     color: semanticColor.textSecondary,
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 6,
     minHeight: 38,
-    paddingHorizontal: 14,
+    paddingHorizontal: 11,
     shadowColor: '#8A6BD1',
     shadowOffset: {
       width: 0,
