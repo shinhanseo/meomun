@@ -50,7 +50,9 @@ export function RecordDetailScreen({ route, navigation }: Props) {
 
   const handleEdit = () => {
     setIsMoreMenuOpen(false);
-    navigation.navigate('RecordWrite');
+    navigation.navigate('RecordEdit', {
+      recordId: recordId,
+    });
   };
 
   const handleDelete = () => {
