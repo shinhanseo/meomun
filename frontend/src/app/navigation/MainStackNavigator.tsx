@@ -6,11 +6,15 @@ import { PlaceSelectScreen } from '../../features/place/screens/PlaceSelectScree
 import { RecordDetailScreen } from '../../features/record/screens/RecordDetailScreen';
 import { RecordWriteScreen } from '../../features/record/screens/RecordWriteScreen';
 import { MainTabNavigator } from './MainTabNavigator';
+import { RecordEditScreen } from '../../features/record/screens/RecordEditScreen';
 
 export type MainStackParamList = {
   MainTabs: undefined;
   RecordWrite: undefined;
   RecordDetail: { recordId: string };
+  RecordEdit: {
+    recordId: string;
+  };
   PlaceSelect: undefined;
   PlaceArchiveDetail: undefined;
   EmotionArchiveDetail: undefined;
@@ -28,6 +32,7 @@ export function MainStackNavigator() {
     >
       <Stack.Screen name="MainTabs" component={MainTabNavigator} />
       <Stack.Screen name="RecordWrite" component={RecordWriteScreen} />
+      <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
       <Stack.Screen name="RecordDetail" component={RecordDetailScreen} />
       <Stack.Screen name="PlaceSelect" component={PlaceSelectScreen} />
       <Stack.Screen
