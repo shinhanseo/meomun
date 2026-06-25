@@ -41,6 +41,20 @@ export function HomeScreen() {
   const panelMode = selectedRecord ? 'selected' : 'latest';
 
   useEffect(() => {
+    if (!selectedRecord) {
+      return;
+    }
+
+    const selectedRecordExists = records.some(
+      (record) => record.id === selectedRecord.id,
+    );
+
+    if (!selectedRecordExists) {
+      setSelectedRecord(null);
+    }
+  }, [records, selectedRecord]);
+
+  useEffect(() => {
     const requestLocation = async () => {
       const permission = await Location.requestForegroundPermissionsAsync();
 
