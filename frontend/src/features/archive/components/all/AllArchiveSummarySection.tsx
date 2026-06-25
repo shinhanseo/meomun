@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 14,
     marginHorizontal: 24,
-    marginTop: 20,
+    marginTop: 30,
     minHeight: 166,
     overflow: 'hidden',
     padding: 18,
