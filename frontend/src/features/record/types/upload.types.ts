@@ -21,3 +21,15 @@ export interface SelectedRecordImage {
   fileName: string;
   contentType: string;
 }
+
+export type EditableRecordImage =
+  | {
+    type: 'existing';
+    id: string;
+    objectKey: string;
+    imageUrl: string;
+    uri: string;
+  }
+  | ({
+    type: 'new';
+  } & SelectedRecordImage);

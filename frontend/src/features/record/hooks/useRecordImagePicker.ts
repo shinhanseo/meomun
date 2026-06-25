@@ -43,26 +43,28 @@ async function convertAssetToJpeg(
 export function useRecordImagePicker() {
   const [images, setImages] = useState<SelectedRecordImage[]>([]);
 
-  const pickImages = useCallback(async () => {
-    if (images.length >= MAX_IMAGE_COUNT) {
-      return;
+  const pickImagesFromLibrary = useCallback(async (
+    limit = MAX_IMAGE_COUNT,
+  ): Promise<SelectedRecordImage[]> => {
+    if (limit <= 0) {
+      return [];
     }
 
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permission.granted) {
-      return;
+      return [];
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsMultipleSelection: true,
-      selectionLimit: MAX_IMAGE_COUNT - images.length,
+      selectionLimit: limit,
       quality: 0.9,
     });
 
     if (result.canceled) {
-      return;
+      return [];
     }
 
     console.log(
@@ -76,15 +78,25 @@ export function useRecordImagePicker() {
       })),
     );
 
-    const pickedImages = await Promise.all(
+    return Promise.all(
       result.assets.map((asset, index) => convertAssetToJpeg(asset, index)),
+    );
+  }, []);
+
+  const pickImages = useCallback(async () => {
+    if (images.length >= MAX_IMAGE_COUNT) {
+      return;
+    }
+
+    const pickedImages = await pickImagesFromLibrary(
+      MAX_IMAGE_COUNT - images.length,
     );
 
     setImages((prevImages) => [
       ...prevImages,
       ...pickedImages,
     ].slice(0, MAX_IMAGE_COUNT));
-  }, [images.length]);
+  }, [images.length, pickImagesFromLibrary]);
 
   const removeImage = useCallback((index: number) => {
     setImages((prevImages) =>
@@ -99,6 +111,7 @@ export function useRecordImagePicker() {
   return {
     images,
     pickImages,
+    pickImagesFromLibrary,
     removeImage,
     resetImages,
   };

@@ -20,6 +20,7 @@ import { semanticColor } from '../../../shared/constants/color';
 
 import { RecordContentSection } from '../components/recordwrite/RecordContentSection';
 import { RecordEmotionSection } from '../components/recordwrite/RecordEmotionSection';
+import { RecordPhotoSection } from '../components/recordwrite/RecordPhotoSection';
 import { RecordPlaceSection } from '../components/recordwrite/RecordPlaceSection';
 import { RecordWriteHeader } from '../components/recordwrite/RecordWriteHeader';
 import { RecordWrtieTitleInput } from '../components/recordwrite/RecordWriteTitleInput';
@@ -28,7 +29,9 @@ import { RecordWriteValidationModal } from '../components/recordwrite/RecordWrit
 import { useEditRecord } from '../hooks/useEditRecord';
 import { usePlaceRecordSummary } from '../hooks/usePlaceRecordSummary';
 import { useRecordDetail } from '../hooks/useRecordDetail';
+import { useRecordImagePicker } from '../hooks/useRecordImagePicker';
 import { useRecordWriteStore } from '../store/recordWriteStore';
+import type { EditableRecordImage } from '../types/upload.types';
 
 type RecordEditNavigationProp = NativeStackNavigationProp<
   MainStackParamList,
@@ -44,9 +47,13 @@ export function RecordEditScreen() {
 
   const initializedRecordIdRef = useRef<string | null>(null);
   const [validationMessage, setValidationMessage] = useState('');
+  const [editableImages, setEditableImages] = useState<EditableRecordImage[]>(
+    [],
+  );
 
   const { data: record, isLoading } = useRecordDetail(recordId);
   const editRecordMutation = useEditRecord();
+  const { pickImagesFromLibrary } = useRecordImagePicker();
 
   const title = useRecordWriteStore((state) => state.title);
   const place = useRecordWriteStore((state) => state.place);
@@ -88,11 +95,39 @@ export function RecordEditScreen() {
       longitude: record.place.longitude,
       latitude: record.place.latitude,
     });
+    setEditableImages(
+      record.images.map((image) => ({
+        type: 'existing',
+        id: image.id,
+        objectKey: image.objectKey,
+        imageUrl: image.imageUrl,
+        uri: image.imageUrl,
+      })),
+    );
   }, [record, setTitle, setEmotion, setContent, setPlace]);
 
   const handleClose = () => {
     resetDraft();
     navigation.goBack();
+  };
+
+  const handlePressAddImage = async () => {
+    const remainImageCount = 3 - editableImages.length;
+    const pickedImages = await pickImagesFromLibrary(remainImageCount);
+
+    setEditableImages((prevImages) => [
+      ...prevImages,
+      ...pickedImages.map((image) => ({
+        type: 'new' as const,
+        ...image,
+      })),
+    ].slice(0, 3));
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setEditableImages((prevImages) =>
+      prevImages.filter((_, imageIndex) => imageIndex !== index),
+    );
   };
 
   const handleSave = () => {
@@ -130,8 +165,8 @@ export function RecordEditScreen() {
           recordedAt: record.recordedAt,
           visibility: record.visibility,
           place,
-          imageObjectKeys: record.images.map((image) => image.objectKey),
         },
+        images: editableImages,
       },
       {
         onSuccess: (updatedRecord) => {
@@ -204,6 +239,12 @@ export function RecordEditScreen() {
           <RecordEmotionSection
             selectedEmotion={emotion}
             onSelectEmotion={setEmotion}
+          />
+
+          <RecordPhotoSection
+            images={editableImages}
+            onPressAddImage={handlePressAddImage}
+            onRemoveImage={handleRemoveImage}
           />
 
           <RecordContentSection

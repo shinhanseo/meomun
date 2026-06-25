@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
-import type { SelectedRecordImage } from '../../types/upload.types';
-
 interface RecordPhotoSectionProps {
-  images: SelectedRecordImage[];
+  images: {
+    uri: string;
+  }[];
   onPressAddImage: () => void;
   onRemoveImage: (index: number) => void;
 }
