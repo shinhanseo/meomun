@@ -3,6 +3,7 @@ import type { EmotionCode } from '../../../shared/constants/emotionMeta';
 export type ArchiveSort = 'latest' | 'oldest';
 
 export interface AllArchiveRequestParams {
+  keyword?: string;
   cursor?: string;
   limit?: number;
   sort?: ArchiveSort;
