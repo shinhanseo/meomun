@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     shadowRadius: 18,
   },
   totalArea: {
-    flex: 0.3,
+    flex: 0.35,
     justifyContent: 'center',
   },
   totalLabel: {
