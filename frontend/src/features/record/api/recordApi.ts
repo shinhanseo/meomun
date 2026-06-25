@@ -36,6 +36,15 @@ export const recordApi = {
     return data;
   },
 
+  async editRecord(recordId: string, body: CreateRecordRequest) {
+    const { data } = await apiClient.put<RecordResponse>(
+      `/api/records/${recordId}`,
+      body,
+    );
+
+    return data;
+  },
+
   async deleteRecord(recordId: string) {
     await apiClient.delete(`/api/records/${recordId}`);
   },
