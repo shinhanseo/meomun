@@ -34,6 +34,13 @@ export function RecordDetailScreen({ route, navigation }: Props) {
     isFetching,
   } = useRecordDetail(recordId);
 
+  const goHome = () => {
+    navigation.popToTop();
+    navigation.navigate('MainTabs', {
+      screen: 'Home',
+    });
+  };
+
   if (isLoading) {
     return <RecordDetailLoading />;
   }
@@ -43,7 +50,7 @@ export function RecordDetailScreen({ route, navigation }: Props) {
       <RecordDetailError
         isFetching={isFetching}
         onRetry={refetch}
-        onBack={navigation.goBack}
+        onBack={goHome}
       />
     );
   }
@@ -64,7 +71,7 @@ export function RecordDetailScreen({ route, navigation }: Props) {
     deleteRecord.mutate(record.id, {
       onSuccess: () => {
         setIsDeleteConfirmOpen(false);
-        navigation.goBack();
+        goHome();
       },
       onError: () => {
         Alert.alert(
@@ -88,7 +95,7 @@ export function RecordDetailScreen({ route, navigation }: Props) {
           address={record.place.roadAddressName ?? record.place.addressName}
           emotion={record.emotion}
           imageUrl={record.images[0]?.imageUrl}
-          onBack={navigation.goBack}
+          onBack={goHome}
           onPressMore={() => setIsMoreMenuOpen(true)}
         />
 

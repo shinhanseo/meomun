@@ -1,3 +1,4 @@
+import type { NavigatorScreenParams } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { EmotionArchiveDetailScreen } from '../../features/archive/screens/EmotionArchiveDetailScreen';
@@ -7,9 +8,10 @@ import { RecordDetailScreen } from '../../features/record/screens/RecordDetailSc
 import { RecordWriteScreen } from '../../features/record/screens/RecordWriteScreen';
 import { MainTabNavigator } from './MainTabNavigator';
 import { RecordEditScreen } from '../../features/record/screens/RecordEditScreen';
+import type { MainTabParamList } from './MainTabNavigator';
 
 export type MainStackParamList = {
-  MainTabs: undefined;
+  MainTabs: NavigatorScreenParams<MainTabParamList> | undefined;
   RecordWrite: undefined;
   RecordDetail: { recordId: string };
   RecordEdit: {
