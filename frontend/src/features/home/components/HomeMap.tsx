@@ -56,9 +56,18 @@ export function HomeMap({
   const handlePressMarker = ({ markerIdentifier }: { markerIdentifier: string }) => {
     const record = recordById.get(markerIdentifier);
 
-    if (record) {
-      onPressRecord(record);
+    if (!record) {
+      return;
     }
+
+    mapRef.current?.animateCameraTo({
+      latitude: Number(record.place.latitude),
+      longitude: Number(record.place.longitude),
+      zoom: 12,
+      duration: 400,
+    });
+
+    onPressRecord(record);
   };
 
   useEffect(() => {
