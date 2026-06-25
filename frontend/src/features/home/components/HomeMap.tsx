@@ -63,7 +63,7 @@ export function HomeMap({
     mapRef.current?.animateCameraTo({
       latitude: Number(record.place.latitude),
       longitude: Number(record.place.longitude),
-      zoom: 12,
+      zoom: 15,
       duration: 400,
     });
 
