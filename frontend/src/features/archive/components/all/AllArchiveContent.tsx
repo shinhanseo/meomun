@@ -1,3 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useMemo } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -6,19 +9,31 @@ import {
   View,
 } from 'react-native';
 
+import type { MainStackParamList } from '../../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../../shared/constants/color';
 import { useArchiveAll } from '../../hooks/useArchiveAll';
 import type { ArchiveSort } from '../../types/archive.types';
-import { AllArchiveSummarySection } from './AllArchiveSummarySection';
+import { AllArchiveRecordList } from './AllArchiveRecordList';
 
 interface AllArchiveContentProps {
   keyword: string;
   sort: ArchiveSort;
 }
 
+type ArchiveNavigationProp = NativeStackNavigationProp<MainStackParamList>;
+
 export function AllArchiveContent({ keyword, sort }: AllArchiveContentProps) {
+  const navigation = useNavigation<ArchiveNavigationProp>();
   const archiveQuery = useArchiveAll(keyword, sort);
   const firstPage = archiveQuery.data?.pages[0];
+  const records = useMemo(
+    () => archiveQuery.data?.pages.flatMap((page) => page.records) ?? [],
+    [archiveQuery.data],
+  );
+
+  const handlePressRecord = (recordId: string) => {
+    navigation.navigate('RecordDetail', { recordId });
+  };
 
   if (archiveQuery.isLoading) {
     return (
@@ -53,9 +68,14 @@ export function AllArchiveContent({ keyword, sort }: AllArchiveContentProps) {
   }
 
   return (
-    <View>
-      <AllArchiveSummarySection stats={firstPage.stats} />
-    </View>
+    <AllArchiveRecordList
+      stats={firstPage.stats}
+      records={records}
+      hasNextPage={archiveQuery.hasNextPage}
+      isFetchingNextPage={archiveQuery.isFetchingNextPage}
+      onFetchNextPage={() => archiveQuery.fetchNextPage()}
+      onPressRecord={handlePressRecord}
+    />
   );
 }
 
