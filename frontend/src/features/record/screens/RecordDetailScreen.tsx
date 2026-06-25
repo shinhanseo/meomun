@@ -20,7 +20,7 @@ import { RecordDeleteConfirmModal } from '../components/recorddetail/RecordDelet
 type Props = NativeStackScreenProps<MainStackParamList, 'RecordDetail'>;
 
 export function RecordDetailScreen({ route, navigation }: Props) {
-  const { recordId } = route.params;
+  const { recordId, backBehavior = 'goBack' } = route.params;
   const deleteRecord = useDeleteRecord();
 
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
@@ -41,6 +41,15 @@ export function RecordDetailScreen({ route, navigation }: Props) {
     });
   };
 
+  const handleBack = () => {
+    if (backBehavior === 'home') {
+      goHome();
+      return;
+    }
+
+    navigation.goBack();
+  };
+
   if (isLoading) {
     return <RecordDetailLoading />;
   }
@@ -50,7 +59,7 @@ export function RecordDetailScreen({ route, navigation }: Props) {
       <RecordDetailError
         isFetching={isFetching}
         onRetry={refetch}
-        onBack={goHome}
+        onBack={handleBack}
       />
     );
   }
@@ -95,7 +104,7 @@ export function RecordDetailScreen({ route, navigation }: Props) {
           address={record.place.roadAddressName ?? record.place.addressName}
           emotion={record.emotion}
           imageUrl={record.images[0]?.imageUrl}
-          onBack={goHome}
+          onBack={handleBack}
           onPressMore={() => setIsMoreMenuOpen(true)}
         />
 

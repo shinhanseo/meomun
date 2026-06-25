@@ -103,6 +103,7 @@ export function RecordWriteScreen() {
 
           navigation.replace('RecordDetail', {
             recordId: createdRecord.id,
+            backBehavior: 'home',
           });
         },
         onError: (error) => {

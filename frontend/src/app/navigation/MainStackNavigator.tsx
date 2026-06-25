@@ -13,7 +13,10 @@ import type { MainTabParamList } from './MainTabNavigator';
 export type MainStackParamList = {
   MainTabs: NavigatorScreenParams<MainTabParamList> | undefined;
   RecordWrite: undefined;
-  RecordDetail: { recordId: string };
+  RecordDetail: {
+    recordId: string;
+    backBehavior?: 'goBack' | 'home';
+  };
   RecordEdit: {
     recordId: string;
   };

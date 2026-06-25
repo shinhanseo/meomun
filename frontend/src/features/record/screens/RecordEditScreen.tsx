@@ -174,6 +174,7 @@ export function RecordEditScreen() {
 
           navigation.replace('RecordDetail', {
             recordId: updatedRecord.id,
+            backBehavior: 'home',
           });
         },
         onError: (error) => {
