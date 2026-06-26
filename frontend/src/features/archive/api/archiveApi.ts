@@ -1,10 +1,13 @@
 import { apiClient } from '../../../shared/api/client';
+import type { EmotionCode } from '../../../shared/constants/emotionMeta';
 import type {
   ArchiveMonthOptionsResponse,
   AllArchiveRequestParams,
   AllArchiveResponse,
   MonthlyArchiveRequestParams,
   MonthlyArchiveResponse,
+  EmotionArchiveDetailRequestParams,
+  EmotionArchiveDetailResponse,
   EmotionArchiveResponse,
 } from '../types';
 
@@ -42,6 +45,20 @@ export const archiveApi = {
   async getEmotionArchive() {
     const { data } = await apiClient.get<EmotionArchiveResponse>(
       '/api/archives/emotions',
+    );
+
+    return data;
+  },
+
+  async getEmotionArchiveDetail(
+    emotion: EmotionCode,
+    params: EmotionArchiveDetailRequestParams = {},
+  ) {
+    const { data } = await apiClient.get<EmotionArchiveDetailResponse>(
+      `/api/archives/emotions/${emotion}/records`,
+      {
+        params,
+      },
     );
 
     return data;

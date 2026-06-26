@@ -1,5 +1,8 @@
 import type { EmotionCode } from '../../../shared/constants/emotionMeta';
-import type { ArchiveThumbnailImage } from './archiveCommon.types';
+import type {
+  ArchiveRecordListItem,
+  ArchiveSort,
+} from './archiveCommon.types';
 
 export interface EmotionArchiveResponse {
   totalRecordCount: number;
@@ -11,4 +14,17 @@ export interface EmotionArchiveItem {
   recordCount: number;
   percentage: number;
   isMostRecorded: boolean;
+}
+
+export interface EmotionArchiveDetailRequestParams {
+  keyword?: string;
+  cursor?: string;
+  limit?: number;
+  sort?: ArchiveSort;
+}
+
+export interface EmotionArchiveDetailResponse {
+  emotion: EmotionCode;
+  records: ArchiveRecordListItem[];
+  nextCursor: string | null;
 }
