@@ -17,6 +17,10 @@ export function ArchiveScreen() {
   const [sort, setSort] = useState<ArchiveSort>('latest');
   const contentAnimation = useRef(new Animated.Value(1)).current;
 
+  const today = new Date();
+  const [selectedYear, setSelectedYear] = useState(today.getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
+
   useEffect(() => {
     contentAnimation.setValue(0);
     Animated.timing(contentAnimation, {
@@ -72,7 +76,7 @@ export function ArchiveScreen() {
           <AllArchiveContent keyword={keyword} sort={sort} />
         )}
         {activeTab === 'monthly' && (
-          <MonthlyArchiveContent keyword={keyword} sort={sort} />
+          <MonthlyArchiveContent year={selectedYear} month={selectedMonth} keyword={keyword} sort={sort} />
         )}
         {activeTab === 'place' && (
           <PlaceArchiveContent keyword={keyword} sort={sort} />

@@ -1,6 +1,6 @@
 import type { EmotionCode } from '../../../shared/constants/emotionMeta';
 import type {
-  ArchiveRecordListItem,
+  ArchiveThumbnailImage,
   ArchiveSort,
 } from './archiveCommon.types';
 
@@ -10,30 +10,31 @@ export interface ArchiveMonthOption {
   recordCount: number;
 }
 
-export interface MonthlyArchiveEmotionStat {
+export interface MonthlyArchiveEmotionCount {
   emotion: EmotionCode;
-  count: number;
-}
-
-export interface MonthlyArchiveStats {
-  year: number;
-  month: number;
-  totalRecordCount: number;
-  mostRecordedEmotion: EmotionCode | null;
-  emotionStats: MonthlyArchiveEmotionStat[];
+  recordCount: number;
 }
 
 export interface MonthlyArchiveRequestParams {
-  year: number;
-  month: number;
+  yearMonth: string;
   keyword?: string;
   cursor?: string;
   limit?: number;
   sort?: ArchiveSort;
 }
 
+export interface MonthlyArchiveRecordItem {
+  id: string;
+  title: string;
+  emotion: EmotionCode;
+  placeName: string;
+  recordedAt: string;
+  thumbnailImage: ArchiveThumbnailImage | null;
+}
+
 export interface MonthlyArchiveResponse {
-  stats: MonthlyArchiveStats;
-  records: ArchiveRecordListItem[];
+  yearMonth: string;
+  emotionCounts: MonthlyArchiveEmotionCount[];
+  records: MonthlyArchiveRecordItem[];
   nextCursor: string | null;
 }

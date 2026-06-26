@@ -12,14 +12,14 @@ export function useArchiveMonthly(
   sort: ArchiveSort = 'latest',
 ) {
   const trimmedKeyword = keyword.trim();
+  const yearMonth = `${year}-${String(month).padStart(2, '0')}`;
 
   return useInfiniteQuery({
-    queryKey: ['archive', 'monthly', year, month, trimmedKeyword, sort],
+    queryKey: ['archive', 'monthly', yearMonth, trimmedKeyword, sort],
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam }) =>
       archiveApi.getMonthlyArchive({
-        year,
-        month,
+        yearMonth,
         keyword: trimmedKeyword || undefined,
         cursor: pageParam,
         limit: ARCHIVE_PAGE_SIZE,
