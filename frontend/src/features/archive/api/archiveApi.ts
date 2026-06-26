@@ -39,7 +39,7 @@ export const archiveApi = {
     return data;
   },
 
-  async getEmotionArchive(params: EmotionArchiveResponse) {
+  async getEmotionArchive() {
     const { data } = await apiClient.get<EmotionArchiveResponse>(
       '/api/archives/emotions',
     );
