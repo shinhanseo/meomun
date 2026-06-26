@@ -75,6 +75,7 @@ export interface MonthlyArchiveQuery extends ArchivePaginationQuery {
 export interface MonthlyArchiveRecordItem {
   id: string;
   title: string;
+  content: string | null;
   emotion: Emotion;
   placeName: string;
   recordedAt: string;

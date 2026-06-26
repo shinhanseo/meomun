@@ -49,6 +49,7 @@ export class ArchivesMapper {
     return {
       id: record.id,
       title: record.title,
+      content: record.content,
       emotion: record.emotion,
       placeName: record.place.name,
       recordedAt: record.recordedAt.toISOString(),
