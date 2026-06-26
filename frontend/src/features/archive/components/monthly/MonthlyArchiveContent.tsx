@@ -1,11 +1,14 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import type { MainStackParamList } from '../../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../../shared/constants/color';
 import { useArchiveMonthOptions } from '../../hooks/useArchiveMonthOptions';
 import { useArchiveMonthly } from '../../hooks/useArchiveMonthly';
 import type { ArchiveSort } from '../../types';
-import { MonthlyArchiveSummarySection } from './MonthlyArchiveSummarySection';
+import { MonthlyArchiveRecordList } from './MonthlyArchiveRecordList';
 
 interface MonthlyArchiveContentProps {
   year: number;
@@ -15,6 +18,8 @@ interface MonthlyArchiveContentProps {
   onChangeMonth: (year: number, month: number) => void;
 }
 
+type ArchiveNavigationProp = NativeStackNavigationProp<MainStackParamList>;
+
 export function MonthlyArchiveContent({
   year,
   month,
@@ -22,9 +27,16 @@ export function MonthlyArchiveContent({
   sort,
   onChangeMonth,
 }: MonthlyArchiveContentProps) {
+  const navigation = useNavigation<ArchiveNavigationProp>();
   const monthOptionsQuery = useArchiveMonthOptions();
   const monthlyArchiveQuery = useArchiveMonthly(year, month, keyword, sort);
   const monthOptions = monthOptionsQuery.data?.months ?? [];
+  const records =
+    monthlyArchiveQuery.data?.pages.flatMap((page) => page.records) ?? [];
+
+  const handlePressRecord = (recordId: string) => {
+    navigation.navigate('RecordDetail', { recordId });
+  };
 
   useEffect(() => {
     if (monthOptions.length === 0) {
@@ -65,16 +77,20 @@ export function MonthlyArchiveContent({
   }
 
   const firstPage = monthlyArchiveQuery.data?.pages[0];
+
   return (
-    <View>
-      <MonthlyArchiveSummarySection
+    <MonthlyArchiveRecordList
         year={year}
         month={month}
         emotionCounts={firstPage?.emotionCounts ?? []}
         monthOptions={monthOptions}
+      records={records}
+      hasNextPage={monthlyArchiveQuery.hasNextPage}
+      isFetchingNextPage={monthlyArchiveQuery.isFetchingNextPage}
         onChangeMonth={onChangeMonth}
+      onFetchNextPage={() => monthlyArchiveQuery.fetchNextPage()}
+      onPressRecord={handlePressRecord}
       />
-    </View>
   );
 }
 

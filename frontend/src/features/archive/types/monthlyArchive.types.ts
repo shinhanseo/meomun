@@ -30,6 +30,7 @@ export interface MonthlyArchiveRequestParams {
 export interface MonthlyArchiveRecordItem {
   id: string;
   title: string;
+  content: string | null;
   emotion: EmotionCode;
   placeName: string;
   recordedAt: string;

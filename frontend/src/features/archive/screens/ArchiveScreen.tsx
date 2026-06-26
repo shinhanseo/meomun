@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 
 import { semanticColor } from '../../../shared/constants/color';
@@ -39,10 +39,10 @@ export function ArchiveScreen() {
     setIsSearchOpen(false);
   };
 
-  const handleChangeMonth = (year: number, month: number) => {
+  const handleChangeMonth = useCallback((year: number, month: number) => {
     setSelectedYear(year);
     setSelectedMonth(month);
-  };
+  }, []);
 
   return (
     <View style={styles.container}>
