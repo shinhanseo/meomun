@@ -1,5 +1,6 @@
 import { apiClient } from '../../../shared/api/client';
 import type {
+  ArchiveMonthOptionsResponse,
   AllArchiveRequestParams,
   AllArchiveResponse,
   MonthlyArchiveRequestParams,
@@ -13,6 +14,14 @@ export const archiveApi = {
       {
         params,
       },
+    );
+
+    return data;
+  },
+
+  async getArchiveMonthOptions() {
+    const { data } = await apiClient.get<ArchiveMonthOptionsResponse>(
+      '/api/archives/month-options',
     );
 
     return data;
