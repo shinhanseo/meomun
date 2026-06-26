@@ -3,12 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import { semanticColor } from '../../../../shared/constants/color';
 import { useArchiveMonthly } from '../../hooks/useArchiveMonthly';
 import type { ArchiveSort } from '../../types';
+import { MonthlyArchiveSummarySection } from './MonthlyArchiveSummarySection';
 
 interface MonthlyArchiveContentProps {
   year: number;
   month: number;
   keyword: string;
   sort: ArchiveSort;
+  onChangeMonth: (year: number, month: number) => void;
 }
 
 export function MonthlyArchiveContent({
@@ -16,6 +18,7 @@ export function MonthlyArchiveContent({
   month,
   keyword,
   sort,
+  onChangeMonth,
 }: MonthlyArchiveContentProps) {
   const monthlyArchiveQuery = useArchiveMonthly(year, month, keyword, sort);
 
@@ -39,25 +42,14 @@ export function MonthlyArchiveContent({
   }
 
   const firstPage = monthlyArchiveQuery.data?.pages[0];
-  const totalRecordCount =
-    firstPage?.emotionCounts.reduce(
-      (sum, emotionCount) => sum + emotionCount.recordCount,
-      0,
-    ) ?? 0;
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        {year}년 {month}월
-      </Text>
-
-      <Text style={styles.description}>
-        검색어: {keyword || '없음'} / 정렬: {sort}
-      </Text>
-
-      <Text style={styles.description}>
-        기록 수: {totalRecordCount}개
-      </Text>
+    <View>
+      <MonthlyArchiveSummarySection
+        year={year}
+        month={month}
+        emotionCounts={firstPage?.emotionCounts ?? []}
+        onChangeMonth={onChangeMonth}
+      />
     </View>
   );
 }

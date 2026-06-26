@@ -39,6 +39,11 @@ export function ArchiveScreen() {
     setIsSearchOpen(false);
   };
 
+  const handleChangeMonth = (year: number, month: number) => {
+    setSelectedYear(year);
+    setSelectedMonth(month);
+  };
+
   return (
     <View style={styles.container}>
       <ArchiveHeader
@@ -76,7 +81,13 @@ export function ArchiveScreen() {
           <AllArchiveContent keyword={keyword} sort={sort} />
         )}
         {activeTab === 'monthly' && (
-          <MonthlyArchiveContent year={selectedYear} month={selectedMonth} keyword={keyword} sort={sort} />
+          <MonthlyArchiveContent
+            year={selectedYear}
+            month={selectedMonth}
+            keyword={keyword}
+            sort={sort}
+            onChangeMonth={handleChangeMonth}
+          />
         )}
         {activeTab === 'place' && (
           <PlaceArchiveContent keyword={keyword} sort={sort} />
