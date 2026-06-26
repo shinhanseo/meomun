@@ -5,6 +5,7 @@ import type {
   AllArchiveResponse,
   MonthlyArchiveRequestParams,
   MonthlyArchiveResponse,
+  EmotionArchiveResponse,
 } from '../types';
 
 export const archiveApi = {
@@ -37,4 +38,12 @@ export const archiveApi = {
 
     return data;
   },
+
+  async getEmotionArchive(params: EmotionArchiveResponse) {
+    const { data } = await apiClient.get<EmotionArchiveResponse>(
+      '/api/archives/emotions',
+    );
+
+    return data;
+  }
 };
