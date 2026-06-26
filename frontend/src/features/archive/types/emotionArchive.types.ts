@@ -1,14 +1,14 @@
 import type { EmotionCode } from '../../../shared/constants/emotionMeta';
 import type { ArchiveThumbnailImage } from './archiveCommon.types';
 
-export interface EmotionArchiveStat {
-  emotion: EmotionCode;
-  count: number;
-  ratio: number;
-  thumbnailImage: ArchiveThumbnailImage | null;
-}
-
 export interface EmotionArchiveResponse {
   totalRecordCount: number;
-  stats: EmotionArchiveStat[];
+  emotions: EmotionArchiveItem[];
+}
+
+export interface EmotionArchiveItem {
+  emotion: EmotionCode;
+  recordCount: number;
+  percentage: number;
+  isMostRecorded: boolean;
 }
