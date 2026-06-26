@@ -45,5 +45,5 @@ export const archiveApi = {
     );
 
     return data;
-  }
+  },
 };

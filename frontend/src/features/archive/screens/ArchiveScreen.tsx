@@ -94,7 +94,7 @@ export function ArchiveScreen() {
           <PlaceArchiveContent keyword={keyword} sort={sort} />
         )}
         {activeTab === 'emotion' && (
-          <EmotionArchiveContent keyword={keyword} sort={sort} />
+          <EmotionArchiveContent />
         )}
       </Animated.View>
     </View>

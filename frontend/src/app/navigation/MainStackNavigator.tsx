@@ -9,6 +9,7 @@ import { RecordWriteScreen } from '../../features/record/screens/RecordWriteScre
 import { MainTabNavigator } from './MainTabNavigator';
 import { RecordEditScreen } from '../../features/record/screens/RecordEditScreen';
 import type { MainTabParamList } from './MainTabNavigator';
+import type { EmotionCode } from '../../shared/constants/emotionMeta';
 
 export type MainStackParamList = {
   MainTabs: NavigatorScreenParams<MainTabParamList> | undefined;
@@ -22,7 +23,9 @@ export type MainStackParamList = {
   };
   PlaceSelect: undefined;
   PlaceArchiveDetail: undefined;
-  EmotionArchiveDetail: undefined;
+  EmotionArchiveDetail: {
+    emotion: EmotionCode;
+  };
 };
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
