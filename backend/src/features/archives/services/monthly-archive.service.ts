@@ -8,6 +8,7 @@ import {
 import { MonthlyArchiveRepository } from '../repositories/monthly-archive.repository.js';
 
 import type {
+  ArchiveMonthOptionsResponse,
   MonthlyArchiveQuery,
   MonthlyArchiveResponse,
 } from '../archives.types.js';
@@ -17,6 +18,40 @@ export class MonthlyArchiveService {
     private readonly monthlyArchiveRepository = new MonthlyArchiveRepository(),
     private readonly archivesMapper = new ArchivesMapper(),
   ) { }
+
+  async getMonthOptions(userId: string): Promise<ArchiveMonthOptionsResponse> {
+    const records =
+      await this.monthlyArchiveRepository.findMonthlyArchiveRecordDates(userId);
+    const monthMap = new Map<string, {
+      year: number;
+      month: number;
+      recordCount: number;
+    }>();
+
+    for (const record of records) {
+      const date = record.recordedAt;
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const key = `${year}-${month}`;
+      const previousMonthOption = monthMap.get(key);
+
+      monthMap.set(key, {
+        year,
+        month,
+        recordCount: (previousMonthOption?.recordCount ?? 0) + 1,
+      });
+    }
+
+    return {
+      months: [...monthMap.values()].sort((a, b) => {
+        if (a.year !== b.year) {
+          return b.year - a.year;
+        }
+
+        return b.month - a.month;
+      }),
+    };
+  }
 
   async getMonthlyArchive(
     userId: string,

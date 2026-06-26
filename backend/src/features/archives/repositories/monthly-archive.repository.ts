@@ -17,6 +17,20 @@ interface FindMonthlyEmotionCountsOptions {
 }
 
 export class MonthlyArchiveRepository {
+  findMonthlyArchiveRecordDates(userId: string) {
+    return database.record.findMany({
+      where: {
+        userId,
+      },
+      select: {
+        recordedAt: true,
+      },
+      orderBy: {
+        recordedAt: 'desc',
+      },
+    });
+  }
+
   findMonthlyArchiveRecords(
     userId: string,
     options: FindMonthlyArchiveRecordsOptions,

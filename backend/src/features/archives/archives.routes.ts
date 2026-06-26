@@ -9,6 +9,7 @@ const archivesController = new ArchivesController();
 archivesRoutes.use(authenticate);
 
 archivesRoutes.get('/all', archivesController.getAllArchive);
+archivesRoutes.get('/month-options', archivesController.getMonthOptions);
 archivesRoutes.get('/monthly', archivesController.getMonthlyArchive);
 archivesRoutes.get(
   '/place-categories',

@@ -104,6 +104,17 @@ export class ArchivesController {
     response.status(200).json(result);
   };
 
+  getMonthOptions = async (
+    request: Request,
+    response: Response,
+  ) => {
+    const userId = this.getUserId(request);
+
+    const result = await this.monthlyArchiveService.getMonthOptions(userId);
+
+    response.status(200).json(result);
+  };
+
   getPlaceCategoryArchive = async (
     request: Request,
     response: Response,

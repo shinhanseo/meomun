@@ -58,6 +58,16 @@ export interface AllArchiveResponse {
 }
 
 // Monthly archive
+export interface ArchiveMonthOption {
+  year: number;
+  month: number;
+  recordCount: number;
+}
+
+export interface ArchiveMonthOptionsResponse {
+  months: ArchiveMonthOption[];
+}
+
 export interface MonthlyArchiveQuery extends ArchivePaginationQuery {
   yearMonth: string; // YYYY-MM
 }
