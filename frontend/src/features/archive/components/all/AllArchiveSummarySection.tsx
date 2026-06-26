@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import { CalendarDays, MapPin, Moon } from 'lucide-react-native';
 import { Image, Platform, StyleSheet, Text, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import { semanticColor } from '../../../../shared/constants/color';
 import { emotionMeta } from '../../../../shared/constants/emotionMeta';
 import type { ArchiveOverviewStats } from '../../types';
 
@@ -27,7 +27,18 @@ export function AllArchiveSummarySection({
     : '-';
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#7D68D8', '#B99AF4', '#F5C9DF']}
+      locations={[0, 0.55, 1]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
+      <View style={styles.glowLarge} />
+      <View style={styles.glowSmall} />
+      <View style={styles.starOne} />
+      <View style={styles.starTwo} />
+
       <View style={styles.totalArea}>
         <Text style={styles.totalLabel}>총 기록</Text>
 
@@ -69,7 +80,7 @@ export function AllArchiveSummarySection({
           value={formatSummaryDate(stats.latestRecordedAt)}
         />
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -78,10 +89,19 @@ function SummaryItem({ icon, label, value }: SummaryItemProps) {
     <View style={styles.summaryItem}>
       <View style={styles.summaryHeader}>
         <View style={styles.iconBox}>{icon}</View>
-        <Text style={styles.summaryLabel}>{label}</Text>
+        <Text style={styles.summaryLabel} numberOfLines={1}>
+          {label}
+        </Text>
       </View>
 
-      <Text style={styles.summaryValue}>{value}</Text>
+      <Text
+        adjustsFontSizeToFit
+        minimumFontScale={0.78}
+        numberOfLines={1}
+        style={styles.summaryValue}
+      >
+        {value}
+      </Text>
     </View>
   );
 }
@@ -92,7 +112,7 @@ function formatSummaryDate(date: string | null) {
   }
 
   const parsedDate = new Date(date);
-  const year = parsedDate.getFullYear();
+  const year = String(parsedDate.getFullYear()).slice(2);
   const month = `${parsedDate.getMonth() + 1}`.padStart(2, '0');
   const day = `${parsedDate.getDate()}`.padStart(2, '0');
 
@@ -101,15 +121,14 @@ function formatSummaryDate(date: string | null) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#D8C8FF',
-    borderRadius: 20,
+    borderRadius: 22,
     flexDirection: 'row',
-    gap: 14,
+    gap: 16,
     marginHorizontal: 24,
     marginTop: 30,
-    minHeight: 166,
+    minHeight: 188,
     overflow: 'hidden',
-    padding: 18,
+    padding: 20,
     shadowColor: '#8A6BD1',
     shadowOffset: {
       width: 0,
@@ -118,49 +137,78 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.14,
     shadowRadius: 18,
   },
+  glowLarge: {
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    borderRadius: 999,
+    height: 170,
+    position: 'absolute',
+    right: -60,
+    top: -70,
+    width: 170,
+  },
+  glowSmall: {
+    backgroundColor: 'rgba(255, 255, 255, 0.14)',
+    borderRadius: 999,
+    bottom: -46,
+    height: 120,
+    left: -42,
+    position: 'absolute',
+    width: 120,
+  },
+  starOne: {
+    backgroundColor: 'rgba(255, 255, 255, 0.78)',
+    borderRadius: 999,
+    height: 5,
+    position: 'absolute',
+    right: 90,
+    top: 26,
+    width: 5,
+  },
+  starTwo: {
+    backgroundColor: 'rgba(255, 255, 255, 0.54)',
+    borderRadius: 999,
+    height: 4,
+    position: 'absolute',
+    right: 118,
+    top: 50,
+    width: 4,
+  },
   totalArea: {
-    flex: 0.35,
+    flex: 0.46,
     justifyContent: 'center',
   },
   totalLabel: {
-    color: '#5E4B9A',
+    color: 'rgba(255, 255, 255, 0.82)',
     fontSize: 14,
     fontWeight: '800',
     marginBottom: 8,
   },
   totalCount: {
-    color: '#4A347F',
-    fontSize: 34,
+    color: '#FFFFFF',
+    fontSize: 38,
     fontWeight: '900',
-    letterSpacing: 0,
+    letterSpacing: -0.2,
   },
   totalUnit: {
-    color: '#5E4B9A',
-    fontSize: 18,
+    color: 'rgba(255, 255, 255, 0.88)',
+    fontSize: 17,
     fontWeight: '800',
   },
-  totalDescription: {
-    color: '#6E5C9D',
-    fontSize: 12,
-    fontWeight: '600',
-    lineHeight: 18,
-    marginTop: 10,
-  },
   summaryGrid: {
-    flex: 1.35,
+    flex: 1.2,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     rowGap: 10,
   },
   summaryItem: {
-    backgroundColor: 'rgba(255, 255, 255, 0.46)',
-    borderColor: 'rgba(255, 255, 255, 0.55)',
-    borderRadius: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.28)',
+    borderColor: 'rgba(255, 255, 255, 0.34)',
+    borderRadius: 16,
     borderWidth: 1,
     justifyContent: 'center',
-    minHeight: 68,
-    paddingHorizontal: 10,
+    minHeight: 70,
+    paddingHorizontal: 9,
     paddingVertical: 9,
     width: '48%',
   },
@@ -171,7 +219,7 @@ const styles = StyleSheet.create({
   },
   iconBox: {
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.58)',
+    backgroundColor: 'rgba(255, 255, 255, 0.62)',
     borderRadius: 999,
     height: 24,
     justifyContent: 'center',
@@ -182,16 +230,16 @@ const styles = StyleSheet.create({
     width: 18,
   },
   summaryLabel: {
-    color: '#6E5C9D',
-    fontSize: 10,
+    color: 'rgba(255, 255, 255, 0.74)',
+    fontSize: 9,
     fontWeight: '800',
-    lineHeight: 13,
+    lineHeight: 12,
   },
   summaryValue: {
-    color: semanticColor.textPrimary,
+    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '900',
-    lineHeight: 18,
+    lineHeight: 19,
     ...Platform.select({
       ios: {
         letterSpacing: -0.1,
