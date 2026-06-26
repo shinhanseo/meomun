@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
+import { useArchiveMonthOptions } from '../../hooks/useArchiveMonthOptions';
 import { useArchiveMonthly } from '../../hooks/useArchiveMonthly';
 import type { ArchiveSort } from '../../types';
 import { MonthlyArchiveSummarySection } from './MonthlyArchiveSummarySection';
@@ -20,9 +22,30 @@ export function MonthlyArchiveContent({
   sort,
   onChangeMonth,
 }: MonthlyArchiveContentProps) {
+  const monthOptionsQuery = useArchiveMonthOptions();
   const monthlyArchiveQuery = useArchiveMonthly(year, month, keyword, sort);
+  const monthOptions = monthOptionsQuery.data?.months ?? [];
 
-  if (monthlyArchiveQuery.isLoading) {
+  useEffect(() => {
+    if (monthOptions.length === 0) {
+      return;
+    }
+
+    const selectedMonthExists = monthOptions.some(
+      (monthOption) =>
+        monthOption.year === year && monthOption.month === month,
+    );
+
+    if (selectedMonthExists) {
+      return;
+    }
+
+    const latestMonthOption = monthOptions[0];
+
+    onChangeMonth(latestMonthOption.year, latestMonthOption.month);
+  }, [month, monthOptions, onChangeMonth, year]);
+
+  if (monthOptionsQuery.isLoading || monthlyArchiveQuery.isLoading) {
     return (
       <View style={styles.container}>
         <Text style={styles.description}>월별 보관함을 불러오는 중이에요.</Text>
@@ -30,7 +53,7 @@ export function MonthlyArchiveContent({
     );
   }
 
-  if (monthlyArchiveQuery.isError) {
+  if (monthOptionsQuery.isError || monthlyArchiveQuery.isError) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>월별 보관함</Text>
@@ -48,6 +71,7 @@ export function MonthlyArchiveContent({
         year={year}
         month={month}
         emotionCounts={firstPage?.emotionCounts ?? []}
+        monthOptions={monthOptions}
         onChangeMonth={onChangeMonth}
       />
     </View>

@@ -12,12 +12,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { semanticColor } from '../../../../shared/constants/color';
 import { emotionMeta } from '../../../../shared/constants/emotionMeta';
-import type { MonthlyArchiveEmotionCount } from '../../types';
+import type {
+  ArchiveMonthOption,
+  MonthlyArchiveEmotionCount,
+} from '../../types';
 
 interface MonthlyArchiveSummarySectionProps {
   year: number;
   month: number;
   emotionCounts: MonthlyArchiveEmotionCount[];
+  monthOptions: ArchiveMonthOption[];
   onChangeMonth: (year: number, month: number) => void;
 }
 
@@ -27,6 +31,7 @@ export function MonthlyArchiveSummarySection({
   year,
   month,
   emotionCounts,
+  monthOptions,
   onChangeMonth,
 }: MonthlyArchiveSummarySectionProps) {
   const [isPickerVisible, setIsPickerVisible] = useState(false);
@@ -53,10 +58,20 @@ export function MonthlyArchiveSummarySection({
     ? emotionMeta[mostRecordedEmotion]
     : null;
   const yearOptions = useMemo(() => {
-    const currentYear = new Date().getFullYear();
+    const years = Array.from(
+      new Set(monthOptions.map((monthOption) => monthOption.year)),
+    ).sort((a, b) => b - a);
 
-    return Array.from({ length: 7 }, (_, index) => currentYear - 5 + index);
-  }, []);
+    return years.length > 0 ? years : [year];
+  }, [monthOptions, year]);
+  const availableMonthMap = useMemo(() => {
+    return new Map(
+      monthOptions.map((monthOption) => [
+        `${monthOption.year}-${monthOption.month}`,
+        monthOption.recordCount,
+      ]),
+    );
+  }, [monthOptions]);
 
   const handleOpenPicker = () => {
     setDraftYear(year);
@@ -195,13 +210,18 @@ export function MonthlyArchiveSummarySection({
             <View style={styles.monthGrid}>
               {MONTHS.map((monthOption) => {
                 const isSelected = draftMonth === monthOption;
+                const recordCount =
+                  availableMonthMap.get(`${draftYear}-${monthOption}`) ?? 0;
+                const isAvailable = recordCount > 0;
 
                 return (
                   <Pressable
                     key={monthOption}
+                    disabled={!isAvailable}
                     style={({ pressed }) => [
                       styles.monthChip,
-                      isSelected && styles.pickerChipSelected,
+                      !isAvailable && styles.monthChipDisabled,
+                      isSelected && isAvailable && styles.pickerChipSelected,
                       pressed && styles.pressed,
                     ]}
                     onPress={() => setDraftMonth(monthOption)}
@@ -209,11 +229,25 @@ export function MonthlyArchiveSummarySection({
                     <Text
                       style={[
                         styles.pickerChipText,
-                        isSelected && styles.pickerChipTextSelected,
+                        isSelected &&
+                        isAvailable &&
+                        styles.pickerChipTextSelected,
                       ]}
                     >
                       {monthOption}월
                     </Text>
+                    {isAvailable && (
+                      <Text
+                        style={[
+                          styles.monthRecordCount,
+                          isSelected &&
+                          isAvailable &&
+                          styles.monthRecordCountSelected,
+                        ]}
+                      >
+                        {recordCount}개
+                      </Text>
+                    )}
                   </Pressable>
                 );
               })}
@@ -385,9 +419,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F8F5FA',
     borderRadius: 13,
-    height: 42,
+    height: 48,
     justifyContent: 'center',
     width: '23%',
+  },
+  monthChipDisabled: {
+    opacity: 0.34,
   },
   monthGrid: {
     flexDirection: 'row',
@@ -398,6 +435,15 @@ const styles = StyleSheet.create({
     color: semanticColor.textPrimary,
     fontSize: 22,
     fontWeight: '900',
+  },
+  monthRecordCount: {
+    color: '#A8A1B8',
+    fontSize: 10,
+    fontWeight: '800',
+    marginTop: 2,
+  },
+  monthRecordCountSelected: {
+    color: 'rgba(255, 255, 255, 0.84)',
   },
   pickerChipSelected: {
     backgroundColor: '#8E6CE5',
