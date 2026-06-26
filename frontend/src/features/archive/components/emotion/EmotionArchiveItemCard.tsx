@@ -35,15 +35,17 @@ export function EmotionArchiveItemCard({
       style={({ pressed }) => [styles.container, pressed && styles.pressed]}
       onPress={() => onPress?.(item.emotion)}
     >
-      <View
-        style={[
-          styles.iconCircle,
-          {
-            backgroundColor: `${meta.color}1F`,
-          },
-        ]}
-      >
-        <Image source={meta.icon} style={styles.emotionIcon} />
+      <View style={[styles.iconShell, { backgroundColor: `${meta.color}18` }]}>
+        <View
+          style={[
+            styles.iconCircle,
+            {
+              backgroundColor: `${meta.color}28`,
+            },
+          ]}
+        >
+          <Image source={meta.icon} style={styles.emotionIcon} />
+        </View>
       </View>
 
       <View style={styles.content}>
@@ -91,7 +93,7 @@ export function EmotionArchiveItemCard({
 
 const styles = StyleSheet.create({
   badge: {
-    backgroundColor: '#F2ECFF',
+    backgroundColor: 'rgba(142, 108, 229, 0.12)',
     borderRadius: 999,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -104,11 +106,13 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderRadius: 18,
+    borderColor: 'rgba(142, 108, 229, 0.06)',
+    borderRadius: 20,
+    borderWidth: 1,
     flexDirection: 'row',
     marginHorizontal: 24,
     marginTop: 12,
-    padding: 16,
+    padding: 14,
     shadowColor: '#8A6BD1',
     shadowOffset: {
       width: 0,
@@ -129,9 +133,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   emotionIcon: {
-    height: 34,
+    height: 32,
     resizeMode: 'contain',
-    width: 34,
+    width: 32,
   },
   header: {
     alignItems: 'flex-start',
@@ -142,12 +146,19 @@ const styles = StyleSheet.create({
   iconCircle: {
     alignItems: 'center',
     borderRadius: 999,
-    height: 62,
+    height: 56,
     justifyContent: 'center',
-    width: 62,
+    width: 56,
+  },
+  iconShell: {
+    alignItems: 'center',
+    borderRadius: 22,
+    height: 74,
+    justifyContent: 'center',
+    width: 74,
   },
   percentage: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '900',
   },
   pressed: {
@@ -161,9 +172,9 @@ const styles = StyleSheet.create({
     marginTop: 11,
   },
   progressTrack: {
-    backgroundColor: '#EEEAF4',
+    backgroundColor: '#F0ECF7',
     borderRadius: 999,
-    height: 7,
+    height: 8,
     overflow: 'hidden',
   },
   recordCount: {

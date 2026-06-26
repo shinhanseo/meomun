@@ -3,15 +3,20 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   ActivityIndicator,
   FlatList,
+  Image,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import type { MainStackParamList } from '../../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../../shared/constants/color';
-import type { EmotionCode } from '../../../../shared/constants/emotionMeta';
+import {
+  emotionMeta,
+  type EmotionCode,
+} from '../../../../shared/constants/emotionMeta';
 import { useEmotionArchive } from '../../hooks/useArchiveEmotion';
 import { EmotionArchiveItemCard } from './EmotionArchiveItemCard';
 
@@ -54,6 +59,7 @@ export function EmotionArchiveContent() {
   }
 
   const emotions = emotionArchiveQuery.data?.emotions ?? [];
+  const topEmotions = emotions.slice(0, 4);
 
   return (
     <FlatList
@@ -63,13 +69,53 @@ export function EmotionArchiveContent() {
         <EmotionArchiveItemCard item={item} onPress={handlePressEmotion} />
       )}
       ListHeaderComponent={
-        <View style={styles.header}>
-          <Text style={styles.headerEyebrow}>전체 기록 중</Text>
-          <Text style={styles.headerTitle}>감정별 분포</Text>
-          <Text style={styles.headerDescription}>
-            기록된 순간 {emotionArchiveQuery.data?.totalRecordCount ?? 0}개
-          </Text>
-        </View>
+        <>
+          <LinearGradient
+            colors={['#7E6BDA', '#B99AF4', '#F1C7DC']}
+            locations={[0, 0.58, 1]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.summaryCard}
+          >
+            <View style={styles.summaryGlow} />
+
+            <View style={styles.summaryTextArea}>
+              <Text style={styles.summaryEyebrow}>전체 기록 중</Text>
+              <Text style={styles.summaryTitle}>감정별 분포</Text>
+              <Text style={styles.summaryDescription}>
+                기록된 순간 {emotionArchiveQuery.data?.totalRecordCount ?? 0}개
+              </Text>
+            </View>
+
+            <View style={styles.emotionCluster}>
+              {topEmotions.map((item, index) => {
+                const meta = emotionMeta[item.emotion];
+
+                return (
+                  <View
+                    key={item.emotion}
+                    style={[
+                      styles.clusterIconCircle,
+                      {
+                        backgroundColor: `${meta.color}30`,
+                        left: index % 2 === 0 ? 8 : 58,
+                        top: index < 2 ? 10 : 64,
+                      },
+                    ]}
+                  >
+                    <Image source={meta.icon} style={styles.clusterIcon} />
+                  </View>
+                );
+              })}
+
+              <View style={styles.clusterCenter}>
+                <Text style={styles.clusterCenterText}>감정</Text>
+              </View>
+            </View>
+          </LinearGradient>
+
+          <Text style={styles.listTitle}>감정 모아보기</Text>
+        </>
       }
       ListEmptyComponent={
         <View style={styles.emptyContainer}>
@@ -117,29 +163,50 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginBottom: 8,
   },
-  header: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    marginHorizontal: 24,
-    marginTop: 20,
-    padding: 20,
+  clusterCenter: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.42)',
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 58,
+    justifyContent: 'center',
+    left: 34,
+    position: 'absolute',
+    top: 38,
+    width: 58,
   },
-  headerDescription: {
-    color: semanticColor.textSecondary,
-    fontSize: 14,
-    fontWeight: '700',
-    marginTop: 10,
-  },
-  headerEyebrow: {
-    color: '#8E6CE5',
+  clusterCenterText: {
+    color: '#FFFFFF',
     fontSize: 13,
-    fontWeight: '800',
-  },
-  headerTitle: {
-    color: semanticColor.textPrimary,
-    fontSize: 24,
     fontWeight: '900',
-    marginTop: 6,
+  },
+  clusterIcon: {
+    height: 28,
+    resizeMode: 'contain',
+    width: 28,
+  },
+  clusterIconCircle: {
+    alignItems: 'center',
+    borderColor: 'rgba(255, 255, 255, 0.42)',
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 52,
+    justifyContent: 'center',
+    position: 'absolute',
+    width: 52,
+  },
+  emotionCluster: {
+    height: 132,
+    position: 'relative',
+    width: 128,
+  },
+  listTitle: {
+    color: '#5E4B9A',
+    fontSize: 16,
+    fontWeight: '900',
+    marginHorizontal: 24,
+    marginTop: 22,
   },
   pressed: {
     opacity: 0.72,
@@ -168,5 +235,53 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginTop: 10,
     textAlign: 'center',
+  },
+  summaryCard: {
+    borderRadius: 22,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 24,
+    marginTop: 20,
+    minHeight: 178,
+    overflow: 'hidden',
+    padding: 22,
+    shadowColor: '#8A6BD1',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.14,
+    shadowRadius: 18,
+  },
+  summaryDescription: {
+    color: 'rgba(255, 255, 255, 0.78)',
+    fontSize: 14,
+    fontWeight: '700',
+    marginTop: 12,
+  },
+  summaryEyebrow: {
+    color: 'rgba(255, 255, 255, 0.78)',
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  summaryGlow: {
+    backgroundColor: 'rgba(255, 255, 255, 0.22)',
+    borderRadius: 999,
+    height: 150,
+    position: 'absolute',
+    right: -48,
+    top: -52,
+    width: 150,
+  },
+  summaryTextArea: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingRight: 16,
+  },
+  summaryTitle: {
+    color: '#FFFFFF',
+    fontSize: 28,
+    fontWeight: '900',
+    marginTop: 8,
   },
 });
