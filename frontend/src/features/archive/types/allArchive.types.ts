@@ -1,7 +1,8 @@
 import type { EmotionCode } from '../../../shared/constants/emotionMeta';
-
-export type ArchiveSort = 'latest' | 'oldest';
-export type ArchiveTab = 'all' | 'monthly' | 'place' | 'emotion';
+import type {
+  ArchiveRecordListItem,
+  ArchiveSort,
+} from './archiveCommon.types';
 
 export interface AllArchiveRequestParams {
   keyword?: string;
@@ -16,21 +17,6 @@ export interface ArchiveOverviewStats {
   mostRecordedEmotion: EmotionCode | null;
   firstRecordedAt: string | null;
   latestRecordedAt: string | null;
-}
-
-export interface ArchiveThumbnailImage {
-  objectKey: string;
-  imageUrl: string;
-}
-
-export interface ArchiveRecordListItem {
-  id: string;
-  title: string;
-  content: string | null;
-  emotion: EmotionCode;
-  placeName: string;
-  recordedAt: string;
-  thumbnailImage: ArchiveThumbnailImage | null;
 }
 
 export interface AllArchiveResponse {

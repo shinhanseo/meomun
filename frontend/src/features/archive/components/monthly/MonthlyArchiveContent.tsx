@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
-import type { ArchiveSort } from '../../types/archive.types';
+import type { ArchiveSort } from '../../types';
 
 interface MonthlyArchiveContentProps {
   keyword: string;

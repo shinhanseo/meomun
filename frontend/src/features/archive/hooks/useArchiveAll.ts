@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { archiveApi } from '../api/archiveApi';
-import type { ArchiveSort } from '../types/archive.types';
+import type { ArchiveSort } from '../types';
 
 const ARCHIVE_PAGE_SIZE = 20;
 

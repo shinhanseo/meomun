@@ -10,7 +10,7 @@ import { semanticColor } from '../../../../shared/constants/color';
 import type {
   ArchiveOverviewStats,
   ArchiveRecordListItem,
-} from '../../types/archive.types';
+} from '../../types';
 import { AllArchiveRecordCard } from './AllArchiveRecordCard';
 import { AllArchiveSummarySection } from './AllArchiveSummarySection';
 

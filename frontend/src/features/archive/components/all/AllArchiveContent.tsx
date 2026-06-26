@@ -12,7 +12,7 @@ import {
 import type { MainStackParamList } from '../../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../../shared/constants/color';
 import { useArchiveAll } from '../../hooks/useArchiveAll';
-import type { ArchiveSort } from '../../types/archive.types';
+import type { ArchiveSort } from '../../types';
 import { AllArchiveRecordList } from './AllArchiveRecordList';
 
 interface AllArchiveContentProps {

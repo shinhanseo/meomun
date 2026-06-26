@@ -8,7 +8,7 @@ import { MonthlyArchiveContent } from '../components/monthly/MonthlyArchiveConte
 import { PlaceArchiveContent } from '../components/place/PlaceArchiveContent';
 import { ArchiveHeader } from '../components/shared/ArchiveHeader';
 import { ArchiveNavigationBar } from '../components/shared/ArchiveNavigationBar';
-import type { ArchiveSort, ArchiveTab } from '../types/archive.types';
+import type { ArchiveSort, ArchiveTab } from '../types';
 
 export function ArchiveScreen() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);

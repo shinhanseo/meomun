@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
 import { emotionMeta } from '../../../../shared/constants/emotionMeta';
-import type { ArchiveRecordListItem } from '../../types/archive.types';
+import type { ArchiveRecordListItem } from '../../types';
 
 interface AllArchiveRecordCardProps {
   record: ArchiveRecordListItem;

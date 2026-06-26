@@ -4,7 +4,7 @@ import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
 import { emotionMeta } from '../../../../shared/constants/emotionMeta';
-import type { ArchiveOverviewStats } from '../../types/archive.types';
+import type { ArchiveOverviewStats } from '../../types';
 
 interface AllArchiveSummarySectionProps {
   stats: ArchiveOverviewStats;

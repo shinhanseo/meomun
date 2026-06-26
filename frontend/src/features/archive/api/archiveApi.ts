@@ -2,7 +2,7 @@ import { apiClient } from '../../../shared/api/client';
 import {
   AllArchiveRequestParams,
   AllArchiveResponse,
-} from '../types/archive.types';
+} from '../types';
 
 export const archiveApi = {
   async getAllArchive(params: AllArchiveRequestParams = {}) {

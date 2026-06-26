@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
-import type { ArchiveSort, ArchiveTab } from '../../types/archive.types';
+import type { ArchiveSort, ArchiveTab } from '../../types';
 
 interface ArchiveNavigationBarProps {
   activeTab: ArchiveTab;
