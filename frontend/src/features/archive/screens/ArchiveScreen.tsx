@@ -59,6 +59,7 @@ export function ArchiveScreen() {
         onChangeTab={setActiveTab}
         sort={sort}
         onChangeSort={setSort}
+        showSort={activeTab !== 'emotion'}
       />
 
       <Animated.View
