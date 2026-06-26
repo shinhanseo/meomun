@@ -1,6 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { color, semanticColor } from '../../../shared/constants/color';
+import { emotionMeta } from '../../../shared/constants/emotionMeta';
 import { emotionMarkerMeta } from '../constants/emotionMarker';
 import type { MapRecord } from '../types/home.types';
 
@@ -15,8 +16,10 @@ export function HomeRecordPanel({
   record,
   onPressDetail,
 }: HomeRecordPanelProps) {
-  const emotionColor = emotionMarkerMeta[record.emotion].color;
-  const emotionText = emotionMarkerMeta[record.emotion].label;
+  const markerMeta = emotionMarkerMeta[record.emotion];
+  const emotionInfo = emotionMeta[record.emotion];
+  const emotionColor = markerMeta.color;
+  const emotionText = emotionInfo.label;
   const recordedAt = new Date(record.recordedAt);
 
   const formattedDate = `${recordedAt.getFullYear()}.${String(
@@ -28,24 +31,55 @@ export function HomeRecordPanel({
       <View style={styles.handle} />
 
       <View style={styles.header}>
-        <Text style={styles.sectionTitle}>
-          {mode === 'selected' ? '선택한 기록' : '최근 기록'}
-        </Text>
+        <View>
+          <Text style={styles.sectionTitle}>
+            {mode === 'selected' ? '선택한 기록' : '최근 기록'}
+          </Text>
+          <Text style={styles.sectionSubtitle}>
+            {mode === 'selected'
+              ? '지도에서 고른 감정을 열어볼까요?'
+              : '가장 최근에 머문 감정이에요.'}
+          </Text>
+        </View>
 
         <Pressable onPress={onPressDetail} hitSlop={8}>
-          <Text style={styles.viewAll}>전체 보기</Text>
+          <Text style={styles.viewAll}>자세히</Text>
         </Pressable>
       </View>
 
       <Pressable style={styles.recordRow} onPress={onPressDetail}>
-        {record.thumbnailImage ? (
-          <Image
-            source={{ uri: record.thumbnailImage.imageUrl }}
-            style={styles.thumbnail}
-          />
-        ) : (
-          <View style={styles.thumbnailPlaceholder} />
-        )}
+        <View style={styles.thumbnailFrame}>
+          {record.thumbnailImage ? (
+            <Image
+              source={{ uri: record.thumbnailImage.imageUrl }}
+              style={styles.thumbnail}
+            />
+          ) : (
+            <View
+              style={[
+                styles.thumbnailPlaceholder,
+                { backgroundColor: `${emotionColor}1F` },
+              ]}
+            >
+              <Image
+                source={markerMeta.image}
+                style={styles.placeholderIcon}
+              />
+            </View>
+          )}
+
+          <View
+            style={[
+              styles.thumbnailEmotion,
+              { backgroundColor: `${emotionColor}E6` },
+            ]}
+          >
+            <Image
+              source={markerMeta.image}
+              style={styles.thumbnailEmotionIcon}
+            />
+          </View>
+        </View>
 
         <View style={styles.recordContent}>
           <View
@@ -54,12 +88,7 @@ export function HomeRecordPanel({
               { backgroundColor: `${emotionColor}22` },
             ]}
           >
-            <View
-              style={[
-                styles.emotionDot,
-                { backgroundColor: emotionColor },
-              ]}
-            />
+            <Image source={emotionInfo.icon} style={styles.badgeIcon} />
             <Text style={[styles.emotionText, { color: emotionColor }]}>
               {emotionText}
             </Text>
@@ -84,16 +113,18 @@ export function HomeRecordPanel({
 
 const styles = StyleSheet.create({
   wrapper: {
-    position: 'absolute',
-    left: 20,
-    right: 20,
-    bottom: 112,
-    zIndex: 20,
-    borderRadius: 28,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderColor: 'rgba(255, 255, 255, 0.72)',
+    borderRadius: 30,
+    borderWidth: 1,
+    bottom: 112,
+    elevation: 12,
+    left: 20,
     paddingHorizontal: 20,
-    paddingTop: 14,
     paddingBottom: 20,
+    paddingTop: 12,
+    position: 'absolute',
+    right: 20,
     shadowColor: color.purple[700],
     shadowOffset: {
       width: 0,
@@ -101,93 +132,126 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.12,
     shadowRadius: 24,
-    elevation: 12,
+    zIndex: 20,
   },
   handle: {
     alignSelf: 'center',
-    width: 44,
-    height: 5,
-    borderRadius: 999,
     backgroundColor: color.gray[300],
+    borderRadius: 999,
+    height: 5,
     marginBottom: 16,
+    width: 44,
   },
   header: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: 'row',
     marginBottom: 14,
+    justifyContent: 'space-between',
   },
   sectionTitle: {
-    fontSize: 15,
-    fontWeight: '700',
     color: color.purple[900],
+    fontSize: 16,
+    fontWeight: '900',
+  },
+  sectionSubtitle: {
+    color: semanticColor.textSecondary,
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 3,
   },
   viewAll: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: color.gray[500],
+    backgroundColor: color.purple[50],
+    borderRadius: 999,
+    color: color.purple[600],
+    fontSize: 12,
+    overflow: 'hidden',
+    paddingHorizontal: 11,
+    paddingVertical: 6,
+    fontWeight: '800',
+  },
+  thumbnailFrame: {
+    height: 96,
+    position: 'relative',
+    width: 112,
+  },
+  thumbnailEmotion: {
+    alignItems: 'center',
+    borderColor: '#FFFFFF',
+    borderRadius: 999,
+    borderWidth: 2,
+    bottom: -6,
+    height: 34,
+    justifyContent: 'center',
+    position: 'absolute',
+    right: -6,
+    width: 34,
+  },
+  thumbnailEmotionIcon: {
+    height: 24,
+    resizeMode: 'contain',
+    width: 24,
+  },
+  badgeIcon: {
+    height: 15,
+    resizeMode: 'contain',
+    width: 15,
+  },
+  placeholderIcon: {
+    height: 48,
+    resizeMode: 'contain',
+    width: 48,
   },
   recordRow: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    flexDirection: 'row',
+    gap: 15,
   },
   thumbnail: {
-    width: 110,
-    height: 92,
-    borderRadius: 16,
     backgroundColor: color.gray[100],
+    borderRadius: 18,
+    height: 96,
+    width: 112,
   },
   thumbnailPlaceholder: {
-    width: 110,
-    height: 92,
-    borderRadius: 16,
-    backgroundColor: color.purple[100],
+    alignItems: 'center',
+    borderRadius: 18,
+    height: 96,
+    justifyContent: 'center',
+    width: 112,
   },
   recordContent: {
     flex: 1,
     minWidth: 0,
   },
   emotionBadge: {
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    alignSelf: 'flex-start',
     borderRadius: 999,
+    flexDirection: 'row',
+    gap: 4,
+    marginBottom: 8,
     paddingHorizontal: 9,
     paddingVertical: 4,
-    marginBottom: 8,
-  },
-  emotionDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
   },
   emotionText: {
     fontSize: 11,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   title: {
-    fontSize: 20,
-    fontWeight: '700',
     color: semanticColor.textPrimary,
+    fontSize: 20,
+    fontWeight: '900',
     marginBottom: 5,
   },
   content: {
-    fontSize: 13,
     color: semanticColor.textSecondary,
+    fontSize: 13,
+    fontWeight: '600',
     marginBottom: 8,
   },
   date: {
-    fontSize: 12,
     color: semanticColor.textMuted,
-  },
-  detailButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: color.purple[50],
+    fontSize: 12,
+    fontWeight: '700',
   },
 });
