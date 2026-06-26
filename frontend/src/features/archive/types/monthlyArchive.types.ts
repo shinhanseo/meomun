@@ -10,6 +10,10 @@ export interface ArchiveMonthOption {
   recordCount: number;
 }
 
+export interface ArchiveMonthOptionsResponse {
+  months: ArchiveMonthOption[];
+}
+
 export interface MonthlyArchiveEmotionCount {
   emotion: EmotionCode;
   recordCount: number;
