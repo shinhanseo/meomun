@@ -13,27 +13,33 @@ interface ArchiveNavigationBarProps {
   showSort?: boolean;
 }
 
+const ENABLE_PLACE_ARCHIVE = false;
+
 const ARCHIVE_TABS: {
   label: string;
   value: ArchiveTab;
 }[] = [
-    {
-      label: '전체',
-      value: 'all',
-    },
-    {
-      label: '월별',
-      value: 'monthly',
-    },
-    {
-      label: '장소별',
-      value: 'place',
-    },
-    {
-      label: '감정별',
-      value: 'emotion',
-    },
-  ];
+  {
+    label: '전체',
+    value: 'all',
+  },
+  {
+    label: '월별',
+    value: 'monthly',
+  },
+  ...(ENABLE_PLACE_ARCHIVE
+    ? [
+        {
+          label: '장소별',
+          value: 'place' as const,
+        },
+      ]
+    : []),
+  {
+    label: '감정별',
+    value: 'emotion',
+  },
+];
 
 const SORT_OPTIONS: {
   label: string;
