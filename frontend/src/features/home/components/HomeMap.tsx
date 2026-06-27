@@ -86,6 +86,7 @@ export function HomeMap({
   return (
     <View style={styles.container}>
       <NaverMapView
+        locale="ko"
         ref={mapRef}
         style={styles.map}
         onTapMap={onPressMap}
