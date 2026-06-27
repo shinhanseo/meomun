@@ -47,6 +47,7 @@ const config: ExpoConfig = {
       '@react-native-seoul/kakao-login',
       {
         kakaoAppKey: kakaoNativeAppKey,
+        kotlinVersion: '2.1.20',
       },
     ],
     [
