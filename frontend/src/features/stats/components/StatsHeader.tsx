@@ -244,8 +244,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 24,
-    paddingTop: 24,
-    marginTop: 24,
+    paddingTop: 64,
   },
   modalCard: {
     backgroundColor: '#FFFFFF',
