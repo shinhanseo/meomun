@@ -15,10 +15,12 @@ const config: ExpoConfig = {
   slug: 'meomun',
   version: '0.1.0',
   orientation: 'portrait',
+  icon: './src/assets/icons/icon.png',
   userInterfaceStyle: 'light',
   assetBundlePatterns: ['**/*'],
   ios: {
     bundleIdentifier: 'com.hanseo.meomun',
+    icon: './src/assets/icons/icon.png',
     usesAppleSignIn: true,
     infoPlist: {
       NSLocationWhenInUseUsageDescription:
@@ -29,6 +31,11 @@ const config: ExpoConfig = {
   },
   android: {
     package: 'com.hanseo.meomun',
+    icon: './src/assets/icons/icon.png',
+    adaptiveIcon: {
+      foregroundImage: './src/assets/icons/icon.png',
+      backgroundColor: '#FFFFFF',
+    },
     softwareKeyboardLayoutMode: 'resize',
   },
   extra: {
