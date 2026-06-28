@@ -5,6 +5,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { semanticColor } from '../../../../shared/constants/color';
 import type {
@@ -31,6 +32,8 @@ export function AllArchiveRecordList({
   onFetchNextPage,
   onPressRecord,
 }: AllArchiveRecordListProps) {
+  const insets = useSafeAreaInsets();
+
   const handleEndReached = () => {
     if (!hasNextPage || isFetchingNextPage) {
       return;
@@ -69,7 +72,10 @@ export function AllArchiveRecordList({
           <View style={styles.footerSpacer} />
         )
       }
-      contentContainerStyle={styles.contentContainer}
+      contentContainerStyle={[
+        styles.contentContainer,
+        { paddingBottom: insets.bottom + 110 },
+      ]}
       onEndReached={handleEndReached}
       onEndReachedThreshold={0.4}
       showsVerticalScrollIndicator={false}
@@ -79,7 +85,7 @@ export function AllArchiveRecordList({
 
 const styles = StyleSheet.create({
   contentContainer: {
-    paddingBottom: 32,
+    paddingBottom: 110,
   },
   emptyContainer: {
     alignItems: 'center',

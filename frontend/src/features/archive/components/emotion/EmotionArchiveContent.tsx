@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { MainStackParamList } from '../../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../../shared/constants/color';
@@ -23,6 +24,7 @@ import { EmotionArchiveItemCard } from './EmotionArchiveItemCard';
 type ArchiveNavigationProp = NativeStackNavigationProp<MainStackParamList>;
 
 export function EmotionArchiveContent() {
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation<ArchiveNavigationProp>();
   const emotionArchiveQuery = useEmotionArchive();
 
@@ -125,7 +127,10 @@ export function EmotionArchiveContent() {
           </Text>
         </View>
       }
-      contentContainerStyle={styles.contentContainer}
+      contentContainerStyle={[
+        styles.contentContainer,
+        { paddingBottom: insets.bottom + 110 },
+      ]}
       showsVerticalScrollIndicator={false}
     />
   );
@@ -133,7 +138,7 @@ export function EmotionArchiveContent() {
 
 const styles = StyleSheet.create({
   contentContainer: {
-    paddingBottom: 32,
+    paddingBottom: 110,
   },
   emptyContainer: {
     alignItems: 'center',
