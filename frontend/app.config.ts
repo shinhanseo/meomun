@@ -11,7 +11,7 @@ if (!naverMapClientId) {
 }
 
 const config: ExpoConfig = {
-  name: 'Meomun',
+  name: '머문',
   slug: 'meomun',
   version: '0.1.0',
   orientation: 'portrait',
