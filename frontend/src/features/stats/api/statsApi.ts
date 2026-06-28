@@ -2,7 +2,7 @@ import { apiClient } from '../../../shared/api/client';
 import { MonthlyStatsResponse } from '../types/stats.types';
 
 export const statsApi = {
-  async getProviderStatusAsync(yearMonth: string) {
+  async getStats(yearMonth: string) {
     const { data } = await apiClient.get<MonthlyStatsResponse>(
       '/api/stats/monthly',
       {
