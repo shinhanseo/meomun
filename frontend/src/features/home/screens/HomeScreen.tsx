@@ -55,22 +55,36 @@ export function HomeScreen() {
   }, [records, selectedRecord]);
 
   useEffect(() => {
+    let isMounted = true;
+
     const requestLocation = async () => {
-      const permission = await Location.requestForegroundPermissionsAsync();
+      try {
+        const permission = await Location.requestForegroundPermissionsAsync();
 
-      if (permission.status !== 'granted') {
-        return;
+        if (permission.status !== 'granted') {
+          return;
+        }
+
+        const location = await Location.getCurrentPositionAsync({});
+
+        if (!isMounted) {
+          return;
+        }
+
+        setCurrentLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+      } catch (error) {
+        console.log('[home-location] failed to get current location', error);
       }
-
-      const location = await Location.getCurrentPositionAsync({});
-
-      setCurrentLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
     };
 
     requestLocation();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
