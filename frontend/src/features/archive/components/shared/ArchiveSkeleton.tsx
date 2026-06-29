@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import {
   Animated,
@@ -192,15 +192,17 @@ function renderEmotionSkeleton(
         </View>
 
         <View style={styles.emotionClusterSkeleton}>
-          {Array.from({ length: 4 }).map((_, index) =>
-            renderBlock([
-              styles.clusterDot,
-              {
-                left: index % 2 === 0 ? 8 : 58,
-                top: index < 2 ? 10 : 64,
-              },
-            ]),
-          )}
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Fragment key={index}>
+              {renderBlock([
+                styles.clusterDot,
+                {
+                  left: index % 2 === 0 ? 8 : 58,
+                  top: index < 2 ? 10 : 64,
+                },
+              ])}
+            </Fragment>
+          ))}
           {renderBlock(styles.clusterCenter)}
         </View>
       </LinearGradient>
