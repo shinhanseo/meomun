@@ -16,7 +16,7 @@ export class UsersController {
   ) => {
     const userId = this.getUserId(request);
 
-    const user = this.usersService.getMe(userId);
+    const user = await this.usersService.getMe(userId);
 
     response.status(200).json(user);
   }
@@ -27,7 +27,7 @@ export class UsersController {
   ) => {
     const userId = this.getUserId(request);
 
-    const user = this.usersService.updateMe(userId, request.body);
+    const user = await this.usersService.updateMe(userId, request.body);
 
     response.status(200).json(user);
   }
