@@ -150,11 +150,6 @@ export function MonthlyArchiveSummarySection({
             })}
           </View>
         </View>
-
-        <Text style={styles.message}>
-          이번 달, {mostRecordedEmotionMeta?.label ?? '감정이 담긴'} 순간들이
-          {'\n'}당신의 하루를 차곡차곡 채워주었어요.
-        </Text>
       </LinearGradient>
 
       <Modal
