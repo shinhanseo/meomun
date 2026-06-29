@@ -1,10 +1,19 @@
 // frontend/src/features/auth/screens/LoginScreen.tsx
 
-import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Linking, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { color, semanticColor } from '../../../shared/constants/color';
 import { useAppleAuth } from '../hooks/useAppleAuth';
 import { useKakaoAuth } from '../hooks/useKakaoAuth';
+
+const TERMS_URL =
+  'https://quiet-lifter-473.notion.site/38e12450961b800a9b70f6a7623af0c6?pvs=73';
+const PRIVACY_POLICY_URL =
+  'https://quiet-lifter-473.notion.site/38e12450961b80c1998bf20ffb31002c?pvs=73';
+
+function openExternalLink(url: string) {
+  void Linking.openURL(url);
+}
 
 export function LoginScreen() {
   const {
@@ -112,9 +121,19 @@ export function LoginScreen() {
       </View>
       <Text style={styles.agreementLine}>
         로그인하면{' '}
-        <Text style={styles.agreementButtonText}>서비스 이용약관</Text>
+        <Text
+          style={styles.agreementButtonText}
+          onPress={() => openExternalLink(TERMS_URL)}
+        >
+          서비스 이용약관
+        </Text>
         {' '}및{' '}
-        <Text style={styles.agreementButtonText}>개인정보 처리방침</Text>
+        <Text
+          style={styles.agreementButtonText}
+          onPress={() => openExternalLink(PRIVACY_POLICY_URL)}
+        >
+          개인정보 처리방침
+        </Text>
         {'\n'}
         에 동의하게 됩니다.
       </Text>
