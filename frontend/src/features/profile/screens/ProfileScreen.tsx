@@ -10,6 +10,7 @@ import { authApi } from '../../auth/api/authApi';
 import { useAuthStore } from '../../auth/store/authStore';
 import { profileApi } from '../api/profileApi';
 import { ProfileConfirmModal } from '../components/ProfileConfirmModal';
+import { ProfileContactModal } from '../components/ProfileContactModal';
 import { ProfileHeader } from '../components/ProfileHeader';
 import { ProfileMenuList } from '../components/ProfileMenuList';
 import { ProfileSummaryCard } from '../components/ProfileSummaryCard';
@@ -20,6 +21,10 @@ const PRIVACY_POLICY_URL =
   'https://quiet-lifter-473.notion.site/38e12450961b80c1998bf20ffb31002c?pvs=73';
 const TERMS_OF_SERVICE_URL =
   'https://quiet-lifter-473.notion.site/38e12450961b800a9b70f6a7623af0c6?pvs=73';
+const HELP_URL =
+  'https://quiet-lifter-473.notion.site/38e12450961b809b8f27f1d3027767db?pvs=73';
+const SUPPORT_EMAIL = 'imkara123@gmail.com';
+const APP_VERSION = '0.1.0';
 
 export function ProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -27,6 +32,7 @@ export function ProfileScreen() {
   const [isAuthActionPending, setIsAuthActionPending] = useState(false);
   const [confirmModalType, setConfirmModalType] =
     useState<ConfirmModalType | null>(null);
+  const [isContactModalVisible, setIsContactModalVisible] = useState(false);
 
   const userQuery = useQuery({
     queryKey: ['profile', 'me'],
@@ -50,15 +56,35 @@ export function ProfileScreen() {
     ? calculateJoinedDayCount(user.createdAt)
     : null;
 
-  const showPreparingAlert = (title: string) => {
-    Alert.alert(title, '아직 화면을 준비하고 있어요.');
-  };
-
   const openExternalUrl = async (url: string) => {
     try {
       await Linking.openURL(url);
     } catch {
       Alert.alert('페이지를 열 수 없어요', '잠시 후 다시 시도해주세요.');
+    }
+  };
+
+  const openSupportEmail = async () => {
+    const subject = encodeURIComponent('[머문 문의]');
+    const body = encodeURIComponent(
+      [
+        '문의 내용을 적어주세요.',
+        '',
+        '',
+        '---',
+        `사용자 ID: ${user?.id ?? '-'}`,
+        `닉네임: ${nickname}`,
+        `앱 버전: ${APP_VERSION}`,
+        '기기 정보:',
+      ].join('\n'),
+    );
+
+    try {
+      await Linking.openURL(
+        `mailto:${SUPPORT_EMAIL}?subject=${subject}&body=${body}`,
+      );
+    } catch {
+      setIsContactModalVisible(true);
     }
   };
 
@@ -98,7 +124,7 @@ export function ProfileScreen() {
         await authApi.logout({ refreshToken });
       }
     } catch {
-
+      // Server-side logout can fail transiently; local session cleanup should still proceed.
     } finally {
       await tokenStorage.removeRefreshToken();
       clearSession();
@@ -161,8 +187,12 @@ export function ProfileScreen() {
         onPressTerms={() => {
           void openExternalUrl(TERMS_OF_SERVICE_URL);
         }}
-        onPressContact={() => showPreparingAlert('문의하기')}
-        onPressHelp={() => showPreparingAlert('도움말')}
+        onPressContact={() => {
+          void openSupportEmail();
+        }}
+        onPressHelp={() => {
+          void openExternalUrl(HELP_URL);
+        }}
         onPressLogout={handleLogout}
         onPressDeleteAccount={handleDeleteAccount}
         isAuthActionPending={isAuthActionPending}
@@ -174,6 +204,12 @@ export function ProfileScreen() {
         isPending={isAuthActionPending}
         onClose={handleCloseConfirmModal}
         onConfirm={handleConfirmAuthAction}
+      />
+
+      <ProfileContactModal
+        visible={isContactModalVisible}
+        email={SUPPORT_EMAIL}
+        onClose={() => setIsContactModalVisible(false)}
       />
     </ScrollView>
   );
