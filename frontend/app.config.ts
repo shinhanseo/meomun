@@ -32,6 +32,12 @@ const config: ExpoConfig = {
   android: {
     package: 'com.hanseo.meomun',
     icon: './src/assets/icons/icon.png',
+    blockedPermissions: [
+      'android.permission.CAMERA',
+      'android.permission.RECORD_AUDIO',
+      'android.permission.SYSTEM_ALERT_WINDOW',
+      'android.permission.WRITE_EXTERNAL_STORAGE',
+    ],
     adaptiveIcon: {
       foregroundImage: './src/assets/icons/icon.png',
       backgroundColor: '#FFFFFF',
