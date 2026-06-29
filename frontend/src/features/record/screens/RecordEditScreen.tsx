@@ -178,18 +178,6 @@ export function RecordEditScreen() {
           });
         },
         onError: (error) => {
-          if (axios.isAxiosError(error)) {
-            console.log('[record-edit] failed', {
-              message: error.message,
-              status: error.response?.status,
-              data: error.response?.data,
-              url: error.config?.url,
-              method: error.config?.method,
-            });
-          } else {
-            console.log('[record-edit] failed', error);
-          }
-
           Alert.alert('기록 수정에 실패했어요. 잠시 후 다시 시도해주세요.');
         },
       },

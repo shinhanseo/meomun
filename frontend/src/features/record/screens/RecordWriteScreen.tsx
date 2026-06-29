@@ -107,18 +107,6 @@ export function RecordWriteScreen() {
           });
         },
         onError: (error) => {
-          if (axios.isAxiosError(error)) {
-            console.log('[record-create] failed', {
-              message: error.message,
-              status: error.response?.status,
-              data: error.response?.data,
-              url: error.config?.url,
-              method: error.config?.method,
-            });
-          } else {
-            console.log('[record-create] failed', error);
-          }
-
           Alert.alert('기록 저장에 실패했어요. 잠시 후 다시 시도해주세요.');
         },
       },

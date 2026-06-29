@@ -76,7 +76,6 @@ export function HomeScreen() {
           longitude: location.coords.longitude,
         });
       } catch (error) {
-        console.log('[home-location] failed to get current location', error);
       }
     };
 
