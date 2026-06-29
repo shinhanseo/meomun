@@ -29,6 +29,8 @@ export function useCreateRecord() {
       );
       queryClient.invalidateQueries({ queryKey: ['home', 'mapRecords'] });
       queryClient.invalidateQueries({ queryKey: ['record', 'placeSummary'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
+      queryClient.invalidateQueries({ queryKey: ['archive'] });
     },
   });
 }

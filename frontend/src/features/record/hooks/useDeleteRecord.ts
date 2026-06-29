@@ -15,6 +15,15 @@ export function useDeleteRecord() {
         queryClient.removeQueries({
           queryKey: ['record', 'detail', recordId],
         }),
+        queryClient.invalidateQueries({
+          queryKey: ['record', 'placeSummary'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['stats'],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['archive'],
+        }),
       ]);
     },
   });
