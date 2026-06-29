@@ -21,12 +21,14 @@ const config: ExpoConfig = {
   ios: {
     bundleIdentifier: 'com.hanseo.meomun',
     icon: './src/assets/icons/icon.png',
+    supportsTablet: false,
     usesAppleSignIn: true,
     infoPlist: {
       NSLocationWhenInUseUsageDescription:
         '현재 위치를 기준으로 주변 기록을 보여주기 위해 위치 권한이 필요합니다.',
       NSPhotoLibraryUsageDescription:
         '기록에 추가할 사진을 선택하기 위해 사진 보관함 접근 권한이 필요합니다.',
+      UIRequiresFullScreen: true,
     },
   },
   android: {

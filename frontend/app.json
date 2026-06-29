@@ -10,6 +10,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.hanseo.meomun",
+      "supportsTablet": false,
       "usesAppleSignIn": true
     },
     "android": {
