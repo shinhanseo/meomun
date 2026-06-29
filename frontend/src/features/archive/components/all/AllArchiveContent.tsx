@@ -1,18 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useMemo } from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { MainStackParamList } from '../../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../../shared/constants/color';
 import { useArchiveAll } from '../../hooks/useArchiveAll';
 import type { ArchiveSort } from '../../types';
+import { ArchiveSkeleton } from '../shared/ArchiveSkeleton';
 import { AllArchiveRecordList } from './AllArchiveRecordList';
 
 interface AllArchiveContentProps {
@@ -36,12 +31,7 @@ export function AllArchiveContent({ keyword, sort }: AllArchiveContentProps) {
   };
 
   if (archiveQuery.isLoading) {
-    return (
-      <View style={styles.stateContainer}>
-        <ActivityIndicator color="#8E6CE5" size="small" />
-        <Text style={styles.stateText}>보관함을 불러오는 중이에요.</Text>
-      </View>
-    );
+    return <ArchiveSkeleton variant="all" />;
   }
 
   if (archiveQuery.isError) {

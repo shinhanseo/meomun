@@ -2,12 +2,12 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
 import type { MainStackParamList } from '../../../../app/navigation/MainStackNavigator';
 import { semanticColor } from '../../../../shared/constants/color';
 import { useArchiveMonthOptions } from '../../hooks/useArchiveMonthOptions';
 import { useArchiveMonthly } from '../../hooks/useArchiveMonthly';
 import type { ArchiveSort } from '../../types';
+import { ArchiveSkeleton } from '../shared/ArchiveSkeleton';
 import { MonthlyArchiveRecordList } from './MonthlyArchiveRecordList';
 
 interface MonthlyArchiveContentProps {
@@ -44,8 +44,7 @@ export function MonthlyArchiveContent({
     }
 
     const selectedMonthExists = monthOptions.some(
-      (monthOption) =>
-        monthOption.year === year && monthOption.month === month,
+      (monthOption) => monthOption.year === year && monthOption.month === month,
     );
 
     if (selectedMonthExists) {
@@ -58,20 +57,14 @@ export function MonthlyArchiveContent({
   }, [month, monthOptions, onChangeMonth, year]);
 
   if (monthOptionsQuery.isLoading || monthlyArchiveQuery.isLoading) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.description}>월별 보관함을 불러오는 중이에요.</Text>
-      </View>
-    );
+    return <ArchiveSkeleton variant="monthly" />;
   }
 
   if (monthOptionsQuery.isError || monthlyArchiveQuery.isError) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>월별 보관함</Text>
-        <Text style={styles.description}>
-          월별 보관함을 불러오지 못했어요.
-        </Text>
+        <Text style={styles.description}>월별 보관함을 불러오지 못했어요.</Text>
       </View>
     );
   }
@@ -80,17 +73,17 @@ export function MonthlyArchiveContent({
 
   return (
     <MonthlyArchiveRecordList
-        year={year}
-        month={month}
-        emotionCounts={firstPage?.emotionCounts ?? []}
-        monthOptions={monthOptions}
+      year={year}
+      month={month}
+      emotionCounts={firstPage?.emotionCounts ?? []}
+      monthOptions={monthOptions}
       records={records}
       hasNextPage={monthlyArchiveQuery.hasNextPage}
       isFetchingNextPage={monthlyArchiveQuery.isFetchingNextPage}
-        onChangeMonth={onChangeMonth}
+      onChangeMonth={onChangeMonth}
       onFetchNextPage={() => monthlyArchiveQuery.fetchNextPage()}
       onPressRecord={handlePressRecord}
-      />
+    />
   );
 }
 

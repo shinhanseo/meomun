@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
-  ActivityIndicator,
   FlatList,
   Image,
   Pressable,
@@ -19,6 +18,7 @@ import {
   type EmotionCode,
 } from '../../../../shared/constants/emotionMeta';
 import { useEmotionArchive } from '../../hooks/useArchiveEmotion';
+import { ArchiveSkeleton } from '../shared/ArchiveSkeleton';
 import { EmotionArchiveItemCard } from './EmotionArchiveItemCard';
 
 type ArchiveNavigationProp = NativeStackNavigationProp<MainStackParamList>;
@@ -33,18 +33,15 @@ export function EmotionArchiveContent() {
   };
 
   if (emotionArchiveQuery.isLoading) {
-    return (
-      <View style={styles.stateContainer}>
-        <ActivityIndicator color="#8E6CE5" size="small" />
-        <Text style={styles.stateText}>감정별 보관함을 불러오는 중이에요.</Text>
-      </View>
-    );
+    return <ArchiveSkeleton variant="emotion" />;
   }
 
   if (emotionArchiveQuery.isError) {
     return (
       <View style={styles.stateContainer}>
-        <Text style={styles.errorTitle}>감정별 보관함을 불러오지 못했어요.</Text>
+        <Text style={styles.errorTitle}>
+          감정별 보관함을 불러오지 못했어요.
+        </Text>
         <Text style={styles.stateText}>잠시 후 다시 시도해주세요.</Text>
 
         <Pressable
