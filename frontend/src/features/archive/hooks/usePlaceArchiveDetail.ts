@@ -8,7 +8,7 @@ const ARCHIVE_PAGE_SIZE = 20;
 export function usePlaceArchiveDetail(
   placeId: string,
   keyword = '',
-  sort: ArchiveSort = 'latest',
+  sort: ArchiveSort = 'oldest',
 ) {
   const trimmedKeyword = keyword.trim();
 

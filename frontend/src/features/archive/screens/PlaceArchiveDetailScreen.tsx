@@ -103,7 +103,7 @@ export function PlaceArchiveDetailScreen({ route, navigation }: Props) {
             </View>
 
             <View style={styles.timelineHeader}>
-              <Text style={styles.timelineTitle}>이 장소의 기록</Text>
+              <Text style={styles.timelineTitle}>처음 머문 순간부터</Text>
               <Text style={styles.timelineCount}>
                 {firstPage.recordCount}개
               </Text>
