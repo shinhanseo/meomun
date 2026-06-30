@@ -67,6 +67,7 @@ export interface MapRecordResponse {
   emotion: Emotion;
   recordedAt: string;
   place: {
+    id: string;
     latitude: string;
     longitude: string;
   };

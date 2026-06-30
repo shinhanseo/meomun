@@ -258,6 +258,7 @@ export class RecordsService {
       emotion: record.emotion,
       recordedAt: record.recordedAt.toISOString(),
       place: {
+        id: record.place.id,
         latitude: record.place.latitude.toString(),
         longitude: record.place.longitude.toString(),
       },
