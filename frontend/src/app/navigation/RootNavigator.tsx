@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, type LinkingOptions } from '@react-navigation/native';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { semanticColor } from '../../shared/constants/color';
@@ -6,6 +6,29 @@ import { useAuthBootstrap } from '../../features/auth/hooks/useAuthBootstrap';
 import { useAuthStore } from '../../features/auth/store/authStore';
 import { AuthNavigator } from './AuthNavigator';
 import { MainStackNavigator } from './MainStackNavigator';
+import { MainStackParamList } from './MainStackNavigator';
+
+const linking: LinkingOptions<MainStackParamList> = {
+  prefixes: ['meomun://'],
+  config: {
+    screens: {
+      RecordWrite: 'record/new',
+      RecordDetail: 'record/:recordId',
+      MainTabs: {
+        screens: {
+          Home: 'home',
+          Archive: {
+            screens: {
+              ArchiveHome: 'records/today',
+            },
+          },
+          Stats: 'stats',
+          Profile: 'profile',
+        },
+      },
+    },
+  },
+};
 
 export function RootNavigator() {
   useAuthBootstrap();
@@ -22,7 +45,7 @@ export function RootNavigator() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       {accessToken ? <MainStackNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
