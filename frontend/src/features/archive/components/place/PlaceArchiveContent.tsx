@@ -16,7 +16,6 @@ import { color, semanticColor } from '../../../../shared/constants/color';
 import { emotionMeta } from '../../../../shared/constants/emotionMeta';
 import { usePlaceArchive } from '../../hooks/usePlaceArchive';
 import type { ArchiveSort, PlaceArchiveSummaryItem } from '../../types';
-import { ArchiveSkeleton } from '../shared/ArchiveSkeleton';
 
 interface PlaceArchiveContentProps {
   keyword: string;
@@ -43,7 +42,7 @@ export function PlaceArchiveContent({
   };
 
   if (placeArchiveQuery.isLoading) {
-    return <ArchiveSkeleton variant="all" />;
+    return <PlaceArchiveSkeleton />;
   }
 
   if (placeArchiveQuery.isError) {
@@ -168,6 +167,31 @@ function formatPlaceArchiveDate(value: string) {
     2,
     '0',
   )}.${String(date.getDate()).padStart(2, '0')} 최근 기록`;
+}
+
+function PlaceArchiveSkeleton() {
+  return (
+    <View style={styles.skeletonContainer}>
+      <View style={styles.skeletonSummary}>
+        <View style={styles.skeletonSummaryIcon} />
+        <View style={styles.skeletonSummaryCopy}>
+          <View style={styles.skeletonLineSmall} />
+          <View style={styles.skeletonLineLarge} />
+        </View>
+      </View>
+
+      {[0, 1, 2, 3].map((item) => (
+        <View key={item} style={styles.skeletonCard}>
+          <View style={styles.skeletonThumbnail} />
+          <View style={styles.skeletonCardCopy}>
+            <View style={styles.skeletonLineTitle} />
+            <View style={styles.skeletonLineMedium} />
+            <View style={styles.skeletonLineShort} />
+          </View>
+        </View>
+      ))}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -329,6 +353,79 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '900',
     lineHeight: 25,
+  },
+  skeletonCard: {
+    alignItems: 'center',
+    backgroundColor: color.white,
+    borderRadius: 20,
+    flexDirection: 'row',
+    gap: 14,
+    marginHorizontal: 24,
+    marginTop: 12,
+    padding: 12,
+  },
+  skeletonCardCopy: {
+    flex: 1,
+    gap: 10,
+  },
+  skeletonContainer: {
+    paddingTop: 12,
+  },
+  skeletonLineLarge: {
+    backgroundColor: color.purple[100],
+    borderRadius: 999,
+    height: 18,
+    width: '88%',
+  },
+  skeletonLineMedium: {
+    backgroundColor: color.gray[100],
+    borderRadius: 999,
+    height: 12,
+    width: '78%',
+  },
+  skeletonLineShort: {
+    backgroundColor: color.purple[50],
+    borderRadius: 999,
+    height: 18,
+    width: 96,
+  },
+  skeletonLineSmall: {
+    backgroundColor: color.purple[50],
+    borderRadius: 999,
+    height: 12,
+    width: 84,
+  },
+  skeletonLineTitle: {
+    backgroundColor: color.purple[100],
+    borderRadius: 999,
+    height: 16,
+    width: '62%',
+  },
+  skeletonSummary: {
+    alignItems: 'center',
+    backgroundColor: color.white,
+    borderRadius: 24,
+    flexDirection: 'row',
+    gap: 14,
+    marginHorizontal: 24,
+    marginBottom: 10,
+    padding: 18,
+  },
+  skeletonSummaryCopy: {
+    flex: 1,
+    gap: 10,
+  },
+  skeletonSummaryIcon: {
+    backgroundColor: color.purple[50],
+    borderRadius: 18,
+    height: 48,
+    width: 48,
+  },
+  skeletonThumbnail: {
+    backgroundColor: color.purple[50],
+    borderRadius: 16,
+    height: 82,
+    width: 82,
   },
   thumbnail: {
     borderRadius: 16,

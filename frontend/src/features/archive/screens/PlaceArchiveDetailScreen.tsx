@@ -14,7 +14,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { MainStackParamList } from '../../../app/navigation/MainStackNavigator';
 import { color, semanticColor } from '../../../shared/constants/color';
 import { emotionMeta } from '../../../shared/constants/emotionMeta';
-import { ArchiveSkeleton } from '../components/shared/ArchiveSkeleton';
 import { usePlaceArchiveDetail } from '../hooks/usePlaceArchiveDetail';
 import type { ArchiveRecordListItem } from '../types';
 
@@ -47,7 +46,7 @@ export function PlaceArchiveDetailScreen({ route, navigation }: Props) {
     return (
       <View style={styles.container}>
         <Header onPressBack={navigation.goBack} />
-        <ArchiveSkeleton variant="all" />
+        <PlaceTimelineSkeleton />
       </View>
     );
   }
@@ -220,6 +219,40 @@ function formatTimelineDate(value: string) {
     2,
     '0',
   )}.${String(date.getDate()).padStart(2, '0')} ${weekdays[date.getDay()]} ${period} ${hour}:${minute}`;
+}
+
+function PlaceTimelineSkeleton() {
+  return (
+    <View style={styles.skeletonContainer}>
+      <View style={styles.skeletonSummary}>
+        <View style={styles.skeletonSummaryIcon} />
+        <View style={styles.skeletonSummaryCopy}>
+          <View style={styles.skeletonKicker} />
+          <View style={styles.skeletonPlaceName} />
+          <View style={styles.skeletonAddress} />
+        </View>
+      </View>
+
+      <View style={styles.skeletonTimelineHeader}>
+        <View style={styles.skeletonSectionTitle} />
+        <View style={styles.skeletonCountChip} />
+      </View>
+
+      {[0, 1, 2].map((item) => (
+        <View key={item} style={styles.skeletonTimelineItem}>
+          <View style={styles.skeletonRail}>
+            <View style={styles.skeletonDot} />
+            {item < 2 ? <View style={styles.skeletonLine} /> : null}
+          </View>
+          <View style={styles.skeletonRecordCard}>
+            <View style={styles.skeletonRecordMeta} />
+            <View style={styles.skeletonRecordTitle} />
+            <View style={styles.skeletonRecordContent} />
+          </View>
+        </View>
+      ))}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -401,6 +434,115 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginTop: 10,
     textAlign: 'center',
+  },
+  skeletonAddress: {
+    backgroundColor: color.gray[100],
+    borderRadius: 999,
+    height: 12,
+    width: '78%',
+  },
+  skeletonContainer: {
+    paddingTop: 24,
+  },
+  skeletonCountChip: {
+    backgroundColor: color.purple[50],
+    borderRadius: 999,
+    height: 24,
+    width: 44,
+  },
+  skeletonDot: {
+    backgroundColor: color.purple[100],
+    borderColor: color.white,
+    borderRadius: 999,
+    borderWidth: 3,
+    height: 16,
+    width: 16,
+  },
+  skeletonKicker: {
+    backgroundColor: color.purple[50],
+    borderRadius: 999,
+    height: 12,
+    width: 92,
+  },
+  skeletonLine: {
+    backgroundColor: color.purple[100],
+    flex: 1,
+    marginTop: 5,
+    width: 2,
+  },
+  skeletonPlaceName: {
+    backgroundColor: color.purple[100],
+    borderRadius: 999,
+    height: 22,
+    width: '70%',
+  },
+  skeletonRail: {
+    alignItems: 'center',
+    paddingTop: 19,
+    width: 18,
+  },
+  skeletonRecordCard: {
+    backgroundColor: color.white,
+    borderRadius: 18,
+    flex: 1,
+    gap: 12,
+    padding: 16,
+  },
+  skeletonRecordContent: {
+    backgroundColor: color.gray[100],
+    borderRadius: 999,
+    height: 13,
+    width: '88%',
+  },
+  skeletonRecordMeta: {
+    backgroundColor: color.purple[50],
+    borderRadius: 999,
+    height: 14,
+    width: '72%',
+  },
+  skeletonRecordTitle: {
+    backgroundColor: color.purple[100],
+    borderRadius: 999,
+    height: 17,
+    width: '58%',
+  },
+  skeletonSectionTitle: {
+    backgroundColor: color.purple[100],
+    borderRadius: 999,
+    height: 17,
+    width: 116,
+  },
+  skeletonSummary: {
+    alignItems: 'center',
+    backgroundColor: color.white,
+    borderRadius: 24,
+    flexDirection: 'row',
+    gap: 15,
+    marginHorizontal: 20,
+    padding: 18,
+  },
+  skeletonSummaryCopy: {
+    flex: 1,
+    gap: 10,
+  },
+  skeletonSummaryIcon: {
+    backgroundColor: color.purple[50],
+    borderRadius: 18,
+    height: 48,
+    width: 48,
+  },
+  skeletonTimelineHeader: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 24,
+    marginTop: 24,
+  },
+  skeletonTimelineItem: {
+    flexDirection: 'row',
+    gap: 12,
+    marginHorizontal: 24,
+    marginTop: 12,
   },
   timelineCount: {
     backgroundColor: color.purple[50],
