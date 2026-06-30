@@ -78,7 +78,7 @@ export function RecordPlaceSection({
       </View>
 
       <Text style={styles.placeName}>
-        {hasPlace ? place.placeName : '지역을 선택해주세요'}
+        {hasPlace ? place.placeName : '머문 장소를 선택해주세요'}
       </Text>
 
       <Text style={styles.address}>
