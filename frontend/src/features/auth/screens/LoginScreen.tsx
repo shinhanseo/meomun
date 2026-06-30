@@ -1,6 +1,15 @@
 // frontend/src/features/auth/screens/LoginScreen.tsx
 
-import { Image, Linking, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import {
+  Image,
+  Linking,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import { color, semanticColor } from '../../../shared/constants/color';
 import { useAppleAuth } from '../hooks/useAppleAuth';
@@ -16,6 +25,9 @@ function openExternalLink(url: string) {
 }
 
 export function LoginScreen() {
+  const [isTermsAgreed, setIsTermsAgreed] = useState(false);
+  const [isPrivacyAgreed, setIsPrivacyAgreed] = useState(false);
+
   const {
     signInWithKakao,
     isLoading: isKakaoLoading,
@@ -30,12 +42,15 @@ export function LoginScreen() {
 
   const isLoading = isKakaoLoading || isAppleLoading;
   const error = kakaoError ?? appleError;
+  const canSignIn = isTermsAgreed && isPrivacyAgreed && !isLoading;
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-
-        <Image source={require('../../../assets/icons/logo.png')} style={styles.image} />
+        <Image
+          source={require('../../../assets/icons/logo.png')}
+          style={styles.image}
+        />
 
         <View style={styles.textArea}>
           <Text style={styles.title}>어서오세요</Text>
@@ -57,10 +72,10 @@ export function LoginScreen() {
             styles.loginButton,
             styles.kakaoButton,
             pressed && styles.pressedButton,
-            isLoading && styles.disabledButton,
+            !canSignIn && styles.disabledButton,
           ]}
           onPress={signInWithKakao}
-          disabled={isLoading}
+          disabled={!canSignIn}
         >
           <Text style={styles.kakaoButtonText}>
             {isKakaoLoading ? '로그인 중...' : '카카오로 계속하기'}
@@ -73,10 +88,10 @@ export function LoginScreen() {
               styles.loginButton,
               styles.appleButton,
               pressed && styles.pressedButton,
-              isLoading && styles.disabledButton,
+              !canSignIn && styles.disabledButton,
             ]}
             onPress={signInWithApple}
-            disabled={isLoading}
+            disabled={!canSignIn}
           >
             <Text style={styles.appleButtonText}>
               {isAppleLoading ? '로그인 중...' : 'Apple로 계속하기'}
@@ -117,26 +132,65 @@ export function LoginScreen() {
             }}
           />
         </View>
-
       </View>
-      <Text style={styles.agreementLine}>
-        로그인하면{' '}
-        <Text
-          style={styles.agreementButtonText}
-          onPress={() => openExternalLink(TERMS_URL)}
-        >
-          서비스 이용약관
+
+      <View style={styles.agreementArea}>
+        <AgreementCheckbox
+          checked={isTermsAgreed}
+          label="서비스 이용약관에 동의합니다. (필수)"
+          linkLabel="보기"
+          onPress={() => setIsTermsAgreed((value) => !value)}
+          onPressLink={() => openExternalLink(TERMS_URL)}
+        />
+
+        <AgreementCheckbox
+          checked={isPrivacyAgreed}
+          label="개인정보 처리방침에 동의합니다. (필수)"
+          linkLabel="보기"
+          onPress={() => setIsPrivacyAgreed((value) => !value)}
+          onPressLink={() => openExternalLink(PRIVACY_POLICY_URL)}
+        />
+
+        <Text style={styles.agreementNotice}>
+          위치 권한은 장소 기반 기록을 만들 때 별도로 요청돼요.
         </Text>
-        {' '}및{' '}
-        <Text
-          style={styles.agreementButtonText}
-          onPress={() => openExternalLink(PRIVACY_POLICY_URL)}
-        >
-          개인정보 처리방침
-        </Text>
-        {'\n'}
-        에 동의하게 됩니다.
-      </Text>
+      </View>
+    </View>
+  );
+}
+
+interface AgreementCheckboxProps {
+  checked: boolean;
+  label: string;
+  linkLabel: string;
+  onPress: () => void;
+  onPressLink: () => void;
+}
+
+function AgreementCheckbox({
+  checked,
+  label,
+  linkLabel,
+  onPress,
+  onPressLink,
+}: AgreementCheckboxProps) {
+  return (
+    <View style={styles.agreementRow}>
+      <Pressable
+        accessibilityRole="checkbox"
+        accessibilityState={{ checked }}
+        style={styles.checkboxTouchArea}
+        onPress={onPress}
+      >
+        <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
+          {checked ? <Text style={styles.checkboxMark}>✓</Text> : null}
+        </View>
+        <Text style={styles.agreementLabel}>{label}</Text>
+      </Pressable>
+
+      <Pressable hitSlop={8} onPress={onPressLink}>
+        <Text style={styles.agreementButtonText}>{linkLabel}</Text>
+      </Pressable>
     </View>
   );
 }
@@ -146,9 +200,9 @@ const styles = StyleSheet.create({
     backgroundColor: semanticColor.background,
     flex: 1,
     justifyContent: 'space-between',
-    paddingBottom: 56,
+    paddingBottom: 44,
     paddingHorizontal: 28,
-    paddingTop: 120,
+    paddingTop: 70,
   },
   content: {
     alignItems: 'center',
@@ -216,23 +270,61 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image: {
-    height: 330,
-    marginTop: 58,
+    height: 290,
+    marginTop: 8,
     width: '100%',
   },
-  agreementText: {
+  agreementArea: {
+    gap: 10,
+  },
+  agreementRow: {
     alignItems: 'center',
+    flexDirection: 'row',
+    gap: 10,
+    justifyContent: 'space-between',
   },
-
-  agreementLine: {
+  checkboxTouchArea: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    gap: 10,
+  },
+  checkbox: {
+    alignItems: 'center',
+    backgroundColor: semanticColor.surface,
+    borderColor: color.gray[300],
+    borderRadius: 6,
+    borderWidth: 1.5,
+    height: 22,
+    justifyContent: 'center',
+    width: 22,
+  },
+  checkboxChecked: {
+    backgroundColor: semanticColor.primary,
+    borderColor: semanticColor.primary,
+  },
+  checkboxMark: {
+    color: color.white,
+    fontSize: 15,
+    fontWeight: '900',
+    lineHeight: 18,
+  },
+  agreementLabel: {
+    color: semanticColor.textSecondary,
+    flex: 1,
+    fontSize: 13,
+    fontWeight: '600',
+    lineHeight: 19,
+  },
+  agreementNotice: {
     color: semanticColor.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
-    textAlign: 'center',
+    fontSize: 12,
+    lineHeight: 18,
+    paddingLeft: 32,
   },
-
   agreementButtonText: {
     color: semanticColor.primary,
+    fontSize: 13,
     fontWeight: '700',
   },
 });
