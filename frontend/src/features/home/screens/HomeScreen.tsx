@@ -37,8 +37,38 @@ export function HomeScreen() {
       )[0];
   }, [records]);
 
+  const recordsByPlaceId = useMemo(() => {
+    return records.reduce((placeRecords, record) => {
+      const recordsAtPlace = placeRecords.get(record.place.id) ?? [];
+      recordsAtPlace.push(record);
+      placeRecords.set(record.place.id, recordsAtPlace);
+
+      return placeRecords;
+    }, new Map<string, MapRecord[]>());
+  }, [records]);
+
+  const selectedPlaceRecords = selectedRecord
+    ? recordsByPlaceId.get(selectedRecord.place.id) ?? []
+    : [];
+  const selectedPlaceRecordIndex = selectedRecord
+    ? selectedPlaceRecords.findIndex((record) => record.id === selectedRecord.id)
+    : -1;
+
   const panelRecord = selectedRecord ?? latestRecord;
   const panelMode = selectedRecord ? 'selected' : 'latest';
+  const canShowNextRecord =
+    panelMode === 'selected' && selectedPlaceRecords.length > 1;
+
+  const handlePressNextRecord = () => {
+    if (!canShowNextRecord || selectedPlaceRecordIndex < 0) {
+      return;
+    }
+
+    const nextIndex =
+      (selectedPlaceRecordIndex + 1) % selectedPlaceRecords.length;
+
+    setSelectedRecord(selectedPlaceRecords[nextIndex]);
+  };
 
   useEffect(() => {
     if (!selectedRecord) {
@@ -75,7 +105,7 @@ export function HomeScreen() {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
         });
-      } catch (error) {
+      } catch {
       }
     };
 
@@ -102,6 +132,17 @@ export function HomeScreen() {
         <HomeRecordPanel
           mode={panelMode}
           record={panelRecord}
+          recordPosition={
+            canShowNextRecord && selectedPlaceRecordIndex >= 0
+              ? {
+                  current: selectedPlaceRecordIndex + 1,
+                  total: selectedPlaceRecords.length,
+                }
+              : undefined
+          }
+          onPressNextRecord={
+            canShowNextRecord ? handlePressNextRecord : undefined
+          }
           onPressDetail={() => {
             navigation.navigate('RecordDetail', {
               recordId: panelRecord.id,

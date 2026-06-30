@@ -1,4 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ChevronRight } from 'lucide-react-native';
 
 import { color, semanticColor } from '../../../shared/constants/color';
 import { emotionMeta } from '../../../shared/constants/emotionMeta';
@@ -8,12 +9,19 @@ import type { MapRecord } from '../types/home.types';
 type HomeRecordPanelProps = {
   mode: 'latest' | 'selected';
   record: MapRecord;
+  recordPosition?: {
+    current: number;
+    total: number;
+  };
+  onPressNextRecord?: () => void;
   onPressDetail: () => void;
 };
 
 export function HomeRecordPanel({
   mode,
   record,
+  recordPosition,
+  onPressNextRecord,
   onPressDetail,
 }: HomeRecordPanelProps) {
   const markerMeta = emotionMarkerMeta[record.emotion];
@@ -31,7 +39,7 @@ export function HomeRecordPanel({
       <View style={styles.handle} />
 
       <View style={styles.header}>
-        <View>
+        <View style={styles.headerCopy}>
           <Text style={styles.sectionTitle}>
             {mode === 'selected' ? '선택한 기록' : '최근 기록'}
           </Text>
@@ -42,9 +50,34 @@ export function HomeRecordPanel({
           </Text>
         </View>
 
-        <Pressable onPress={onPressDetail} hitSlop={8}>
-          <Text style={styles.viewAll}>자세히</Text>
-        </Pressable>
+        <View style={styles.headerActions}>
+          {onPressNextRecord ? (
+            <View style={styles.placeRecordStepper}>
+              {recordPosition ? (
+                <Text style={styles.recordPosition}>
+                  {recordPosition.current} / {recordPosition.total}
+                </Text>
+              ) : null}
+
+              <Pressable
+                accessibilityLabel="같은 장소의 다음 기록 보기"
+                onPress={onPressNextRecord}
+                hitSlop={8}
+                style={styles.nextButton}
+              >
+                <ChevronRight
+                  color={color.purple[600]}
+                  size={17}
+                  strokeWidth={2.8}
+                />
+              </Pressable>
+            </View>
+          ) : null}
+
+          <Pressable onPress={onPressDetail} hitSlop={8}>
+            <Text style={styles.viewAll}>자세히</Text>
+          </Pressable>
+        </View>
       </View>
 
       <Pressable style={styles.recordRow} onPress={onPressDetail}>
@@ -148,6 +181,16 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     justifyContent: 'space-between',
   },
+  headerCopy: {
+    flex: 1,
+    minWidth: 0,
+    paddingRight: 10,
+  },
+  headerActions: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+  },
   sectionTitle: {
     color: color.purple[900],
     fontSize: 16,
@@ -168,6 +211,38 @@ const styles = StyleSheet.create({
     paddingHorizontal: 11,
     paddingVertical: 6,
     fontWeight: '800',
+  },
+  placeRecordStepper: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(248, 245, 255, 0.96)',
+    borderColor: 'rgba(116, 83, 193, 0.16)',
+    borderRadius: 999,
+    borderWidth: 1,
+    flexDirection: 'row',
+    gap: 7,
+    height: 31,
+    paddingLeft: 10,
+    paddingRight: 3,
+  },
+  nextButton: {
+    alignItems: 'center',
+    backgroundColor: color.white,
+    borderRadius: 999,
+    height: 25,
+    justifyContent: 'center',
+    shadowColor: color.purple[700],
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 5,
+    width: 25,
+  },
+  recordPosition: {
+    color: color.purple[600],
+    fontSize: 11,
+    fontWeight: '900',
   },
   thumbnailFrame: {
     height: 96,

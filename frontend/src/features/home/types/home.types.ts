@@ -7,6 +7,7 @@ export interface MapRecord {
   emotion: EmotionType;
   recordedAt: string;
   place: {
+    id: string;
     latitude: string;
     longitude: string;
   };
