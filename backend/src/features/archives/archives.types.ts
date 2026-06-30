@@ -122,6 +122,37 @@ export interface PlaceCategoryArchiveDetailResponse {
   nextCursor: string | null;
 }
 
+export interface PlaceArchiveItem {
+  place: {
+    id: string;
+    placeName: string;
+    addressName: string;
+    roadAddressName: string | null;
+  };
+  recordCount: number;
+  mostRecordedEmotion: Emotion | null;
+  latestRecordedAt: string;
+  thumbnailImage: ArchiveThumbnailImage | null;
+}
+
+export interface PlaceArchiveResponse {
+  places: PlaceArchiveItem[];
+}
+
+export interface PlaceArchiveDetailResponse {
+  place: {
+    id: string;
+    placeName: string;
+    addressName: string;
+    roadAddressName: string | null;
+    latitude: string;
+    longitude: string;
+  };
+  recordCount: number;
+  records: ArchiveRecordListItem[];
+  nextCursor: string | null;
+}
+
 // Emotion archive
 export interface EmotionArchiveItem {
   emotion: Emotion;

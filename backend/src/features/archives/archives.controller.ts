@@ -42,6 +42,22 @@ interface PlaceCategoryArchiveDetailQuery {
   cursor?: string;
 }
 
+interface PlaceArchiveQuery {
+  keyword?: string;
+  sort?: ArchiveSort;
+}
+
+interface PlaceArchiveDetailParams {
+  placeId: string;
+}
+
+interface PlaceArchiveDetailQuery {
+  keyword?: string;
+  sort?: ArchiveSort;
+  limit?: string;
+  cursor?: string;
+}
+
 interface MonthlyArchiveRequestQuery {
   yearMonth?: string;
   keyword?: string;
@@ -155,6 +171,50 @@ export class ArchivesController {
         category,
         query,
       );
+
+    response.status(200).json(result);
+  };
+
+  getPlaceArchive = async (
+    request: Request<object, object, object, PlaceArchiveQuery>,
+    response: Response,
+  ) => {
+    const userId = this.getUserId(request);
+
+    const result = await this.placeArchiveService.getPlaceArchive(userId, {
+      keyword: request.query.keyword,
+      sort: request.query.sort,
+    });
+
+    response.status(200).json(result);
+  };
+
+  getPlaceArchiveDetail = async (
+    request: Request<
+      PlaceArchiveDetailParams,
+      object,
+      object,
+      PlaceArchiveDetailQuery
+    >,
+    response: Response,
+  ) => {
+    const userId = this.getUserId(request);
+
+    const query: ArchivePaginationQuery = {
+      keyword: request.query.keyword,
+      sort: request.query.sort,
+      limit:
+        request.query.limit === undefined
+          ? undefined
+          : Number(request.query.limit),
+      cursor: request.query.cursor,
+    };
+
+    const result = await this.placeArchiveService.getPlaceArchiveDetail(
+      userId,
+      request.params.placeId,
+      query,
+    );
 
     response.status(200).json(result);
   };

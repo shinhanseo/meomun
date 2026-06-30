@@ -19,6 +19,11 @@ archivesRoutes.get(
   '/place-categories/:category/records',
   archivesController.getPlaceCategoryArchiveDetail,
 );
+archivesRoutes.get('/places', archivesController.getPlaceArchive);
+archivesRoutes.get(
+  '/places/:placeId/records',
+  archivesController.getPlaceArchiveDetail,
+);
 archivesRoutes.get('/emotions', archivesController.getEmotionArchive);
 archivesRoutes.get(
   '/emotions/:emotion/records',
