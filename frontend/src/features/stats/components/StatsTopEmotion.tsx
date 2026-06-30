@@ -1,7 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { semanticColor } from '../../../shared/constants/color';
 import { emotionMeta } from '../../../shared/constants/emotionMeta';
 import type { EmotionStatsItem } from '../types/stats.types';
 
