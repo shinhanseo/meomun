@@ -138,8 +138,6 @@ export function RecordWriteScreen() {
             onPressSave={handleSave}
           />
 
-          <RecordWrtieTitleInput title={title} onChangeTitle={setTitle} />
-
           <RecordPlaceSection
             place={place}
             placeRecordSummary={placeRecordSummary}
@@ -150,6 +148,8 @@ export function RecordWriteScreen() {
             selectedEmotion={emotion}
             onSelectEmotion={setEmotion}
           />
+
+          <RecordWrtieTitleInput title={title} onChangeTitle={setTitle} />
 
           <RecordPhotoSection
             images={images}
