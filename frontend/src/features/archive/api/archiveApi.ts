@@ -9,6 +9,10 @@ import type {
   EmotionArchiveDetailRequestParams,
   EmotionArchiveDetailResponse,
   EmotionArchiveResponse,
+  PlaceArchiveDetailRequestParams,
+  PlaceArchiveDetailResponse,
+  PlaceArchiveRequestParams,
+  PlaceArchiveResponse,
 } from '../types';
 
 export const archiveApi = {
@@ -56,6 +60,31 @@ export const archiveApi = {
   ) {
     const { data } = await apiClient.get<EmotionArchiveDetailResponse>(
       `/api/archives/emotions/${emotion}/records`,
+      {
+        params,
+      },
+    );
+
+    return data;
+  },
+
+  async getPlaceArchiveDetail(
+    placeId: string,
+    params: PlaceArchiveDetailRequestParams = {},
+  ) {
+    const { data } = await apiClient.get<PlaceArchiveDetailResponse>(
+      `/api/archives/places/${placeId}/records`,
+      {
+        params,
+      },
+    );
+
+    return data;
+  },
+
+  async getPlaceArchive(params: PlaceArchiveRequestParams = {}) {
+    const { data } = await apiClient.get<PlaceArchiveResponse>(
+      '/api/archives/places',
       {
         params,
       },
