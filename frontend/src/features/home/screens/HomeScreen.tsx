@@ -7,10 +7,16 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { MainStackParamList } from '../../../app/navigation/MainStackNavigator';
 import { HomeHeader } from '../components/HomeHeader';
 import { HomeMap } from '../components/HomeMap';
+import { HomeEmotionFilter } from '../components/HomeEmotionFilter';
 import { HomeRecordPanel } from '../components/HomeRecordPanel';
 import { HomeEmptyPanel } from '../components/HomeEmptyPanel';
+import { HomeFilterEmptyPanel } from '../components/HomeFilterEmptyPanel';
 import { useMapRecords } from '../hooks/useMapRecords';
 import type { MapRecord } from '../types/home.types';
+import {
+  emotionMeta,
+  type EmotionCode,
+} from '../../../shared/constants/emotionMeta';
 
 type CurrentLocation = {
   latitude: number;
@@ -26,26 +32,37 @@ export function HomeScreen() {
   const [currentLocation, setCurrentLocation] =
     useState<CurrentLocation | null>(null);
   const [selectedRecord, setSelectedRecord] = useState<MapRecord | null>(null);
+  const [selectedEmotion, setSelectedEmotion] = useState<EmotionCode | null>(
+    null,
+  );
+
+  const filteredRecords = useMemo(() => {
+    if (!selectedEmotion) {
+      return records;
+    }
+
+    return records.filter((record) => record.emotion === selectedEmotion);
+  }, [records, selectedEmotion]);
 
   const latestRecord = useMemo(() => {
-    return records
+    return filteredRecords
       .slice()
       .sort(
         (a, b) =>
           new Date(b.recordedAt).getTime() -
           new Date(a.recordedAt).getTime(),
       )[0];
-  }, [records]);
+  }, [filteredRecords]);
 
   const recordsByPlaceId = useMemo(() => {
-    return records.reduce((placeRecords, record) => {
+    return filteredRecords.reduce((placeRecords, record) => {
       const recordsAtPlace = placeRecords.get(record.place.id) ?? [];
       recordsAtPlace.push(record);
       placeRecords.set(record.place.id, recordsAtPlace);
 
       return placeRecords;
     }, new Map<string, MapRecord[]>());
-  }, [records]);
+  }, [filteredRecords]);
 
   const selectedPlaceRecords = selectedRecord
     ? recordsByPlaceId.get(selectedRecord.place.id) ?? []
@@ -75,14 +92,14 @@ export function HomeScreen() {
       return;
     }
 
-    const selectedRecordExists = records.some(
+    const selectedRecordExists = filteredRecords.some(
       (record) => record.id === selectedRecord.id,
     );
 
     if (!selectedRecordExists) {
       setSelectedRecord(null);
     }
-  }, [records, selectedRecord]);
+  }, [filteredRecords, selectedRecord]);
 
   useEffect(() => {
     let isMounted = true;
@@ -119,7 +136,7 @@ export function HomeScreen() {
   return (
     <View style={styles.container}>
       <HomeMap
-        records={records}
+        records={filteredRecords}
         currentLocation={currentLocation}
         selectedRecordId={selectedRecord?.id}
         onPressRecord={setSelectedRecord}
@@ -127,6 +144,14 @@ export function HomeScreen() {
       />
 
       <HomeHeader />
+
+      <HomeEmotionFilter
+        selectedEmotion={selectedEmotion}
+        onSelectEmotion={(emotion) => {
+          setSelectedEmotion(emotion);
+          setSelectedRecord(null);
+        }}
+      />
 
       {panelRecord ? (
         <HomeRecordPanel
@@ -158,13 +183,18 @@ export function HomeScreen() {
             });
           }}
         />
-      ) : (
+      ) : records.length === 0 ? (
         <HomeEmptyPanel
           onPressCreate={() => {
             navigation.navigate('RecordWrite');
           }}
         />
-      )}
+      ) : selectedEmotion ? (
+        <HomeFilterEmptyPanel
+          emotionLabel={emotionMeta[selectedEmotion].label}
+          onPressClear={() => setSelectedEmotion(null)}
+        />
+      ) : null}
     </View>
   );
 }
