@@ -13,7 +13,7 @@ interface ArchiveNavigationBarProps {
   showSort?: boolean;
 }
 
-const ENABLE_PLACE_ARCHIVE = false;
+const ENABLE_PLACE_ARCHIVE = true;
 
 const ARCHIVE_TABS: {
   label: string;
