@@ -14,6 +14,7 @@ type HomeRecordPanelProps = {
     total: number;
   };
   onPressNextRecord?: () => void;
+  onPressPlaceRecords?: () => void;
   onPressDetail: () => void;
 };
 
@@ -22,6 +23,7 @@ export function HomeRecordPanel({
   record,
   recordPosition,
   onPressNextRecord,
+  onPressPlaceRecords,
   onPressDetail,
 }: HomeRecordPanelProps) {
   const markerMeta = emotionMarkerMeta[record.emotion];
@@ -142,12 +144,20 @@ export function HomeRecordPanel({
       </Pressable>
 
       {recordPosition ? (
-        <View style={styles.placeRecordNotice}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="이 장소의 모든 기록 보기"
+          onPress={onPressPlaceRecords}
+          style={({ pressed }) => [
+            styles.placeRecordNotice,
+            pressed && styles.pressed,
+          ]}
+        >
           <View style={styles.noticeDot} />
           <Text style={styles.placeRecordNoticeText}>
             이 장소에 기록이 {recordPosition.total}개 있어요
           </Text>
-        </View>
+        </Pressable>
       ) : null}
     </View>
   );
@@ -284,6 +294,9 @@ const styles = StyleSheet.create({
     height: 48,
     resizeMode: 'contain',
     width: 48,
+  },
+  pressed: {
+    opacity: 0.76,
   },
   recordRow: {
     alignItems: 'center',

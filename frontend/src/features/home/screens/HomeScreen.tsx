@@ -143,6 +143,15 @@ export function HomeScreen() {
           onPressNextRecord={
             canShowNextRecord ? handlePressNextRecord : undefined
           }
+          onPressPlaceRecords={
+            canShowNextRecord && selectedRecord
+              ? () => {
+                  navigation.navigate('PlaceArchiveDetail', {
+                    placeId: selectedRecord.place.id,
+                  });
+                }
+              : undefined
+          }
           onPressDetail={() => {
             navigation.navigate('RecordDetail', {
               recordId: panelRecord.id,
