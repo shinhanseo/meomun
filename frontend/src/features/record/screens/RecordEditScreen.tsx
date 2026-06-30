@@ -217,8 +217,6 @@ export function RecordEditScreen() {
             onPressSave={handleSave}
           />
 
-          <RecordWrtieTitleInput title={title} onChangeTitle={setTitle} />
-
           <RecordPlaceSection
             place={place}
             placeRecordSummary={placeRecordSummary}
@@ -229,6 +227,8 @@ export function RecordEditScreen() {
             selectedEmotion={emotion}
             onSelectEmotion={setEmotion}
           />
+
+          <RecordWrtieTitleInput title={title} onChangeTitle={setTitle} />
 
           <RecordPhotoSection
             images={editableImages}
