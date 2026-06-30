@@ -1,4 +1,5 @@
 import { parseArchiveYearMonth } from '../archives/archives.query.js';
+import { compareEmotionStats } from '../../common/utils/emotion-order.js';
 import { StatsRepository } from './stats.repository.js';
 
 import type {
@@ -77,7 +78,7 @@ export class StatsService {
         recordCount,
         percentage: this.calculatePercentage(recordCount, totalRecordCount),
       }))
-      .sort((a, b) => b.recordCount - a.recordCount);
+      .sort(compareEmotionStats);
   }
 
   private createCalendar(records: MonthlyRecord[]): DailyEmotionStats[] {

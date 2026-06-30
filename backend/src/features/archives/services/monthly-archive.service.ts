@@ -1,4 +1,5 @@
 import { ArchivesMapper } from '../archives.mapper.js';
+import { compareEmotionStats } from '../../../common/utils/emotion-order.js';
 import {
   parseArchiveKeyword,
   parseArchiveLimit,
@@ -84,10 +85,12 @@ export class MonthlyArchiveService {
 
     return {
       yearMonth,
-      emotionCounts: emotionCounts.map(({ emotion, _count }) => ({
-        emotion,
-        recordCount: _count.emotion,
-      })),
+      emotionCounts: emotionCounts
+        .map(({ emotion, _count }) => ({
+          emotion,
+          recordCount: _count.emotion,
+        }))
+        .sort(compareEmotionStats),
       records: await Promise.all(
         pageRecords.map((record) =>
           this.archivesMapper.toMonthlyArchiveRecordItem(record),

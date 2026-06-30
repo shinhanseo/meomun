@@ -1,4 +1,5 @@
 import { ArchivesMapper } from '../archives.mapper.js';
+import { compareEmotionByOrder } from '../../../common/utils/emotion-order.js';
 import {
   parseArchiveKeyword,
   parseArchiveLimit,
@@ -148,7 +149,16 @@ export class PlaceArchiveService {
     emotionCounts: Partial<Record<PlaceCategoryRecord['emotion'], number>>,
   ) {
     const sortedEmotions = Object.entries(emotionCounts).sort(
-      ([, countA], [, countB]) => countB - countA,
+      ([emotionA, countA], [emotionB, countB]) => {
+        if (countA !== countB) {
+          return countB - countA;
+        }
+
+        return compareEmotionByOrder(
+          emotionA as PlaceCategoryRecord['emotion'],
+          emotionB as PlaceCategoryRecord['emotion'],
+        );
+      },
     );
 
     return sortedEmotions[0]?.[0] as PlaceCategoryRecord['emotion'] | null;

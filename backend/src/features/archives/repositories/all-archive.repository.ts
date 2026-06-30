@@ -1,4 +1,5 @@
 import { database } from '../../../db.js';
+import { compareEmotionStats } from '../../../common/utils/emotion-order.js';
 
 import type { ArchiveSort } from '../archives.types.js';
 
@@ -114,10 +115,16 @@ export class AllArchiveRepository {
           emotion: 'desc',
         },
       },
-      take: 1,
     });
 
-    return result[0]?.emotion ?? null;
+    const sortedResult = result
+      .map(({ emotion, _count }) => ({
+        emotion,
+        recordCount: _count.emotion,
+      }))
+      .sort(compareEmotionStats);
+
+    return sortedResult[0]?.emotion ?? null;
   }
 
   findFirstRecord(userId: string) {

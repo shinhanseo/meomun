@@ -5,6 +5,7 @@ import {
   parseArchiveSort,
 } from '../archives.query.js';
 import { EmotionArchiveRepository } from '../repositories/emotion-archive.repository.js';
+import { compareEmotionStats } from '../../../common/utils/emotion-order.js';
 
 import type { Emotion } from '../../../generated/prisma/enums.js';
 import type {
@@ -25,17 +26,24 @@ export class EmotionArchiveService {
       this.emotionArchiveRepository.findEmotionCounts(userId),
     ]);
 
-    const mostRecordedEmotion = emotionCounts[0]?.emotion ?? null;
-
-    return {
-      totalRecordCount,
-      emotions: emotionCounts.map(({ emotion, _count }) => ({
+    const emotions = emotionCounts
+      .map(({ emotion, _count }) => ({
         emotion,
         recordCount: _count.emotion,
         percentage: this.calculatePercentage(
           _count.emotion,
           totalRecordCount,
         ),
+      }))
+      .sort(compareEmotionStats);
+    const mostRecordedEmotion = emotions[0]?.emotion ?? null;
+
+    return {
+      totalRecordCount,
+      emotions: emotions.map(({ emotion, recordCount, percentage }) => ({
+        emotion,
+        recordCount,
+        percentage,
         isMostRecorded: emotion === mostRecordedEmotion,
       })),
     };
