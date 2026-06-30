@@ -22,7 +22,7 @@ export function StatsTopEmotionCard({
       colors={['#8E6CE5', '#C7A7F5', '#F3D5E8']}
       locations={[0, 0.55, 1]}
       start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+      end={{ x: 1, y: 1 }} 
       style={styles.container}
     >
       <View style={styles.textArea}>

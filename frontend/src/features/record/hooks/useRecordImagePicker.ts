@@ -24,15 +24,6 @@ async function convertAssetToJpeg(
   const fileNameBase = asset.fileName?.replace(/\.[^/.]+$/, '') ?? 'record';
   const fileName = `${fileNameBase}-${Date.now()}-${index}.jpg`;
 
-  console.log('[record-image-picker] converted asset to jpeg', {
-    originalUri: asset.uri,
-    originalFileName: asset.fileName,
-    originalMimeType: asset.mimeType,
-    convertedUri: convertedImage.uri,
-    fileName,
-    contentType: JPEG_CONTENT_TYPE,
-  });
-
   return {
     uri: convertedImage.uri,
     fileName,
@@ -66,18 +57,6 @@ export function useRecordImagePicker() {
     if (result.canceled) {
       return [];
     }
-
-    console.log(
-      '[record-image-picker] selected assets',
-      result.assets.map((asset) => ({
-        uri: asset.uri,
-        fileName: asset.fileName,
-        mimeType: asset.mimeType,
-        width: asset.width,
-        height: asset.height,
-      })),
-    );
-
     return Promise.all(
       result.assets.map((asset, index) => convertAssetToJpeg(asset, index)),
     );
