@@ -22,7 +22,9 @@ export type MainStackParamList = {
     recordId: string;
   };
   PlaceSelect: undefined;
-  PlaceArchiveDetail: undefined;
+  PlaceArchiveDetail: {
+    placeId: string;
+  };
   EmotionArchiveDetail: {
     emotion: EmotionCode;
   };
