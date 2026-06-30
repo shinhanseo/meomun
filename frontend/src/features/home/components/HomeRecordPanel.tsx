@@ -140,6 +140,15 @@ export function HomeRecordPanel({
           <Text style={styles.date}>{formattedDate}</Text>
         </View>
       </Pressable>
+
+      {recordPosition ? (
+        <View style={styles.placeRecordNotice}>
+          <View style={styles.noticeDot} />
+          <Text style={styles.placeRecordNoticeText}>
+            이 장소에 기록이 {recordPosition.total}개 있어요
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -280,6 +289,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     gap: 15,
+  },
+  placeRecordNotice: {
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(248, 245, 255, 0.78)',
+    borderRadius: 999,
+    flexDirection: 'row',
+    gap: 6,
+    marginTop: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  noticeDot: {
+    backgroundColor: color.purple[400],
+    borderRadius: 999,
+    height: 5,
+    width: 5,
+  },
+  placeRecordNoticeText: {
+    color: color.purple[700],
+    fontSize: 11,
+    fontWeight: '800',
   },
   thumbnail: {
     backgroundColor: color.gray[100],
