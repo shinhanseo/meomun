@@ -5,6 +5,8 @@ import { uploadApi } from '../api/uploadApi';
 import type { CreateRecordRequest } from '../types/record.types';
 import type { SelectedRecordImage } from '../types/upload.types';
 
+import { syncTodayWidgetSummary } from '../../../shared/widget/syncTodayWidgetSummary';
+
 interface CreateRecordMutationVariables {
   record: Omit<CreateRecordRequest, 'imageObjectKeys'>;
   images: SelectedRecordImage[];
@@ -31,6 +33,9 @@ export function useCreateRecord() {
       queryClient.invalidateQueries({ queryKey: ['record', 'placeSummary'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
       queryClient.invalidateQueries({ queryKey: ['archive'] });
+      void syncTodayWidgetSummary(queryClient, {
+        upsertRecord: createdRecord,
+      });
     },
   });
 }
