@@ -5,6 +5,8 @@ import { uploadApi } from '../api/uploadApi';
 import type { CreateRecordRequest, RecordResponse } from '../types/record.types';
 import type { EditableRecordImage } from '../types/upload.types';
 
+import { syncTodayWidgetSummary } from '../../../shared/widget/syncTodayWidgetSummary';
+
 interface EditRecordMutationVariables {
   recordId: string;
   record: Omit<CreateRecordRequest, 'imageObjectKeys'>;
@@ -46,6 +48,11 @@ export function useEditRecord() {
       queryClient.invalidateQueries({ queryKey: ['record', 'placeSummary'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
       queryClient.invalidateQueries({ queryKey: ['archive'] });
+
+      void syncTodayWidgetSummary(queryClient, {
+        upsertRecord: updatedRecord,
+      });
+
     },
   });
 }
