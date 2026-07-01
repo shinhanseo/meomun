@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { recordApi } from '../api/recordApi';
 
+import { syncTodayWidgetSummary } from '../../../shared/widget/syncTodayWidgetSummary';
+
 export function useDeleteRecord() {
   const queryClient = useQueryClient();
 
@@ -25,6 +27,10 @@ export function useDeleteRecord() {
           queryKey: ['archive'],
         }),
       ]);
+
+      await syncTodayWidgetSummary(queryClient, {
+        removeRecordId: recordId,
+      });
     },
   });
 }
