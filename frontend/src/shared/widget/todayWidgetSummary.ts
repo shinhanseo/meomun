@@ -34,7 +34,7 @@ export function getTodayWidgetDeepLink(params: {
   return 'meomun://records/today';
 }
 
-type TodayRecordForWidget = {
+export type TodayRecordForWidget = {
   id: string;
   emotion: EmotionCode;
   recordedAt: string;
