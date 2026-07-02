@@ -17,6 +17,7 @@
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 		F11748462D0722820044C1D9 /* MeomunWidgetBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F11748452D0722820044C1D9 /* MeomunWidgetBridge.m */; };
+		F11748472D0737C90044C1D9 /* MeomunWidgetTimelineReloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748482D0737C90044C1D9 /* MeomunWidgetTimelineReloader.swift */; };
 		F22247540911B528DD400C3C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EC5E18FDB9C8ED6A03843481 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,7 @@
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Meomun/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* Meomun-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Meomun-Bridging-Header.h"; path = "Meomun/Meomun-Bridging-Header.h"; sourceTree = "<group>"; };
 		F11748452D0722820044C1D9 /* MeomunWidgetBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MeomunWidgetBridge.m; path = Meomun/MeomunWidgetBridge.m; sourceTree = "<group>"; };
+		F11748482D0737C90044C1D9 /* MeomunWidgetTimelineReloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MeomunWidgetTimelineReloader.swift; path = Meomun/MeomunWidgetTimelineReloader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -106,6 +108,7 @@
 				F11748412D0307B40044C1D9 /* AppDelegate.swift */,
 				F11748442D0722820044C1D9 /* Meomun-Bridging-Header.h */,
 				F11748452D0722820044C1D9 /* MeomunWidgetBridge.m */,
+				F11748482D0737C90044C1D9 /* MeomunWidgetTimelineReloader.swift */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -470,6 +473,7 @@
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
 				F11748462D0722820044C1D9 /* MeomunWidgetBridge.m in Sources */,
+				F11748472D0737C90044C1D9 /* MeomunWidgetTimelineReloader.swift in Sources */,
 				8C9F5CF7D5E6BC6380AFEDD1 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

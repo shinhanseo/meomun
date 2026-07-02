@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
+#import "Meomun-Swift.h"
 
 static NSString *const MeomunWidgetAppGroup = @"group.com.hanseo.meomun";
 static NSString *const MeomunTodayWidgetSummaryKey = @"today_widget_summary";
@@ -27,6 +28,7 @@ RCT_EXPORT_METHOD(saveTodayWidgetSummary
 
   [defaults setObject:summaryJson forKey:MeomunTodayWidgetSummaryKey];
   [defaults synchronize];
+  [MeomunWidgetTimelineReloader reloadAllTimelines];
 
   resolve(nil);
 }
