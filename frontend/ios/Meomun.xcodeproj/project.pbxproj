@@ -51,6 +51,7 @@
 		324EC5942FF6321F00E71418 /* MeomunWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MeomunWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		324EC5952FF6321F00E71418 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		324EC5972FF6321F00E71418 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		324EC5AD2FF632A800E71418 /* MeomunWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MeomunWidgetExtension.entitlements; sourceTree = "<group>"; };
 		39FC7F4F3DC319892965C50C /* Pods-Meomun.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Meomun.debug.xcconfig"; path = "Target Support Files/Pods-Meomun/Pods-Meomun.debug.xcconfig"; sourceTree = "<group>"; };
 		43792E8EEA279BCD2B9860C9 /* libPods-Meomun.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Meomun.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE719C7DF12AFBFD8E2A9D5 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Meomun/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
@@ -152,6 +153,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				324EC5AD2FF632A800E71418 /* MeomunWidgetExtension.entitlements */,
 				13B07FAE1A68108700A75B9A /* Meomun */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				324EC5992FF6321F00E71418 /* MeomunWidget */,
@@ -577,6 +579,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = MeomunWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -625,6 +628,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = MeomunWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;

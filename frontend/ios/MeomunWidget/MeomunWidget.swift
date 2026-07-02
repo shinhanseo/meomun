@@ -1,88 +1,99 @@
-//
-//  MeomunWidget.swift
-//  MeomunWidget
-//
-//  Created by Shin Han Seo on 7/2/26.
-//
-
 import WidgetKit
 import SwiftUI
 
-struct Provider: AppIntentTimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationAppIntent())
-    }
+private let appGroupId = "group.com.hanseo.meomun"
+private let summaryKey = "today_widget_summary"
 
-    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: configuration)
-    }
-    
-    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
-        var entries: [SimpleEntry] = []
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
-            entries.append(entry)
-        }
-
-        return Timeline(entries: entries, policy: .atEnd)
-    }
-
-//    func relevances() async -> WidgetRelevances<ConfigurationAppIntent> {
-//        // Generate a list containing the contexts this widget is relevant in.
-//    }
+struct TodayWidgetSummary: Decodable {
+  let hasTodayRecord: Bool
+  let emotionLabel: String?
+  let emotionEmoji: String?
+  let recordCount: Int
+  let latestPlaceName: String?
+  let latestRecordId: String?
+  let deepLink: String
+  let updatedAt: String
 }
 
-struct SimpleEntry: TimelineEntry {
-    let date: Date
-    let configuration: ConfigurationAppIntent
+struct MeomunEntry: TimelineEntry {
+  let date: Date
+  let summary: TodayWidgetSummary?
 }
 
-struct MeomunWidgetEntryView : View {
-    var entry: Provider.Entry
+struct Provider: TimelineProvider {
+  func placeholder(in context: Context) -> MeomunEntry {
+    MeomunEntry(date: Date(), summary: nil)
+  }
 
-    var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
+  func getSnapshot(in context: Context, completion: @escaping (MeomunEntry) -> Void) {
+    completion(MeomunEntry(date: Date(), summary: loadSummary()))
+  }
 
-            Text("Favorite Emoji:")
-            Text(entry.configuration.favoriteEmoji)
-        }
+  func getTimeline(in context: Context, completion: @escaping (Timeline<MeomunEntry>) -> Void) {
+    let entry = MeomunEntry(date: Date(), summary: loadSummary())
+    let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date()) ?? Date()
+
+    completion(Timeline(entries: [entry], policy: .after(nextUpdate)))
+  }
+
+  private func loadSummary() -> TodayWidgetSummary? {
+    guard
+      let defaults = UserDefaults(suiteName: appGroupId),
+      let json = defaults.string(forKey: summaryKey),
+      let data = json.data(using: .utf8)
+    else {
+      return nil
     }
+
+    return try? JSONDecoder().decode(TodayWidgetSummary.self, from: data)
+  }
+}
+
+struct MeomunWidgetEntryView: View {
+  var entry: Provider.Entry
+
+  var body: some View {
+    if let summary = entry.summary, summary.hasTodayRecord {
+      VStack(alignment: .leading, spacing: 6) {
+        Text(summary.emotionEmoji ?? "·")
+          .font(.system(size: 28))
+
+        Text(summary.emotionLabel ?? "오늘의 기록")
+          .font(.system(size: 16, weight: .semibold))
+          .foregroundStyle(.primary)
+
+        if let placeName = summary.latestPlaceName {
+          Text(placeName)
+            .font(.system(size: 12))
+            .foregroundStyle(.secondary)
+            .lineLimit(1)
+        }
+      }
+      .containerBackground(.background, for: .widget)
+      .widgetURL(URL(string: summary.deepLink))
+    } else {
+      VStack(alignment: .leading, spacing: 6) {
+        Text("오늘은 어디에")
+          .font(.system(size: 15, weight: .semibold))
+
+        Text("머물렀나요?")
+          .font(.system(size: 15, weight: .semibold))
+      }
+      .containerBackground(.background, for: .widget)
+      .widgetURL(URL(string: "meomun://record/new"))
+    }
+  }
 }
 
 struct MeomunWidget: Widget {
-    let kind: String = "MeomunWidget"
+  let kind: String = "MeomunWidget"
 
-    var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
-            MeomunWidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
-        }
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: kind, provider: Provider()) { entry in
+      MeomunWidgetEntryView(entry: entry)
     }
-}
-
-extension ConfigurationAppIntent {
-    fileprivate static var smiley: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "😀"
-        return intent
-    }
-    
-    fileprivate static var starEyes: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "🤩"
-        return intent
-    }
-}
-
-#Preview(as: .systemSmall) {
-    MeomunWidget()
-} timeline: {
-    SimpleEntry(date: .now, configuration: .smiley)
-    SimpleEntry(date: .now, configuration: .starEyes)
+    .configurationDisplayName("머문")
+    .description("오늘 머문 감정과 장소를 보여줘요.")
+    .supportedFamilies([.systemSmall])
+  }
 }
