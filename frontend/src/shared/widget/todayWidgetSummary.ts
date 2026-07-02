@@ -41,6 +41,17 @@ export type TodayRecordForWidget = {
   placeName?: string;
 };
 
+const emotionEmojiMap: Record<EmotionCode, string> = {
+  ANGRY: '😠',
+  ANXIOUS: '😟',
+  CALM: '😌',
+  FLUTTER: '☺️',
+  HAPPY: '😊',
+  REFLECTIVE: '🤔',
+  SAD: '😢',
+  TIRED: '😮‍💨',
+};
+
 export function buildTodayWidgetSummary(
   todayRecords: TodayRecordForWidget[],
 ): TodayWidgetSummary {
@@ -59,6 +70,7 @@ export function buildTodayWidgetSummary(
     hasTodayRecord: true,
     emotionCode: latestRecord.emotion,
     emotionLabel: emotion.label,
+    emotionEmoji: emotionEmojiMap[latestRecord.emotion],
     recordCount: todayRecords.length,
     latestPlaceName: latestRecord.placeName,
     latestRecordId: latestRecord.id,
