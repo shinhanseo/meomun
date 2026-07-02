@@ -14,7 +14,7 @@ export async function saveTodayWidgetSummary(
 ): Promise<void> {
   const summaryJson = JSON.stringify(summary);
 
-  if (Platform.OS === 'ios' && nativeWidgetBridge) {
+  if ((Platform.OS === 'ios' || Platform.OS === 'android') && nativeWidgetBridge) {
     try {
       await nativeWidgetBridge.saveTodayWidgetSummary(summaryJson);
       console.log('[today-widget:saved]', summary);
