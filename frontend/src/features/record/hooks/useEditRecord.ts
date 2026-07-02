@@ -5,7 +5,10 @@ import { uploadApi } from '../api/uploadApi';
 import type { CreateRecordRequest, RecordResponse } from '../types/record.types';
 import type { EditableRecordImage } from '../types/upload.types';
 
-import { syncTodayWidgetSummary } from '../../../shared/widget/syncTodayWidgetSummary';
+import {
+  syncTodayWidgetSummary,
+  syncTodayWidgetSummaryFromServer,
+} from '../../../shared/widget/syncTodayWidgetSummary';
 
 interface EditRecordMutationVariables {
   recordId: string;
@@ -38,7 +41,7 @@ export function useEditRecord() {
         imageObjectKeys,
       });
     },
-    onSuccess: (updatedRecord) => {
+    onSuccess: async (updatedRecord) => {
       queryClient.setQueryData(
         ['record', 'detail', updatedRecord.id],
         updatedRecord,
@@ -49,9 +52,14 @@ export function useEditRecord() {
       queryClient.invalidateQueries({ queryKey: ['stats'] });
       queryClient.invalidateQueries({ queryKey: ['archive'] });
 
-      void syncTodayWidgetSummary(queryClient, {
+      await syncTodayWidgetSummary(queryClient, {
         upsertRecord: updatedRecord,
+      }).catch((error) => {
+        console.warn('[today-widget:sync-after-edit-failed]', error);
       });
+      void syncTodayWidgetSummaryFromServer(queryClient, {
+        upsertRecord: updatedRecord,
+      }).catch(() => { });
 
     },
   });

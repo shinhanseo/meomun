@@ -5,7 +5,10 @@ import { uploadApi } from '../api/uploadApi';
 import type { CreateRecordRequest } from '../types/record.types';
 import type { SelectedRecordImage } from '../types/upload.types';
 
-import { syncTodayWidgetSummary } from '../../../shared/widget/syncTodayWidgetSummary';
+import {
+  syncTodayWidgetSummary,
+  syncTodayWidgetSummaryFromServer,
+} from '../../../shared/widget/syncTodayWidgetSummary';
 
 interface CreateRecordMutationVariables {
   record: Omit<CreateRecordRequest, 'imageObjectKeys'>;
@@ -24,7 +27,7 @@ export function useCreateRecord() {
         imageObjectKeys,
       });
     },
-    onSuccess: (createdRecord) => {
+    onSuccess: async (createdRecord) => {
       queryClient.setQueryData(
         ['record', 'detail', createdRecord.id],
         createdRecord,
@@ -33,8 +36,17 @@ export function useCreateRecord() {
       queryClient.invalidateQueries({ queryKey: ['record', 'placeSummary'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
       queryClient.invalidateQueries({ queryKey: ['archive'] });
-      void syncTodayWidgetSummary(queryClient, {
+
+      await syncTodayWidgetSummary(queryClient, {
         upsertRecord: createdRecord,
+      }).catch((error) => {
+        console.warn('[today-widget:sync-after-create-failed]', error);
+      });
+
+      void syncTodayWidgetSummaryFromServer(queryClient, {
+        upsertRecord: createdRecord,
+      }).catch((error) => {
+        console.warn('[today-widget:server-sync-after-create-failed]', error);
       });
     },
   });

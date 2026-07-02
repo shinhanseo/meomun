@@ -2,7 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { recordApi } from '../api/recordApi';
 
-import { syncTodayWidgetSummary } from '../../../shared/widget/syncTodayWidgetSummary';
+import {
+  syncTodayWidgetSummary,
+  syncTodayWidgetSummaryFromServer,
+} from '../../../shared/widget/syncTodayWidgetSummary';
 
 export function useDeleteRecord() {
   const queryClient = useQueryClient();
@@ -30,7 +33,10 @@ export function useDeleteRecord() {
 
       await syncTodayWidgetSummary(queryClient, {
         removeRecordId: recordId,
+      }).catch((error) => {
+        console.warn('[today-widget:sync-after-delete-failed]', error);
       });
+      await syncTodayWidgetSummaryFromServer(queryClient).catch(() => { });
     },
   });
 }
