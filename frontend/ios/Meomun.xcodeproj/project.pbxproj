@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -68,7 +68,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		324EC5AB2FF6322000E71418 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		324EC5AB2FF6322000E71418 /* Exceptions for "MeomunWidget" folder in "MeomunWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -78,7 +78,18 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		324EC5992FF6321F00E71418 /* MeomunWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (324EC5AB2FF6322000E71418 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = MeomunWidget; sourceTree = "<group>"; };
+		324EC5992FF6321F00E71418 /* MeomunWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				324EC5AB2FF6322000E71418 /* Exceptions for "MeomunWidget" folder in "MeomunWidgetExtension" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = MeomunWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,8 +251,6 @@
 				324EC5992FF6321F00E71418 /* MeomunWidget */,
 			);
 			name = MeomunWidgetExtension;
-			packageProductDependencies = (
-			);
 			productName = MeomunWidgetExtension;
 			productReference = 324EC5942FF6321F00E71418 /* MeomunWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -605,6 +614,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hanseo.meomun.MeomunWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -654,6 +664,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hanseo.meomun.MeomunWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
