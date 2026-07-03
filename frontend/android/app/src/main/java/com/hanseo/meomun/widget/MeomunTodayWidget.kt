@@ -35,6 +35,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hanseo.meomun.R
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import org.json.JSONObject
 
 private const val WIDGET_PREFS_NAME = "meomun_widget"
@@ -48,6 +53,7 @@ data class TodayWidgetSummary(
   val recordCount: Int,
   val latestPlaceName: String?,
   val deepLink: String,
+  val updatedAt: String,
 )
 
 class MeomunTodayWidget : GlanceAppWidget() {
@@ -256,6 +262,11 @@ private fun loadTodayWidgetSummary(context: Context): TodayWidgetSummary? {
 
   return runCatching {
     val json = JSONObject(summaryJson)
+    val updatedAt = json.optStringOrNull("updatedAt") ?: return@runCatching null
+
+    if (!isToday(updatedAt)) {
+      return@runCatching null
+    }
 
     TodayWidgetSummary(
       hasTodayRecord = json.optBoolean("hasTodayRecord", false),
@@ -265,6 +276,7 @@ private fun loadTodayWidgetSummary(context: Context): TodayWidgetSummary? {
       recordCount = json.optInt("recordCount", 0),
       latestPlaceName = json.optStringOrNull("latestPlaceName"),
       deepLink = json.optString("deepLink", "meomun://record/new"),
+      updatedAt = updatedAt,
     )
   }.getOrNull()
 }
@@ -274,6 +286,32 @@ private fun JSONObject.optStringOrNull(name: String): String? {
     optString(name).takeIf { it.isNotBlank() }
   } else {
     null
+  }
+}
+
+private fun isToday(isoString: String): Boolean {
+  val date = parseIsoDate(isoString) ?: return false
+  val today = Calendar.getInstance()
+  val target = Calendar.getInstance().apply {
+    time = date
+  }
+
+  return today.get(Calendar.YEAR) == target.get(Calendar.YEAR) &&
+    today.get(Calendar.DAY_OF_YEAR) == target.get(Calendar.DAY_OF_YEAR)
+}
+
+private fun parseIsoDate(isoString: String): Date? {
+  val patterns = listOf(
+    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+    "yyyy-MM-dd'T'HH:mm:ss'Z'",
+  )
+
+  return patterns.firstNotNullOfOrNull { pattern ->
+    runCatching {
+      SimpleDateFormat(pattern, Locale.US).apply {
+        timeZone = TimeZone.getTimeZone("UTC")
+      }.parse(isoString)
+    }.getOrNull()
   }
 }
 

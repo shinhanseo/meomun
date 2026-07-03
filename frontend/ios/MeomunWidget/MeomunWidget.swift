@@ -46,7 +46,29 @@ struct Provider: TimelineProvider {
       return nil
     }
 
-    return try? JSONDecoder().decode(TodayWidgetSummary.self, from: data)
+    guard let summary = try? JSONDecoder().decode(TodayWidgetSummary.self, from: data) else {
+      return nil
+    }
+
+    guard isToday(summary.updatedAt) else {
+      return nil
+    }
+
+    return summary
+  }
+
+  private func isToday(_ isoString: String) -> Bool {
+    let formatter = ISO8601DateFormatter()
+    formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+    let fallbackFormatter = ISO8601DateFormatter()
+    fallbackFormatter.formatOptions = [.withInternetDateTime]
+
+    guard let date = formatter.date(from: isoString) ?? fallbackFormatter.date(from: isoString) else {
+      return false
+    }
+
+    return Calendar.current.isDateInToday(date)
   }
 }
 
