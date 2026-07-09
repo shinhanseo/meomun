@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import axios from 'axios';
 import { useState } from 'react';
 import {
   Alert,
@@ -106,7 +105,7 @@ export function RecordWriteScreen() {
             backBehavior: 'home',
           });
         },
-        onError: (error) => {
+        onError: () => {
           Alert.alert('기록 저장에 실패했어요. 잠시 후 다시 시도해주세요.');
         },
       },

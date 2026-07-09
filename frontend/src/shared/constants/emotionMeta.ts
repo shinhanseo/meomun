@@ -1,5 +1,13 @@
 import type { ImageSourcePropType } from 'react-native';
 
+import angryIcon from '../../assets/emotions/angry.png';
+import anxiousIcon from '../../assets/emotions/anxious.png';
+import calmIcon from '../../assets/emotions/calm.png';
+import flutterIcon from '../../assets/emotions/flutter.png';
+import happyIcon from '../../assets/emotions/happy.png';
+import reflectiveIcon from '../../assets/emotions/reflective.png';
+import sadIcon from '../../assets/emotions/sad.png';
+import tiredIcon from '../../assets/emotions/tired.png';
 import { color } from './color';
 
 export const EMOTION_CODES = [
@@ -24,42 +32,42 @@ type EmotionMeta = {
 export const emotionMeta = {
   ANGRY: {
     label: '화남',
-    icon: require('../../assets/emotions/angry.png'),
+    icon: angryIcon,
     color: color.red[500],
   },
   ANXIOUS: {
     label: '불안',
-    icon: require('../../assets/emotions/anxious.png'),
+    icon: anxiousIcon,
     color: '#B58AF7',
   },
   CALM: {
     label: '평온',
-    icon: require('../../assets/emotions/calm.png'),
+    icon: calmIcon,
     color: color.green[500],
   },
   FLUTTER: {
     label: '설렘',
-    icon: require('../../assets/emotions/flutter.png'),
+    icon: flutterIcon,
     color: color.pink[500],
   },
   HAPPY: {
     label: '행복',
-    icon: require('../../assets/emotions/happy.png'),
+    icon: happyIcon,
     color: color.yellow[500],
   },
   REFLECTIVE: {
     label: '사색',
-    icon: require('../../assets/emotions/reflective.png'),
+    icon: reflectiveIcon,
     color: '#7C6FD6',
   },
   SAD: {
     label: '슬픔',
-    icon: require('../../assets/emotions/sad.png'),
+    icon: sadIcon,
     color: color.blue[500],
   },
   TIRED: {
     label: '지침',
-    icon: require('../../assets/emotions/tired.png'),
+    icon: tiredIcon,
     color: color.gray[400],
   },
 } satisfies Record<EmotionCode, EmotionMeta>;

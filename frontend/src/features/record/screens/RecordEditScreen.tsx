@@ -3,7 +3,6 @@ import type {
   RouteProp,
 } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -177,7 +176,7 @@ export function RecordEditScreen() {
             backBehavior: 'home',
           });
         },
-        onError: (error) => {
+        onError: () => {
           Alert.alert('기록 수정에 실패했어요. 잠시 후 다시 시도해주세요.');
         },
       },

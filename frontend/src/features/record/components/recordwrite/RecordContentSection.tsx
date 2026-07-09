@@ -2,10 +2,7 @@ import { Feather } from 'lucide-react-native';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { semanticColor } from '../../../../shared/constants/color';
-import {
-  emotionMeta,
-  type EmotionCode,
-} from '../../../../shared/constants/emotionMeta';
+import { type EmotionCode } from '../../../../shared/constants/emotionMeta';
 
 interface RecordContentSectionProps {
   selectedEmotion: EmotionCode | null;

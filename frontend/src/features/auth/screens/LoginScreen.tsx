@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import { color, semanticColor } from '../../../shared/constants/color';
+import logoImage from '../../../assets/icons/logo.png';
 import { useAppleAuth } from '../hooks/useAppleAuth';
 import { useKakaoAuth } from '../hooks/useKakaoAuth';
 
@@ -48,7 +49,7 @@ export function LoginScreen() {
     <View style={styles.container}>
       <View style={styles.content}>
         <Image
-          source={require('../../../assets/icons/logo.png')}
+          source={logoImage}
           style={styles.image}
         />
 

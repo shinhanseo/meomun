@@ -32,7 +32,7 @@ export function useAuthBootstrap() {
 
         await tokenStorage.setRefreshToken(response.refreshToken);
         setAccessToken(response.accessToken);
-      } catch (error) {
+      } catch {
         await tokenStorage.removeRefreshToken();
         clearSession();
       } finally {

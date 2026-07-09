@@ -15,6 +15,9 @@ import {
 
 import type { AuthStackParamList } from '../../../app/navigation/AuthNavigator';
 import { color, semanticColor } from '../../../shared/constants/color';
+import onboardingImage1 from '../../../assets/images/onboarding/onboarding1.png';
+import onboardingImage2 from '../../../assets/images/onboarding/onboarding2.png';
+import onboardingImage3 from '../../../assets/images/onboarding/onboarding3.png';
 
 import { useOnboardingStore } from '../store/onboardingStore';
 
@@ -28,19 +31,19 @@ const slides = [
     id: 'map',
     title: '오늘의 감정을\n지도 위에 남겨보세요',
     description: '기록의 시작이 글이면 어려워요.\n머문은 장소와 감정에서 시작해요.',
-    image: require('../../../assets/images/onboarding/onboarding1.png'),
+    image: onboardingImage1,
   },
   {
     id: 'record',
     title: '소중한 순간들을\n기록하고 돌아보세요',
     description: '사진과 함께 남긴 기록이\n나만의 감정 지도가 되어줄 거예요.',
-    image: require('../../../assets/images/onboarding/onboarding2.png'),
+    image: onboardingImage2,
   },
   {
     id: 'stats',
     title: '나만의 감정 흐름을\n한눈에 확인하세요',
     description: '통계를 통해 내 감정의 패턴을\n발견하고 이해할 수 있어요.',
-    image: require('../../../assets/images/onboarding/onboarding3.png'),
+    image: onboardingImage3,
   },
 ];
 

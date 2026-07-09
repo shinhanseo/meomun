@@ -5,7 +5,6 @@ import BottomSheet, {
 import {
   Edit3Icon,
   Trash2Icon,
-  XIcon,
 } from 'lucide-react-native';
 import { useCallback, useMemo, useRef } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
