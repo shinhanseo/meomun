@@ -81,6 +81,14 @@ def enableMinifyInReleaseBuilds = (findProperty('android.enableMinifyInReleaseBu
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
+def keystorePropertiesFile = rootProject.file('key.properties')
+def keystoreProperties = new Properties()
+def hasReleaseSigning = keystorePropertiesFile.exists()
+def allowDebugReleaseSigning = (findProperty('android.allowDebugReleaseSigning') ?: 'false').toBoolean()
+
+if (hasReleaseSigning) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
 
 android {
     ndkVersion rootProject.ext.ndkVersion
@@ -109,15 +117,25 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (hasReleaseSigning) {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
             def enableShrinkResources = findProperty('android.enableShrinkResourcesInReleaseBuilds') ?: 'false'
             shrinkResources enableShrinkResources.toBoolean()
             minifyEnabled enableMinifyInReleaseBuilds
@@ -134,6 +152,23 @@ android {
     }
     androidResources {
         ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~'
+    }
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    def requestedReleaseBuild = taskGraph.allTasks.any { task ->
+        def taskName = task.name.toLowerCase(Locale.ROOT)
+        taskName.contains('release') && (
+            taskName.startsWith('assemble') ||
+            taskName.startsWith('bundle') ||
+            taskName.startsWith('package') ||
+            taskName.startsWith('sign') ||
+            taskName.startsWith('validateSigning'.toLowerCase(Locale.ROOT))
+        )
+    }
+
+    if (requestedReleaseBuild && !hasReleaseSigning && !allowDebugReleaseSigning) {
+        throw new GradleException("Missing android/key.properties. Add release signing credentials, or pass -Pandroid.allowDebugReleaseSigning=true for a local test build.")
     }
 }
 
