@@ -232,3 +232,5 @@ docs/legal
 ```text
 0.1.0
 ```
+## iOS
+iOS 출시되었습니다!
